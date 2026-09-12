@@ -77,7 +77,7 @@ const bands: SchoolBandsCopy = {
       "English is the primary language of instruction with a strong emphasis on Nepali, plus Mandarin Chinese and Sanskrit language learning",
       "Active learning through morning circles, exploration, research, projects, experiments, problem-solving, reflection, and real-world application",
       "Continuous assessment through classwork, assignments, projects, practical activities, and interactive engagement",
-      "Learning collaborations with 3Di School (Design & Tech), Play Nepal (Movement & Wellness), UnMath (Joyful Math), and Samatva Wellness",
+      "Learning collaborations with 3Di School (Design & Tech), Play Nepal (Movement & Wellness), UnMath (Joyful Math), Mero Coding (Coding & Computational Thinking), and Samatva Wellness",
       "Co-curricular activities in Art & Craft, Music, Dance, Public Speaking, Football, Basketball, Karate, Cricksal, Swimming, Table Tennis & Badminton",
       "Curriculum-related educational trips (2 per term in Kathmandu Valley) plus optional national and international experiential learning trips",
       "Strong parent partnership with parent representative roles, guest speaking, classroom support, and regular communication",

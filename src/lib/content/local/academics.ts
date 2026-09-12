@@ -18,7 +18,7 @@ export const academicLevels: readonly AcademicLevel[] = [
       "National Curriculum, Government of Nepal (Grades I–VII)",
       "NEB +2 in Science and Management",
       "Mandarin Chinese and Sanskrit Language Learning",
-      "Collaborations with 3Di School, Play Nepal, UnMath & Samatva Wellness",
+      "Collaborations with 3Di School, Play Nepal, UnMath, Mero Coding & Samatva Wellness",
       "Internships, career guidance, and international exposure trips",
     ],
     campusSlug: slug("gokarneshwor"),
