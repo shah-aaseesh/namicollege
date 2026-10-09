@@ -44,11 +44,22 @@ const SOCIAL_GLYPHS: Record<SocialPlatform, IconSvgElement> = {
   whatsapp: WhatsappIcon,
 };
 
+/** The intro, photo and button in the desktop menu panel (edited in WordPress). */
+export type SiteNavPanelCopy = {
+  readonly text: string;
+  readonly image: {
+    readonly src: string;
+    readonly alt: string;
+  } | null;
+  readonly button: { readonly label: string; readonly href: string } | null;
+};
+
 export type SiteNavPanelProps = {
   labelId: string;
   items: readonly SiteNavItem[];
   places: readonly string[];
   links: readonly SiteMetaLink[];
+  panel: SiteNavPanelCopy;
   socialProfiles?: readonly SocialProfile[];
   siteName: string;
   logoSrc?: string;
@@ -60,6 +71,7 @@ export function SiteNavPanel({
   labelId,
   places,
   links,
+  panel,
   socialProfiles = [],
   siteName,
   logoSrc,
@@ -90,12 +102,13 @@ export function SiteNavPanel({
         <Accordion className="border-none w-full">
           {items.map((item, index) => (
             <div
-              key={item.label}
+              // biome-ignore lint/suspicious/noArrayIndexKey: menu items are an ordered CMS list
+              key={index}
               className="border-t border-border w-full nav-anim-item"
             >
               {item.children ? (
                 <AccordionItem
-                  value={item.label}
+                  value={String(index)}
                   className="border-none w-full"
                 >
                   <AccordionTrigger className="py-4 text-xl font-body font-medium w-full text-ink">
@@ -108,9 +121,10 @@ export function SiteNavPanel({
                   </AccordionTrigger>
                   <AccordionPanel className="pl-10">
                     <div className="flex flex-col gap-4 mt-2 mb-4">
-                      {item.children.map((child) => (
+                      {item.children.map((child, childIndex) => (
                         <Link
-                          key={child.label}
+                          // biome-ignore lint/suspicious/noArrayIndexKey: sub-links are an ordered CMS list
+                          key={childIndex}
                           href={child.href as Route}
                           onClick={onNavigate}
                           className="text-lg text-ink-muted hover:text-accent transition-colors"
@@ -145,34 +159,41 @@ export function SiteNavPanel({
           src={logoSrc}
           className="scale-125 my-6"
         />
-        <p className="text-sm text-ink-muted leading-relaxed px-4">
-          NAMI provides world-class education with state-of-the-art facilities,
-          empowering students to become future leaders and innovators.
-        </p>
+        {panel.text.trim() === "" ? null : (
+          <p className="text-sm text-ink-muted leading-relaxed px-4">
+            {panel.text}
+          </p>
+        )}
 
         {/* Banner */}
-        <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden mt-2 shadow-lg">
-          <Image
-            src="/sections/nami/campus-library.jpg"
-            alt="College Library"
-            fill
-            sizes="336px"
-            className="absolute inset-0 object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-          <div className="absolute bottom-6 inset-x-6">
-            <Link
-              href={"/admissions" as Route}
-              onClick={onNavigate}
-              className={cn(
-                buttonVariants({ size: "lg" }),
-                "w-full bg-accent hover:bg-accent/90 text-white border-none shadow-md",
-              )}
-            >
-              Apply Now
-            </Link>
+        {panel.image === null && panel.button === null ? null : (
+          <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden mt-2 shadow-lg">
+            {panel.image === null ? null : (
+              <Image
+                src={panel.image.src}
+                alt={panel.image.alt}
+                fill
+                sizes="336px"
+                className="absolute inset-0 object-cover"
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            {panel.button === null ? null : (
+              <div className="absolute bottom-6 inset-x-6">
+                <Link
+                  href={panel.button.href as Route}
+                  onClick={onNavigate}
+                  className={cn(
+                    buttonVariants({ size: "lg" }),
+                    "w-full bg-accent hover:bg-accent/90 text-white border-none shadow-md",
+                  )}
+                >
+                  {panel.button.label}
+                </Link>
+              </div>
+            )}
           </div>
-        </div>
+        )}
 
         {/* Contact Info */}
         <div className="flex flex-col gap-6 w-full text-left mt-6 border-t border-border pt-10">

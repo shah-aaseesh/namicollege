@@ -5,13 +5,6 @@ import type { InstitutionNoticesCopy } from "@/components/shared/institution-not
 import type { ContentImage, ContentLink, SectionCopy } from "@/lib/content";
 import { richText } from "@/lib/content";
 
-export type CourseKey =
-  | "computer-science"
-  | "environmental-science"
-  | "environmental-studies"
-  | "business-administration"
-  | "msc-computing";
-
 export type ModuleStatus = "Compulsory" | "Optional" | "Designated";
 
 export type ProgrammeModule = {
@@ -41,7 +34,8 @@ export type KeyFact = {
 };
 
 export type BachelorsProgramme = {
-  readonly key: CourseKey;
+  /** The course page's web address: /institutions/bachelors/{key}. */
+  readonly key: string;
   readonly qualification: string;
   readonly title: string;
   readonly fullTitle: string;

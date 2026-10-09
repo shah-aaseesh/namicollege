@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SiteCtaBand } from "@/components/layout/site-cta-band";
+import { SiteNewsletterBand } from "@/components/layout/site-newsletter-band";
 import { CareerPlacement } from "@/components/shared/career-placement";
 import { InstitutionAwarding } from "@/components/shared/institution-awarding";
 import { InstitutionContact } from "@/components/shared/institution-contact";
@@ -8,7 +8,13 @@ import { InstitutionNotices } from "@/components/shared/institution-notices";
 import type { CareerPartner } from "@/components/shared/partner-carousel";
 import { SharedHero } from "@/components/shared/shared-hero";
 import { Testimonials } from "@/components/shared/testimonials";
-import { content } from "@/lib/content";
+import {
+  getBachelorsPage,
+  getBachelorsProgrammes,
+} from "@/lib/cms/pages/bachelors";
+import { testimonialsProps } from "@/lib/cms/testimonials";
+import { hasImage, isExternalHref } from "@/lib/cms/types";
+import { content, richText } from "@/lib/content";
 import { institutionPath } from "@/lib/content/institutions";
 import { createMetadata } from "@/lib/seo";
 import { BachelorsAcademicHeadSection } from "./_components/bachelors-academic-head";
@@ -19,29 +25,36 @@ import { PearsonVueBanner } from "./_components/pearson-vue-banner";
 import { UniversityPartnersSection } from "./_components/university-partners-section";
 import { WhyUndergraduateSection } from "./_components/why-undergraduate-section";
 
-export const metadata: Metadata = createMetadata({
-  path: institutionPath("bachelors"),
-  title: bachelorsCopy.meta.title,
-  description: bachelorsCopy.meta.description,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getBachelorsPage();
+
+  return createMetadata({
+    path: institutionPath("bachelors"),
+    title: seo.title,
+    description: seo.description,
+  });
+}
+
+function linkOf(link: { label: string; href: string }) {
+  return {
+    label: link.label,
+    href: link.href,
+    destination: isExternalHref(link.href)
+      ? ("external" as const)
+      : ("internal" as const),
+  };
+}
 
 export default async function BachelorsPage() {
-  const [institution, leadership, affiliations, partners, testimonials] =
+  const [page, programmes, institution, affiliations, partners] =
     await Promise.all([
+      getBachelorsPage(),
+      getBachelorsProgrammes(),
       content.getInstitution(),
-      content.getLeadership(),
       content.getAffiliations(),
       content.getPartners(),
-      content.getTestimonials(),
     ]);
-
-  const academicHead =
-    leadership.academics.find(
-      (item) => item.slug === bachelorsCopy.academicHead.slug,
-    ) ?? null;
-  const alumni = testimonials.filter(
-    (item) => item.institution === "institute",
-  );
+  const { hero, academicHead, courses } = page;
 
   const socials = institution.contact.socialProfiles.filter(
     (profile) => profile.destination === "external",
@@ -54,72 +67,105 @@ export default async function BachelorsPage() {
     logo: partner.logo,
   }));
 
+  const headParagraphs = academicHead.paragraphs.filter(
+    (item) => item.trim() !== "",
+  );
+  const alumni = testimonialsProps(page.alumni, "bachelors-alumni");
+
   return (
     <>
       <SharedHero
         entity={institution.entities.institute}
-        heading={bachelorsCopy.masthead.heading}
-        heroLabel={bachelorsCopy.masthead.heroLabel}
-        motto={bachelorsCopy.masthead.motto}
-        primaryCta={bachelorsCopy.masthead.cta}
-        slides={bachelorsCopy.masthead.slides}
-        standfirst={bachelorsCopy.masthead.standfirst}
+        heading={hero.title || undefined}
+        heroLabel={hero.label || institution.entities.institute.name}
+        motto={institution.motto}
+        primaryCta={linkOf(hero.button)}
+        slides={hero.slides.map((slide) => slide.image)}
+        standfirst={hero.standfirst}
         watch={watch ?? null}
       />
 
-      <WhyUndergraduateSection />
+      <WhyUndergraduateSection why={page.why} />
 
-      {academicHead === null ? null : (
+      {headParagraphs.length === 0 ? null : (
         <BachelorsAcademicHeadSection
-          eyebrow={bachelorsCopy.academicHead.eyebrow}
+          eyebrow={academicHead.label}
           id="academic-head"
-          message={bachelorsCopy.academicHead.message}
+          message={richText(...headParagraphs)}
           person={{
             name: academicHead.name,
-            portrait:
-              bachelorsCopy.academicHead.portrait ?? academicHead.portrait,
+            portrait: hasImage(academicHead.portrait)
+              ? academicHead.portrait
+              : null,
             title: academicHead.title,
           }}
         />
       )}
 
       {/* Dedicated University Partners & VC/Dean Messages */}
-      <UniversityPartnersSection />
+      <UniversityPartnersSection copy={page.universities} />
 
-      <BachelorsCourseRail copy={bachelorsCopy.programmes} id="programmes" />
+      <BachelorsCourseRail
+        copy={{
+          eyebrow: courses.label,
+          heading: courses.title,
+          standfirst:
+            courses.description.trim() === "" ? null : courses.description,
+          awardedLabel: courses.awardedLabel,
+          startingLabel: courses.startingLabel,
+          pendingLabel: courses.pendingLabel,
+          items: programmes,
+        }}
+        id="programmes"
+      />
 
       <InstitutionAwarding
         affiliations={affiliations}
-        copy={bachelorsCopy.awarding}
+        copy={{
+          eyebrow: page.awarding.title,
+          heading: page.awarding.label,
+          standfirst: page.awarding.description,
+          sinceLabel: page.awarding.sinceLabel,
+        }}
         id="awarding"
         levelSlug={bachelorsCopy.levelSlug}
       />
 
-      <PearsonVueBanner />
+      <PearsonVueBanner copy={page.pearson} />
 
-      <CareerPlacement
-        copy={bachelorsCopy.partners}
-        id="partners"
-        partners={networkPartners}
-        tone="surface"
-      />
+      {hasImage(page.placement.image) ? (
+        <CareerPlacement
+          copy={{
+            eyebrow: page.placement.title,
+            heading: page.placement.label,
+            image: page.placement.image,
+            label: bachelorsCopy.partners.label,
+          }}
+          id="partners"
+          partners={networkPartners}
+          tone="surface"
+        />
+      ) : null}
 
-      <Testimonials id="alumni" items={alumni} section={bachelorsCopy.alumni} />
+      <Testimonials id="alumni" items={alumni.items} section={alumni.section} />
 
-      <MouPartnersSection id="mou-partners" />
+      <MouPartnersSection copy={page.mou} id="mou-partners" />
 
       <InstitutionNotices
-        copy={bachelorsCopy.notices}
+        copy={{
+          eyebrow: page.notices.title,
+          heading: "",
+          standfirst: page.notices.description,
+          ctaLabel: page.notices.buttonLabel,
+          emptyState: page.notices.emptyState,
+        }}
         id="notices"
         institution="institute"
       />
 
       <InstitutionEnrollCta institution="institute" />
 
-      <SiteCtaBand
-        heading="Subscribe to our Newsletter"
-        standfirst={institution.entities.institute.name}
-      />
+      <SiteNewsletterBand standfirst={institution.entities.institute.name} />
 
       <InstitutionContact id="contact" institution="institute" />
     </>

@@ -1,12 +1,11 @@
-"use client";
-
 import type { Route } from "next";
 import Link from "next/link";
 import { Reveal, RevealItem } from "@/components/motion/reveal";
 import { SplitText } from "@/components/motion/split-text";
 import { buttonVariants } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import type { EntityRole } from "@/lib/content";
+import { getSitePage } from "@/lib/cms/pages/site";
+import { content, type EntityRole } from "@/lib/content";
 import { ArrowRightIcon, DownloadIcon, PhoneIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
@@ -24,56 +23,53 @@ export interface InstitutionEnrollCtaProps {
   readonly className?: string;
 }
 
-const DEFAULTS_BY_ROLE: Record<
-  EntityRole,
-  {
-    heading: string;
-    description: string;
-    brochureLabel: string;
-    phone: string;
-  }
-> = {
-  school: {
-    heading: "Ready to Enroll?",
-    description:
-      "We are here to guide you through every step of the admissions process. If you have any questions or need assistance, our admissions team is ready to help.",
-    brochureLabel: "Brochure",
-    phone: "+977-01-4917441/42/43/44, +977-01-4913353",
-  },
-  college: {
-    heading: "Ready to Enroll?",
-    description:
-      "We are here to guide you through every step of the Cambridge A-Level admissions process. If you have any questions, our admissions desk is here to support you.",
-    brochureLabel: "Prospectus",
-    phone: "+977-01-4917441/42/43/44, +977-01-4913353",
-  },
-  institute: {
-    heading: "Ready to Enroll?",
-    description:
-      "We are here to guide you through every step of university admissions. If you have any questions about Northampton UK degree programmes, our advisors are ready to assist.",
-    brochureLabel: "Prospectus",
-    phone: "+977-01-5920335/36",
-  },
-};
-
-export function InstitutionEnrollCta({
+// Each prop overrides the text edited in WordPress (Site Settings → Enroll Banner).
+// The phone number comes from Site Settings → Institution Contacts.
+export async function InstitutionEnrollCta({
   id = "enroll",
   institution = "school",
   eyebrow,
   heading,
   description,
-  applyLabel = "Apply Now",
-  applyHref = "/admissions",
+  applyLabel,
+  applyHref,
   brochureLabel,
-  brochureHref = "/admissions",
+  brochureHref,
   phone,
   className,
 }: InstitutionEnrollCtaProps) {
-  const roleDefaults = DEFAULTS_BY_ROLE[institution] ?? DEFAULTS_BY_ROLE.school;
-  const effectiveHeading = heading ?? roleDefaults.heading;
-  const effectiveDescription = description ?? roleDefaults.description;
-  const effectiveBrochureLabel = brochureLabel ?? roleDefaults.brochureLabel;
-  const effectivePhone = phone ?? roleDefaults.phone;
+  const [{ enroll }, profile] = await Promise.all([
+    getSitePage(),
+    content.getInstitution(),
+  ]);
+  const copy = {
+    school: {
+      heading: enroll.schoolHeading,
+      description: enroll.schoolDescription,
+      apply: enroll.schoolApply,
+      brochure: enroll.schoolBrochure,
+    },
+    college: {
+      heading: enroll.collegeHeading,
+      description: enroll.collegeDescription,
+      apply: enroll.collegeApply,
+      brochure: enroll.collegeBrochure,
+    },
+    institute: {
+      heading: enroll.instituteHeading,
+      description: enroll.instituteDescription,
+      apply: enroll.instituteApply,
+      brochure: enroll.instituteBrochure,
+    },
+  }[institution];
+  const effectiveHeading = heading ?? copy.heading;
+  const effectiveDescription = description ?? copy.description;
+  const effectiveApplyLabel = applyLabel ?? copy.apply.label;
+  const effectiveApplyHref = applyHref ?? (copy.apply.href || "/admissions");
+  const effectiveBrochureLabel = brochureLabel ?? copy.brochure.label;
+  const effectiveBrochureHref =
+    brochureHref ?? (copy.brochure.href || "/admissions");
+  const effectivePhone = phone ?? profile.contact.byEntity[institution].phone;
 
   const isSchool = institution === "school";
   const isCollege = institution === "college";
@@ -139,44 +135,48 @@ export function InstitutionEnrollCta({
           {/* Action Button Row */}
           <RevealItem className="mt-7 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
             {/* Primary Action: Apply Now */}
-            <Link
-              href={applyHref as Route}
-              className={cn(
-                buttonVariants({ size: "lg" }),
-                "w-full sm:w-auto justify-center",
-                isCollege
-                  ? "bg-white text-primary-800 hover:bg-neutral-100 font-semibold shadow-md"
-                  : "bg-[#BD1B21] text-white hover:bg-[#9e1419] font-semibold shadow-lg border border-[#BD1B21]/60",
-              )}
-            >
-              <span>{applyLabel}</span>
-              <Icon
-                icon={ArrowRightIcon}
+            {effectiveApplyLabel.trim() === "" ? null : (
+              <Link
+                href={effectiveApplyHref as Route}
                 className={cn(
-                  "size-4",
-                  isCollege ? "text-primary-800" : "text-white",
+                  buttonVariants({ size: "lg" }),
+                  "w-full sm:w-auto justify-center",
+                  isCollege
+                    ? "bg-white text-primary-800 hover:bg-neutral-100 font-semibold shadow-md"
+                    : "bg-[#BD1B21] text-white hover:bg-[#9e1419] font-semibold shadow-lg border border-[#BD1B21]/60",
                 )}
-              />
-            </Link>
+              >
+                <span>{effectiveApplyLabel}</span>
+                <Icon
+                  icon={ArrowRightIcon}
+                  className={cn(
+                    "size-4",
+                    isCollege ? "text-primary-800" : "text-white",
+                  )}
+                />
+              </Link>
+            )}
 
             {/* Brochure Action: Download Brochure */}
-            <Link
-              href={brochureHref as Route}
-              className={cn(
-                buttonVariants({ size: "lg", variant: "outline" }),
-                "w-full sm:w-auto justify-center border-white/35 bg-white/10 text-white hover:bg-white/20 hover:border-white shadow-sm backdrop-blur-xs",
-              )}
-            >
-              <Icon
-                icon={DownloadIcon}
+            {effectiveBrochureLabel.trim() === "" ? null : (
+              <Link
+                href={effectiveBrochureHref as Route}
                 className={cn(
-                  "size-4",
-                  isSchool && "text-[#F7CD00]",
-                  !isSchool && "text-white/80",
+                  buttonVariants({ size: "lg", variant: "outline" }),
+                  "w-full sm:w-auto justify-center border-white/35 bg-white/10 text-white hover:bg-white/20 hover:border-white shadow-sm backdrop-blur-xs",
                 )}
-              />
-              <span>{effectiveBrochureLabel}</span>
-            </Link>
+              >
+                <Icon
+                  icon={DownloadIcon}
+                  className={cn(
+                    "size-4",
+                    isSchool && "text-[#F7CD00]",
+                    !isSchool && "text-white/80",
+                  )}
+                />
+                <span>{effectiveBrochureLabel}</span>
+              </Link>
+            )}
           </RevealItem>
 
           {/* Help Line / Contact Link */}
@@ -195,7 +195,7 @@ export function InstitutionEnrollCta({
                   !isSchool && "text-primary-200",
                 )}
               />
-              <span>Need help? Call Admissions at</span>
+              <span>{enroll.helpText}</span>
               <Link
                 href={
                   `tel:${(effectivePhone.split(/[/,]/)[0] ?? "").replace(/[^+\d]/g, "")}` as Route

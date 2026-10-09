@@ -7,154 +7,37 @@ import { useState } from "react";
 import { Reveal } from "@/components/motion/reveal";
 import { SplitText } from "@/components/motion/split-text";
 import { Eyebrow, H3 } from "@/components/ui/typography";
+import type {
+  BachelorsPageContent,
+  BachelorsUniversityPartner,
+} from "@/lib/cms/pages/bachelors";
+import { hasImage } from "@/lib/cms/types";
 import { cn } from "@/lib/utils";
-
-type UniversityPartner = {
-  readonly id: "northampton" | "kathmandu-university";
-  readonly badge: string;
-  readonly partnerStatus: string;
-  readonly name: string;
-  readonly location: string;
-  readonly logo: string;
-  readonly overview: readonly string[];
-  readonly metrics: readonly {
-    readonly value: string;
-    readonly label: string;
-  }[];
-  readonly programmes: readonly {
-    readonly title: string;
-    readonly award: string;
-    readonly duration?: string;
-  }[];
-  readonly leaderRole: string;
-  readonly leaderName: string;
-  readonly leaderTitle: string;
-  readonly leaderAffiliation: string;
-  readonly leaderPhoto?: string;
-  readonly leaderQuote: string;
-  readonly leaderMessage: readonly string[];
-  readonly note?: string;
-};
-
-const UNIVERSITY_PARTNERS: readonly UniversityPartner[] = [
-  {
-    id: "northampton",
-    badge: "Official UK Degree Awarding Partner",
-    partnerStatus: "Direct Academic Partnership Since 2012",
-    name: "University of Northampton, UK",
-    location: "Waterside Campus, University Drive, Northampton - NN1 5PH",
-    logo: "/logos/universities/northampton.png",
-    overview: [
-      "The University of Northampton is a leading British public university located on its purpose-built £330 million Waterside Campus in England. Globally recognized as the UK's first Ashoka U Changemaker Campus and commended for teaching excellence under the British Teaching Excellence Framework (TEF), the university champions social innovation, enterprise, and high graduate outcomes.",
-      "Since 2012, NAMI has operated in direct academic partnership with the University of Northampton to deliver accredited undergraduate and postgraduate degrees in Kathmandu. Programmes follow identical curricula, assessment frameworks, and moderation from external UK examiners, granting graduates authentic British degrees recognized internationally.",
-    ],
-    metrics: [
-      { value: "12+ Years", label: "Academic Partnership" },
-      { value: "100% UK Awarded", label: "Direct Equivalence" },
-      { value: "TEF Rated", label: "Teaching Excellence" },
-    ],
-    programmes: [
-      {
-        title: "BSc. (Hons) Computing",
-        award: "UoN, UK",
-        duration: "3 Years",
-      },
-      {
-        title: "BSc. (Hons) Software Engineering",
-        award: "UoN, UK",
-        duration: "3 Years",
-      },
-      {
-        title: "BSc. (Hons) Network Engineering",
-        award: "UoN, UK",
-        duration: "3 Years",
-      },
-      {
-        title: "BSc. (Hons) Environmental Science",
-        award: "UoN, UK",
-        duration: "3 Years",
-      },
-      {
-        title: "BBA (Hons) Business Administration",
-        award: "UoN, UK",
-        duration: "3 Years",
-      },
-    ],
-    leaderRole: "Message from the Vice-Chancellor",
-    leaderName: "Professor Anne-Marie Kilday",
-    leaderTitle: "Vice-Chancellor",
-    leaderAffiliation: "University of Northampton, United Kingdom",
-    leaderPhoto:
-      "/sections/nami/anne-marie-kilday-outside-portrait-683x1024.jpg",
-    leaderQuote:
-      "Our partnership with NAMI reflects our shared conviction in widening access to world-class British higher education, equipping students in Nepal with the innovation and global competencies to lead transformative careers.",
-    leaderMessage: [
-      "At the University of Northampton, we believe higher education has the transformative power to develop future leaders, ignite innovation, and deliver real social impact. Our long-standing collaboration with Naaya Aayam Multi-Disciplinary Institute (NAMI) in Kathmandu is a testament to this global mission.",
-      "Through this partnership, students in Nepal engage in rigorous, career-focused degree programmes in Computing, Software Engineering, Network Engineering, Environmental Science, and Business Administration. These programmes are delivered under our exacting academic standards, incorporating experiential learning and technological literacy.",
-      "We take immense pride in the achievements of NAMI graduates who continue to excel across international technology companies, research organizations, and entrepreneurial ventures. We look forward to deepening our academic collaboration and welcoming future cohorts into our global community.",
-    ],
-  },
-  {
-    id: "kathmandu-university",
-    badge: "National University Collaboration",
-    partnerStatus: "Collaborative Academic Partnership from 2026",
-    name: "Kathmandu University (KU)",
-    location: "Main Campus · Dhulikhel, Kavrepalanchok, Nepal",
-    logo: "/logos/universities/Kathmandu_University_Logo.webp",
-    overview: [
-      "Established in 1991, Kathmandu University is an autonomous, premier non-government public institution dedicated to academic excellence, scientific research, and professional training in Nepal. Ranked consistently among Nepal's top national universities, KU is celebrated for research integrity, dedicated faculty, and high pedagogical standards.",
-      "NAMI has entered into a strategic collaboration with Kathmandu University to offer the Bachelor in Environmental Studies (BES) programme. Combining classroom rigour with field-based ecological assessments, GIS spatial modeling, and sustainability policy analysis, the programme prepares graduates to tackle critical Himalayan and global environmental challenges.",
-    ],
-    metrics: [
-      { value: "Autonomous", label: "Premier National University" },
-      { value: "Himalayan Fieldwork", label: "Applied Ecology Practicums" },
-      { value: "Session 2026", label: "Commencing Intake" },
-    ],
-    programmes: [
-      {
-        title: "BSc. in Environmental Studies (BES)",
-        award: "KU Collaboration",
-        duration: "4 Years · 8 Semesters",
-      },
-      {
-        title: "Himalayan Ecology & Field Practicums",
-        award: "KU Academic Track",
-        duration: "Applied Research",
-      },
-      {
-        title: "Climate Policy & Sustainability Governance",
-        award: "Joint Initiatives",
-        duration: "Policy Practicum",
-      },
-    ],
-    leaderRole: "Message from the Dean / Academic Leadership",
-    leaderName: "Office of the Dean, School of Science",
-    leaderTitle: "Dean & Academic Leadership Council",
-    leaderAffiliation: "Kathmandu University, Dhulikhel, Nepal",
-    leaderQuote:
-      "Collaborating with NAMI allows us to expand multidisciplinary environmental education, nurturing the next generation of environmental researchers, policy advocates, and sustainability leaders in Nepal.",
-    leaderMessage: [
-      "Kathmandu University has always led the nation in scientific innovation, environmental stewardship, and academic quality. As global environmental and climate realities evolve, the need for skilled, research-oriented environmental professionals has never been more urgent.",
-      "Through our collaborative academic initiatives with NAMI, we bring KU's rich curriculum and pedagogical framework to motivated students in Kathmandu. The Bachelor in Environmental Studies programme is designed to bridge scientific fundamentals with practical fieldwork and community-based sustainability projects.",
-      "We welcome aspiring environmental scientists and future changemakers to embark on this collaborative educational journey with Kathmandu University and NAMI.",
-    ],
-    note: "Official Dean message and comprehensive KU academic details will be updated as finalized by Kathmandu University.",
-  },
-];
 
 function UniversityCard({
   partner,
+  index,
   defaultExpanded = false,
 }: {
-  partner: UniversityPartner;
+  partner: BachelorsUniversityPartner;
+  index: number;
   defaultExpanded?: boolean;
 }) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
-  const isUoN = partner.id === "northampton";
+  // The dark style was designed for the University of Northampton card.
+  const isUoN = partner.dark;
+  const overview = partner.overview.filter((para) => para.trim() !== "");
+  const leaderMessage = partner.leaderMessage.filter(
+    (para) => para.trim() !== "",
+  );
+  const metrics = partner.metrics.filter((m) => m.value.trim() !== "");
+  const programmes = partner.programmes.filter(
+    (prog) => prog.title.trim() !== "",
+  );
 
   return (
     <article
-      id={`partner-${partner.id}`}
+      id={`partner-${index + 1}`}
       className={cn(
         "group relative overflow-hidden rounded-3xl p-6 sm:p-8 lg:p-10 transition-all duration-300",
         isUoN
@@ -195,7 +78,7 @@ function UniversityCard({
                 isUoN ? "text-zinc-300" : "text-ink-muted",
               )}
             >
-              • {partner.partnerStatus}
+              • {partner.status}
             </span>
           </div>
 
@@ -219,24 +102,26 @@ function UniversityCard({
         </div>
 
         {/* Logo Container */}
-        <div
-          className={cn(
-            "relative h-16 sm:h-20 w-48 sm:w-64 shrink-0 flex items-center justify-center p-2.5 sm:p-3 rounded-2xl transition-transform duration-200 group-hover:scale-[1.02]",
-            isUoN
-              ? "bg-white shadow-md border border-zinc-200"
-              : "bg-surface-raised/60 border border-border/80 shadow-xs",
-          )}
-        >
-          <div className="relative w-full h-full">
-            <Image
-              src={partner.logo}
-              alt={`${partner.name} Crest`}
-              fill
-              unoptimized
-              className="object-contain"
-            />
+        {hasImage(partner.logo) ? (
+          <div
+            className={cn(
+              "relative h-16 sm:h-20 w-48 sm:w-64 shrink-0 flex items-center justify-center p-2.5 sm:p-3 rounded-2xl transition-transform duration-200 group-hover:scale-[1.02]",
+              isUoN
+                ? "bg-white shadow-md border border-zinc-200"
+                : "bg-surface-raised/60 border border-border/80 shadow-xs",
+            )}
+          >
+            <div className="relative w-full h-full">
+              <Image
+                src={partner.logo.src}
+                alt={partner.logo.alt || `${partner.name} Crest`}
+                fill
+                unoptimized
+                className="object-contain"
+              />
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
 
       {/* Collapsed State Preview */}
@@ -249,7 +134,7 @@ function UniversityCard({
                 isUoN ? "!text-zinc-200" : "text-ink/80",
               )}
             >
-              {partner.overview[0]}
+              {overview[0]}
             </p>
 
             <div
@@ -318,9 +203,10 @@ function UniversityCard({
               </h4>
 
               <div className="space-y-3.5 text-xs sm:text-sm leading-relaxed text-justify [text-align-last:left]">
-                {partner.overview.map((para) => (
+                {overview.map((para, paraIndex) => (
                   <p
-                    key={para.slice(0, 32)}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: items are an ordered CMS list
+                    key={paraIndex}
                     className={cn(
                       "leading-relaxed font-normal",
                       isUoN ? "!text-zinc-200" : "text-ink/80",
@@ -331,7 +217,7 @@ function UniversityCard({
                 ))}
               </div>
 
-              {partner.note && (
+              {partner.note.trim() !== "" && (
                 <div
                   className={cn(
                     "mt-4 p-3 rounded-xl border text-xs leading-relaxed",
@@ -373,8 +259,12 @@ function UniversityCard({
                       : "bg-surface-raised/40 border-border/70",
                   )}
                 >
-                  {partner.metrics.map((m) => (
-                    <div key={m.label} className="text-center">
+                  {metrics.map((m, metricIndex) => (
+                    <div
+                      className="text-center"
+                      // biome-ignore lint/suspicious/noArrayIndexKey: items are an ordered CMS list
+                      key={metricIndex}
+                    >
                       <p
                         className={cn(
                           "font-display text-sm sm:text-base font-bold",
@@ -413,9 +303,10 @@ function UniversityCard({
                 </p>
 
                 <div className="grid grid-cols-1 min-[480px]:grid-cols-2 gap-2.5">
-                  {partner.programmes.map((prog) => (
+                  {programmes.map((prog, progIndex) => (
                     <Link
-                      key={prog.title}
+                      // biome-ignore lint/suspicious/noArrayIndexKey: items are an ordered CMS list
+                      key={progIndex}
                       href={"#programmes" as Route}
                       className={cn(
                         "group flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border text-xs transition-all duration-200 cursor-pointer",
@@ -483,12 +374,12 @@ function UniversityCard({
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-start">
               {/* Left Column: Big VC Portrait & Credentials */}
-              {partner.leaderPhoto ? (
+              {hasImage(partner.leaderPhoto) ? (
                 <div className="md:col-span-5 lg:col-span-4 flex flex-col items-center sm:items-start">
                   <div className="relative aspect-[3/4] w-full min-h-[340px] sm:min-h-[400px] lg:min-h-[460px] rounded-2xl overflow-hidden border-2 border-[#E0006C]/50 shadow-2xl bg-zinc-900">
                     <Image
-                      src={partner.leaderPhoto}
-                      alt={partner.leaderName}
+                      src={partner.leaderPhoto.src}
+                      alt={partner.leaderPhoto.alt || partner.leaderName}
                       fill
                       className="object-cover object-[center_55%]"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 480px"
@@ -593,10 +484,11 @@ function UniversityCard({
                     isUoN ? "!text-zinc-200" : "text-ink/80",
                   )}
                 >
-                  {partner.leaderMessage.map((msg) => (
+                  {leaderMessage.map((msg, msgIndex) => (
                     <p
-                      key={msg.slice(0, 32)}
                       className="leading-relaxed font-normal"
+                      // biome-ignore lint/suspicious/noArrayIndexKey: items are an ordered CMS list
+                      key={msgIndex}
                     >
                       {msg}
                     </p>
@@ -646,7 +538,17 @@ function UniversityCard({
   );
 }
 
-export function UniversityPartnersSection() {
+export function UniversityPartnersSection({
+  copy,
+}: {
+  readonly copy: BachelorsPageContent["universities"];
+}) {
+  const partners = copy.partners.filter(
+    (partner) => partner.name.trim() !== "",
+  );
+
+  if (partners.length === 0) return null;
+
   return (
     <section
       className="gutter-x section-y bg-surface-raised/20 border-y border-border"
@@ -657,9 +559,7 @@ export function UniversityPartnersSection() {
         <div className="max-w-3xl mb-10 sm:mb-14">
           <Reveal>
             <div className="flex items-center gap-5">
-              <Eyebrow className="text-accent">
-                Academic Affiliations &amp; Degree Awarding
-              </Eyebrow>
+              <Eyebrow className="text-accent">{copy.label}</Eyebrow>
               <span className="h-px flex-1 bg-border" />
             </div>
           </Reveal>
@@ -670,7 +570,7 @@ export function UniversityPartnersSection() {
                 as="h2"
                 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink font-normal tracking-tight"
               >
-                Our University Partners
+                {copy.title}
               </SplitText>
             </Reveal>
           </div>
@@ -678,11 +578,13 @@ export function UniversityPartnersSection() {
 
         {/* Both Cards Expandable / Collapsible */}
         <div className="space-y-8 sm:space-y-12">
-          {UNIVERSITY_PARTNERS.map((partner, index) => (
+          {partners.map((partner, index) => (
             <UniversityCard
-              key={partner.id}
-              partner={partner}
               defaultExpanded={index === 0}
+              index={index}
+              // biome-ignore lint/suspicious/noArrayIndexKey: items are an ordered CMS list
+              key={index}
+              partner={partner}
             />
           ))}
         </div>

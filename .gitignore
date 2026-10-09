@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -59,8 +60,8 @@ next-env.d.ts
 
 # large media files (whitelist production video assets <= 50MB)
 *.mp4
-!/public/Final First Video.mp4
-!/public/nami-video.mp4
+!/public/videos/Final First Video.mp4
+!/public/videos/nami-video.mp4
 *.mov
 *.avi
 *.zip

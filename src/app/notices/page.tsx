@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 import { P } from "@/components/ui/typography";
+import { getNoticesPage } from "@/lib/cms/pages/notices";
 import { content } from "@/lib/content";
 import {
   INSTITUTION_PARAM,
   parseInstitutionFilter,
 } from "@/lib/institution-filter";
 import { createMetadata } from "@/lib/seo";
-import { noticesCopy } from "./_components/notices-copy";
 import { NoticesMasthead } from "./_components/notices-masthead";
 import { UpdatesArchive } from "./_components/updates-archive";
 import {
@@ -21,26 +21,30 @@ type PageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export const metadata: Metadata = createMetadata({
-  path: "/notices",
-  title: noticesCopy.meta.title,
-  description: noticesCopy.meta.description,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getNoticesPage();
+  return createMetadata({
+    path: "/notices",
+    title: seo.title,
+    description: seo.description,
+  });
+}
 
 export default async function NoticesPage({ searchParams }: PageProps) {
-  const [items, institution, query] = await Promise.all([
+  const [items, institution, query, page] = await Promise.all([
     content.getUpdates(),
     content.getInstitution(),
     searchParams,
+    getNoticesPage(),
   ]);
 
   return (
     <>
-      <NoticesMasthead />
+      <NoticesMasthead copy={page.masthead} />
       {items.length === 0 ? (
         <section className="gutter-x section-y border-t border-border">
           <div className="mx-auto max-w-page">
-            <P className="max-w-xl">{noticesCopy.emptyArchive}</P>
+            <P className="max-w-xl">{page.empty.text}</P>
           </div>
         </section>
       ) : (

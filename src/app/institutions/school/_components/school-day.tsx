@@ -49,10 +49,11 @@ export function SchoolDay({
 
         <div className="mt-12 lg:mt-16">
           <ul className="grid border-t border-white/15 lg:grid-cols-2 lg:gap-x-14 xl:gap-x-16">
-            {copy.campus.map((entry) => (
+            {copy.campus.map((entry, index) => (
               <li
                 className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 border-b border-white/15 py-4 sm:py-6"
-                key={entry.title}
+                // biome-ignore lint/suspicious/noArrayIndexKey: ordered CMS list
+                key={`${index}-${entry.title}`}
               >
                 {entry.photo && (
                   <div className="relative aspect-4/3 hidden sm:block sm:h-30 sm:w-40 lg:h-33 lg:w-44 shrink-0 overflow-hidden rounded-2xl shadow-md bg-black/20">
@@ -68,7 +69,7 @@ export function SchoolDay({
 
                 <div className="min-w-0 flex-1">
                   <Accordion className="border-none w-full">
-                    <AccordionItem value={entry.title} className="border-none">
+                    <AccordionItem value={`${index}`} className="border-none">
                       <AccordionTrigger className="p-0 text-start group hover:text-white transition-colors">
                         <h3 className="font-display text-2xl sm:text-3xl font-semibold sm:font-normal text-white leading-snug group-hover:text-[#9CC21A]">
                           {entry.title}

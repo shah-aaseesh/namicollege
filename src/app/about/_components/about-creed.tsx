@@ -1,7 +1,7 @@
 import { Reveal } from "@/components/motion/reveal";
 import { SplitText } from "@/components/motion/split-text";
 import { Eyebrow, P } from "@/components/ui/typography";
-import { paragraphsOf, type RichText, type SectionCopy } from "@/lib/content";
+import type { AboutCreed as AboutCreedContent } from "@/lib/cms/pages/about";
 
 function CreedCard({
   label,
@@ -43,17 +43,9 @@ function CreedCard({
   );
 }
 
-export function AboutCreed({
-  mission,
-  vision,
-  section,
-}: {
-  mission: RichText;
-  vision: RichText;
-  section: SectionCopy;
-}) {
-  const missionParagraphs = paragraphsOf(mission);
-  const visionParagraphs = paragraphsOf(vision);
+export function AboutCreed({ creed }: { creed: AboutCreedContent }) {
+  const missionParagraphs = creed.mission.filter((item) => item.trim() !== "");
+  const visionParagraphs = creed.vision.filter((item) => item.trim() !== "");
 
   if (missionParagraphs.length === 0 && visionParagraphs.length === 0) {
     return null;
@@ -65,7 +57,7 @@ export function AboutCreed({
         {/* Section Heading */}
         <Reveal>
           <div className="flex items-center gap-5">
-            <Eyebrow>{section.heading}</Eyebrow>
+            <Eyebrow>{creed.label}</Eyebrow>
             <span className="h-px flex-1 bg-border" />
           </div>
         </Reveal>
@@ -76,7 +68,7 @@ export function AboutCreed({
               as="h2"
               className="font-display text-3xl sm:text-4xl text-accent font-normal"
             >
-              {section.eyebrow ?? "Mission & Vision"}
+              {creed.title}
             </SplitText>
           </Reveal>
         </div>
@@ -84,11 +76,17 @@ export function AboutCreed({
         {/* 2-Column Side-by-Side Cards: Left Mission & Right Vision */}
         <div className="mt-8 sm:mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-stretch">
           <Reveal className="h-full" y={16}>
-            <CreedCard label="Mission" paragraphs={missionParagraphs} />
+            <CreedCard
+              label={creed.missionLabel}
+              paragraphs={missionParagraphs}
+            />
           </Reveal>
 
           <Reveal className="h-full" y={24}>
-            <CreedCard label="Vision" paragraphs={visionParagraphs} />
+            <CreedCard
+              label={creed.visionLabel}
+              paragraphs={visionParagraphs}
+            />
           </Reveal>
         </div>
       </div>

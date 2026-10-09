@@ -76,10 +76,11 @@ function BandContent({ band }: { readonly band: SchoolBand }) {
 
       {band.streams.length === 0 ? null : (
         <div className="mt-10 sm:mt-12 grid gap-6 sm:grid-cols-2">
-          {band.streams.map((stream) => (
+          {band.streams.map((stream, sIdx) => (
             <div
               className="rounded-2xl border border-[#E5DECf] bg-white p-6 lg:p-8 transition-all duration-300 shadow-2xs hover:shadow-xl hover:-translate-y-0.5 flex flex-col justify-between"
-              key={stream.name}
+              // biome-ignore lint/suspicious/noArrayIndexKey: ordered CMS list
+              key={`${sIdx}-${stream.name}`}
             >
               <div>
                 {stream.photo && (
@@ -117,7 +118,8 @@ function BandContent({ band }: { readonly band: SchoolBand }) {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                     {stream.subjectGroups.map((group, gIdx) => (
                       <div
-                        key={group.title}
+                        // biome-ignore lint/suspicious/noArrayIndexKey: ordered CMS list
+                        key={`${gIdx}-${group.title}`}
                         className="flex flex-col rounded-xl border border-[#E5DECf] bg-[#FAF7F0]/70 p-3 transition-all duration-200 hover:border-primary-400 hover:bg-white hover:shadow-sm"
                       >
                         {/* Track Header */}

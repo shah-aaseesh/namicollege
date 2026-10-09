@@ -4,6 +4,7 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Display, Eyebrow, Standfirst } from "@/components/ui/typography";
+import type { ContactPageContent } from "@/lib/cms/pages/contact";
 import type { SocialPlatform } from "@/lib/content";
 import { content } from "@/lib/content";
 import type { IconSvgElement } from "@/lib/icons";
@@ -16,7 +17,6 @@ import {
   YouTubeIcon,
 } from "@/lib/icons";
 import { cn } from "@/lib/utils";
-import { contactCopy } from "./contact-copy";
 
 const SOCIAL_GLYPHS: Record<SocialPlatform, IconSvgElement> = {
   facebook: FacebookIcon,
@@ -27,10 +27,13 @@ const SOCIAL_GLYPHS: Record<SocialPlatform, IconSvgElement> = {
   whatsapp: WhatsappIcon,
 };
 
-export async function ContactMasthead() {
+export async function ContactMasthead({
+  copy,
+}: {
+  readonly copy: ContactPageContent["masthead"];
+}) {
   const institution = await content.getInstitution();
   const { contact } = institution;
-  const copy = contactCopy.masthead;
 
   const email = contact.email;
   const phones = contact.phones;
@@ -43,13 +46,13 @@ export async function ContactMasthead() {
       <div className="mx-auto max-w-page">
         <div className="lg:grid lg:grid-cols-12 lg:gap-x-10 items-end">
           <div className="lg:col-span-7">
-            <Eyebrow>{copy.eyebrow}</Eyebrow>
+            <Eyebrow>{copy.label}</Eyebrow>
             <Display className="mt-3 text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
-              {copy.heading}
+              {copy.title}
             </Display>
           </div>
           <Standfirst className="mt-5 max-w-xl text-neutral-700 lg:col-span-5 lg:mt-0">
-            {copy.standfirst}
+            {copy.description}
           </Standfirst>
         </div>
 

@@ -23,9 +23,9 @@ const VALUE_WIDTH = CONTENT_WIDTH - LABEL_WIDTH;
 const LOGO_SIZE = 46;
 const EMPTY = "—";
 
-type Row = { readonly label: string; readonly value: string };
+export type Row = { readonly label: string; readonly value: string };
 
-type Block =
+export type Block =
   | {
       readonly kind: "fields";
       readonly heading: string;
@@ -43,11 +43,26 @@ type Block =
       readonly value: string;
     };
 
-type Palette = {
+export type Palette = {
   readonly brand: RGB;
   readonly ink: RGB;
   readonly muted: RGB;
   readonly rule: RGB;
+};
+
+export type PdfLogo = {
+  readonly paths: readonly string[];
+  readonly scale: number;
+};
+
+/**
+ * Colours and logo for the masthead. The browser reads them from the page;
+ * the server (src/lib/inquiry-pdf-server.ts) passes them in so both produce
+ * the same PDF.
+ */
+export type InquiryPdfAssets = {
+  readonly palette: Palette;
+  readonly logo: PdfLogo | null;
 };
 
 type Fonts = { readonly regular: PDFFont; readonly bold: PDFFont };
@@ -108,54 +123,47 @@ function circleToPath(cx: number, cy: number, r: number): string {
   ].join(" ");
 }
 
-function numberAttr(element: Element, name: string): number {
-  return Number.parseFloat(element.getAttribute(name) ?? "0") || 0;
+function attrOf(tag: string, name: string): number {
+  const match = new RegExp(`\\s${name}="([^"]*)"`).exec(tag);
+  return Number.parseFloat(match?.[1] ?? "0") || 0;
 }
 
-async function loadLogo(): Promise<{
-  readonly paths: readonly string[];
-  readonly scale: number;
-} | null> {
+/** Turns the logo SVG's paths, rects and circles into PDF paths. */
+export function logoFromSvg(svg: string): PdfLogo | null {
+  const root = /<svg\b[^>]*>/.exec(svg)?.[0] ?? "";
+  const viewBox = (/\sviewBox="([^"]*)"/.exec(root)?.[1] ?? "")
+    .split(/[\s,]+/)
+    .map(Number);
+  const boxWidth = viewBox[2];
+  if (!boxWidth) return null;
+
+  const paths: string[] = [];
+  for (const [tag, name] of svg.matchAll(/<(path|rect|circle)\b[^>]*>/g)) {
+    if (name === "path") {
+      const d = /\sd="([^"]*)"/.exec(tag)?.[1];
+      if (d) paths.push(d);
+      continue;
+    }
+    if (name === "rect") {
+      const x = attrOf(tag, "x");
+      const y = attrOf(tag, "y");
+      paths.push(
+        `M ${x} ${y} H ${x + attrOf(tag, "width")} V ${y + attrOf(tag, "height")} H ${x} Z`,
+      );
+      continue;
+    }
+    paths.push(
+      circleToPath(attrOf(tag, "cx"), attrOf(tag, "cy"), attrOf(tag, "r")),
+    );
+  }
+  return paths.length > 0 ? { paths, scale: LOGO_SIZE / boxWidth } : null;
+}
+
+async function loadLogo(): Promise<PdfLogo | null> {
   try {
     const response = await fetch("/logos/brand/nami-color.svg");
     if (!response.ok) return null;
-    const svg = new DOMParser().parseFromString(
-      await response.text(),
-      "image/svg+xml",
-    );
-    const root = svg.querySelector("svg");
-    if (!root) return null;
-
-    const viewBox = (root.getAttribute("viewBox") ?? "")
-      .split(/[\s,]+/)
-      .map(Number);
-    const boxWidth = viewBox[2];
-    if (!boxWidth) return null;
-
-    const paths: string[] = [];
-    for (const node of root.querySelectorAll("path, rect, circle")) {
-      if (node.localName === "path") {
-        const d = node.getAttribute("d");
-        if (d) paths.push(d);
-        continue;
-      }
-      if (node.localName === "rect") {
-        const x = numberAttr(node, "x");
-        const y = numberAttr(node, "y");
-        paths.push(
-          `M ${x} ${y} H ${x + numberAttr(node, "width")} V ${y + numberAttr(node, "height")} H ${x} Z`,
-        );
-        continue;
-      }
-      paths.push(
-        circleToPath(
-          numberAttr(node, "cx"),
-          numberAttr(node, "cy"),
-          numberAttr(node, "r"),
-        ),
-      );
-    }
-    return paths.length > 0 ? { paths, scale: LOGO_SIZE / boxWidth } : null;
+    return logoFromSvg(await response.text());
   } catch {
     return null;
   }
@@ -481,12 +489,12 @@ function drawProse(
   }
 }
 
-async function drawMasthead(
+function drawMasthead(
   layout: Layout,
   institutionName: string,
   palette: Palette,
+  logo: PdfLogo | null,
 ) {
-  const logo = await loadLogo();
   const top = layout.cursor;
   let titleX = MARGIN;
 
@@ -521,15 +529,38 @@ async function drawMasthead(
   layout.line(palette.rule);
 }
 
+/**
+ * The labelled answers exactly as the PDF lays them out. The admissions inbox
+ * in WordPress shows these so staff read the same wording as the PDF.
+ */
+export function inquirySummary(data: AdmissionsFormData): {
+  readonly institutionId: string;
+  readonly institutionName: string;
+  readonly courseLabel: string;
+  readonly blocks: readonly Block[];
+} {
+  const course = findInquiryCourse(data.program);
+  if (!course) throw new Error("Choose a course before submitting the form.");
+  return {
+    institutionId: course.institutionId,
+    institutionName:
+      findInstitution(course.institutionId)?.title ?? course.label,
+    courseLabel: course.label,
+    blocks: buildBlocks(data, course),
+  };
+}
+
 export async function buildInquiryPdf(
   data: AdmissionsFormData,
+  assets?: InquiryPdfAssets,
 ): Promise<Uint8Array> {
   const course = findInquiryCourse(data.program);
   if (!course) throw new Error("Choose a course before downloading the form.");
 
   const institutionName =
     findInstitution(course.institutionId)?.title ?? course.label;
-  const palette = readPalette();
+  const palette = assets?.palette ?? readPalette();
+  const logo = assets === undefined ? await loadLogo() : assets.logo;
   const doc = await PDFDocument.create();
   const fonts: Fonts = {
     regular: await doc.embedFont(StandardFonts.Helvetica),
@@ -539,7 +570,7 @@ export async function buildInquiryPdf(
   doc.setTitle(`${institutionName} Inquiry Form`);
 
   const layout = new Layout(doc, fonts, palette);
-  await drawMasthead(layout, institutionName, palette);
+  drawMasthead(layout, institutionName, palette, logo);
 
   for (const block of buildBlocks(data, course)) {
     drawHeading(layout, block.heading, palette);

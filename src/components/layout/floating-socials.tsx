@@ -1,6 +1,7 @@
 import type { Route } from "next";
 import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
+import { getSitePage } from "@/lib/cms/pages/site";
 import { content } from "@/lib/content";
 import {
   ArrowRightIcon,
@@ -29,77 +30,38 @@ function formatWhatsAppLink(target: string, message: string): string {
 }
 
 export async function FloatingSocials({ className }: FloatingSocialsProps) {
-  const institution = await content.getInstitution();
+  const [institution, { floating }] = await Promise.all([
+    content.getInstitution(),
+    getSitePage(),
+  ]);
   const { contact } = institution;
 
   const whatsappTarget = contact.whatsapp ?? "namicollege";
   const whatsappUrl = formatWhatsAppLink(
     whatsappTarget,
-    "Hello NAMI, I would like to enquire about admissions, programmes, and campus visits.",
+    floating.whatsappMessage,
   );
+
+  // A PDF opens in a new tab and downloads; a page link opens normally.
+  const itemsOf = (links: readonly { label: string; href: string }[]) =>
+    links.map((link) => ({
+      label: link.label,
+      href: link.href as Route,
+      isPdf: /.pdf($|[?#])/i.test(link.href),
+    }));
 
   const DOWNLOAD_CATEGORIES = [
     {
       id: "applications",
-      label: "Application Forms",
-      items: [
-        {
-          key: "primary-app",
-          label: "Primary School",
-          href: "/documents/Nami International School (Primary) Admission form.pdf" as Route,
-          isPdf: true,
-        },
-        {
-          key: "plus2-app",
-          label: "+2 NEB",
-          href: "/documents/Application_form_nami_international_school_plus_2.pdf" as Route,
-          isPdf: true,
-        },
-        {
-          key: "alevels-app",
-          label: "A-Levels",
-          href: "/documents/NAMI_College_A_Level_Application_Form.pdf" as Route,
-          isPdf: true,
-        },
-        {
-          key: "bachelors-app",
-          label: "Bachelors",
-          href: "/documents/Nami_applicationform_bachelors.pdf" as Route,
-          isPdf: true,
-        },
-      ],
+      label: floating.formsLabel,
+      items: itemsOf(floating.forms),
     },
     {
       id: "brochures",
-      label: "Brochures",
-      items: [
-        {
-          key: "primary-brochure",
-          label: "Primary School",
-          href: "/institutions/school" as Route,
-          isPdf: false,
-        },
-        {
-          key: "plus2-brochure",
-          label: "+2 NEB",
-          href: "/institutions/school" as Route,
-          isPdf: false,
-        },
-        {
-          key: "alevels-brochure",
-          label: "A-Levels",
-          href: "/institutions/a-levels" as Route,
-          isPdf: false,
-        },
-        {
-          key: "bachelors-brochure",
-          label: "Bachelors",
-          href: "/documents/Nami book.pdf" as Route,
-          isPdf: true,
-        },
-      ],
+      label: floating.brochuresLabel,
+      items: itemsOf(floating.brochures),
     },
-  ] as const;
+  ].filter((cat) => cat.items.length > 0);
 
   return (
     <aside
@@ -114,10 +76,10 @@ export async function FloatingSocials({ className }: FloatingSocialsProps) {
         <button
           type="button"
           className="flex size-9 items-center justify-center rounded-lg text-white transition-all duration-150 hover:bg-primary-800 hover:scale-105 focus-visible:bg-primary-800 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-inset cursor-pointer"
-          aria-label="Download Forms & Brochures"
+          aria-label={floating.downloadLabel}
         >
           <Icon className="size-5 text-white" icon={DownloadIcon} />
-          <span className="sr-only">Download Forms & Brochures</span>
+          <span className="sr-only">{floating.downloadLabel}</span>
         </button>
 
         {/* Level 1 Flyout: Categories (Application Forms, Brochures) */}
@@ -143,9 +105,10 @@ export async function FloatingSocials({ className }: FloatingSocialsProps) {
                   <div className="absolute -right-1 top-3.5 size-2.5 rotate-45 border-r border-t border-neutral-200/90 bg-white" />
 
                   <div className="relative space-y-1">
-                    {cat.items.map((opt) => (
+                    {cat.items.map((opt, optIndex) => (
                       <Link
-                        key={opt.key}
+                        // biome-ignore lint/suspicious/noArrayIndexKey: links are an ordered CMS list
+                        key={optIndex}
                         href={opt.href}
                         target={opt.isPdf ? "_blank" : undefined}
                         rel={opt.isPdf ? "noopener noreferrer" : undefined}
@@ -174,16 +137,16 @@ export async function FloatingSocials({ className }: FloatingSocialsProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="flex size-9 items-center justify-center rounded-lg transition-all duration-150 hover:bg-primary-800 hover:scale-105 focus-visible:bg-primary-800 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-inset cursor-pointer"
-          aria-label="Chat on WhatsApp"
+          aria-label={floating.whatsappLabel}
         >
           <Icon className="size-5.5" icon={WhatsappIcon} />
-          <span className="sr-only">Chat on WhatsApp</span>
+          <span className="sr-only">{floating.whatsappLabel}</span>
         </Link>
 
         {/* Tooltip */}
         <div className="invisible pointer-events-none absolute right-full top-1/2 z-50 mr-3 -translate-y-1/2 -translate-x-1.5 whitespace-nowrap rounded-lg border border-neutral-200/90 bg-white px-2.5 py-1 text-xs font-medium text-neutral-800 opacity-0 shadow-lg transition-all duration-150 ease-out group-hover/item:visible group-hover/item:translate-x-0 group-hover/item:opacity-100 group-focus-within/item:visible group-focus-within/item:translate-x-0 group-focus-within/item:opacity-100">
           <div className="absolute -right-1 top-1/2 size-2 -translate-y-1/2 rotate-45 border-r border-t border-neutral-200/90 bg-white" />
-          <span>Chat on WhatsApp</span>
+          <span>{floating.whatsappLabel}</span>
         </div>
       </div>
     </aside>

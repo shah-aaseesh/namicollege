@@ -16,6 +16,7 @@ export function AlumniNetworkCta({
     readonly heading: string;
     readonly standfirst: string;
     readonly email: string;
+    readonly buttonLabel: string;
   };
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,7 +45,7 @@ export function AlumniNetworkCta({
                       className="size-4.5 text-primary-700"
                       icon={SparklesIcon}
                     />
-                    <span>Share Your Story</span>
+                    <span>{copy.buttonLabel}</span>
                   </button>
                 }
                 description={

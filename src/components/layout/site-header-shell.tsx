@@ -18,7 +18,11 @@ import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { ChevronDownIcon, CloseIcon, MenuIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { SiteHeaderWordmark } from "./site-header-wordmark";
-import { type SiteMetaLink, SiteNavPanel } from "./site-nav-panel";
+import {
+  type SiteMetaLink,
+  SiteNavPanel,
+  type SiteNavPanelCopy,
+} from "./site-nav-panel";
 import type { SiteNavItem } from "./site-nav-sections";
 
 const HIDE_AFTER = 96;
@@ -30,6 +34,7 @@ export type SiteHeaderShellProps = {
   items: readonly SiteNavItem[];
   places: readonly string[];
   links: readonly SiteMetaLink[];
+  panel: SiteNavPanelCopy;
 };
 
 function isItemActive(item: SiteNavItem, pathname: string): boolean {
@@ -200,6 +205,7 @@ export function SiteHeaderShell({
   items,
   places,
   links,
+  panel,
   siteName,
 }: SiteHeaderShellProps) {
   const pathname = usePathname();
@@ -375,6 +381,7 @@ export function SiteHeaderShell({
                     labelId={labelId}
                     places={places}
                     links={links}
+                    panel={panel}
                     siteName={institutionalLogo.name}
                     logoSrc={institutionalLogo.src}
                     onNavigate={() => setOpen(false)}

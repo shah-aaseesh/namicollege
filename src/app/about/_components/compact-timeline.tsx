@@ -4,84 +4,15 @@ import Image from "next/image";
 import { Reveal } from "@/components/motion/reveal";
 import { SplitText } from "@/components/motion/split-text";
 import { P } from "@/components/ui/typography";
+import type { AboutHistory } from "@/lib/cms/pages/about";
+import { hasImage } from "@/lib/cms/types";
 import { cn } from "@/lib/utils";
 
-type Milestone = {
-  readonly year: string;
-  readonly title: string;
-  readonly era: string;
-  readonly partner: string;
-  readonly logo: string;
-  readonly description: string;
-};
+export function CompactTimeline({ history }: { history: AboutHistory }) {
+  const milestones = history.milestones.filter(
+    (item) => item.title.trim() !== "",
+  );
 
-const MILESTONES: readonly Milestone[] = [
-  {
-    year: "2012",
-    era: "The Foundation",
-    title: "Establishment of NAMI & UK Degree Programmes",
-    partner: "University of Northampton (UK)",
-    logo: "/logos/universities/northampton.png",
-    description:
-      "Established in Kathmandu in direct academic partnership with the University of Northampton, UK, offering accredited Bachelor's and Master's degrees.",
-  },
-  {
-    year: "2013",
-    era: "Campus Scaling",
-    title: "NAMI College Incorporation & Expansion",
-    partner: "NAMI College",
-    logo: "/logos/brand/nami-college.png",
-    description:
-      "Formally incorporated with dedicated multi-storey academic wings, advanced science laboratories, and campus resource centers.",
-  },
-  {
-    year: "2014",
-    era: "Cambridge A-Levels",
-    title: "Launch of Cambridge International GCE A-Levels",
-    partner: "Cambridge Assessment International",
-    logo: "/logos/universities/cambridge.png",
-    description:
-      "Accredited to offer gold-standard Cambridge GCE A-Levels in Science and Non-Science streams with global university placement guidance.",
-  },
-  {
-    year: "2019",
-    era: "National Board",
-    title: "Launch of NAMI International School & NEB +2",
-    partner: "National Examinations Board (NEB)",
-    logo: "/logos/universities/neb.png",
-    description:
-      "Expanded into the national curriculum with NAMI International School, offering NEB-affiliated 10+2 Science and Management programmes.",
-  },
-  {
-    year: "2024",
-    era: "Comprehensive K-12",
-    title: "Primary Wing Launch & CAIE Home Centre Status",
-    partner: "NAMI International School",
-    logo: "/logos/brand/International School-ai.png",
-    description:
-      "Opened Primary School (Grades 1–7) and earned independent Cambridge International Home Examination Centre status in Nepal.",
-  },
-  {
-    year: "2024",
-    era: "Global Testing",
-    title: "Pearson VUE-Authorized Test Center Collaboration",
-    partner: "Pearson VUE",
-    logo: "/sections/misc/pearson-vue.jpg",
-    description:
-      "Officially authorized as a Pearson VUE testing center, enabling on-campus computer-based international IT certifications, academic tests, and global licensure exams.",
-  },
-  {
-    year: "2025–2026",
-    era: "Future Frontiers",
-    title: "Kathmandu University Partnership & CTEVT Programmes",
-    partner: "Kathmandu University & CTEVT",
-    logo: "/logos/universities/Kathmandu_University_Logo.webp",
-    description:
-      "MoU with Kathmandu University for BSc. Environmental Studies, University of Hertfordshire collaboration, and CTEVT vocational programmes.",
-  },
-];
-
-export function CompactTimeline() {
   return (
     <div className="w-full py-8 sm:py-12 md:py-16">
       {/* Section Header */}
@@ -91,18 +22,10 @@ export function CompactTimeline() {
             as="h2"
             className="font-display text-2xl sm:text-3xl md:text-4xl text-accent font-normal"
           >
-            NAMI History
+            {history.title}
           </SplitText>
           <p className="mt-3 sm:mt-4 font-body text-sm sm:text-base text-neutral-700 leading-relaxed w-full text-justify [text-align-last:left]">
-            Established in 2012, Naaya Aayam Multi-Disciplinary Institute (NAMI)
-            was founded with a visionary commitment to deliver transformative,
-            world-class education in Nepal. Over more than a decade of academic
-            excellence and institutional growth, NAMI has evolved from
-            pioneering UK-accredited international degree pathways to
-            establishing premier Cambridge A-Levels, national school divisions
-            (+2 NEB &amp; Primary), vocational CTEVT courses, and strategic
-            partnerships with Kathmandu University—shaping generations of
-            leaders equipped to make a lasting global impact.
+            {history.intro}
           </p>
         </Reveal>
       </div>
@@ -116,12 +39,13 @@ export function CompactTimeline() {
         <div className="absolute top-0 bottom-0 left-3.5 sm:left-4 w-0.5 bg-gradient-to-b from-accent/30 via-accent to-accent/40 md:hidden" />
 
         <div className="space-y-4 sm:space-y-6 md:space-y-8">
-          {MILESTONES.map((item, index) => {
+          {milestones.map((item, index) => {
             const isEven = index % 2 === 0;
 
             return (
               <div
-                key={item.year}
+                // biome-ignore lint/suspicious/noArrayIndexKey: years repeat (two 2024 milestones)
+                key={`${index}-${item.year}`}
                 className={cn(
                   "relative flex flex-col md:flex-row items-center gap-3 sm:gap-4 md:gap-8",
                   isEven ? "md:flex-row-reverse" : "",
@@ -151,15 +75,17 @@ export function CompactTimeline() {
                         </span>
                       </div>
 
-                      <div className="relative h-8 sm:h-9 md:h-10 lg:h-12 w-20 sm:w-24 md:w-28 lg:w-36 shrink-0">
-                        <Image
-                          src={item.logo}
-                          alt={item.partner}
-                          fill
-                          unoptimized
-                          className="object-contain object-right"
-                        />
-                      </div>
+                      {hasImage(item.logo) ? (
+                        <div className="relative h-8 sm:h-9 md:h-10 lg:h-12 w-20 sm:w-24 md:w-28 lg:w-36 shrink-0">
+                          <Image
+                            src={item.logo.src}
+                            alt={item.logo.alt || item.partner}
+                            fill
+                            unoptimized
+                            className="object-contain object-right"
+                          />
+                        </div>
+                      ) : null}
                     </div>
 
                     {/* Milestone Title */}

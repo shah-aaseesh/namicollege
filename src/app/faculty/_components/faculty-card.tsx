@@ -10,7 +10,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { P } from "@/components/ui/typography";
-import type { Leader } from "@/lib/content";
+import type { FacultyPerson } from "@/lib/cms/pages/faculty";
+import { hasImage } from "@/lib/cms/types";
 import { cn } from "@/lib/utils";
 
 function BioContent({ text }: { readonly text: string }) {
@@ -86,7 +87,7 @@ export function FacultyCard({
   isSolo = false,
   className,
 }: {
-  readonly leader: Leader;
+  readonly leader: FacultyPerson;
   readonly index: number;
   readonly isFirstGroup?: boolean;
   readonly isScrollable?: boolean;
@@ -94,6 +95,7 @@ export function FacultyCard({
   readonly className?: string;
 }) {
   const [open, setOpen] = useState(false);
+  const portrait = hasImage(leader.portrait) ? leader.portrait : null;
 
   return (
     <>
@@ -113,15 +115,15 @@ export function FacultyCard({
         )}
       >
         <div className="relative aspect-4/5 w-full overflow-hidden bg-neutral-100">
-          {leader.portrait ? (
+          {portrait ? (
             <Image
-              alt={leader.portrait.alt}
+              alt={portrait.alt || leader.name}
               className="absolute inset-0 object-cover object-top transition-transform duration-700 group-hover:scale-105"
               fetchPriority={isFirstGroup && index === 0 ? "high" : "auto"}
               fill
               loading={isFirstGroup && index === 0 ? "eager" : "lazy"}
               sizes="(max-width: 640px) 260px, (max-width: 1024px) 280px, 25vw"
-              src={leader.portrait.src}
+              src={portrait.src}
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-neutral-100 text-neutral-300">
@@ -181,14 +183,14 @@ export function FacultyCard({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-lg sm:max-w-2xl max-h-[85vh] flex flex-col p-6 sm:p-8">
           <div className="flex items-start gap-4 sm:gap-5 pb-4 border-b border-border/70">
-            {leader.portrait && (
+            {portrait && (
               <div className="relative size-16 sm:size-20 shrink-0 overflow-hidden rounded-2xl border border-border/60 shadow-md">
                 <Image
-                  alt={leader.portrait.alt}
+                  alt={portrait.alt || leader.name}
                   className="object-cover object-top"
                   fill
                   sizes="80px"
-                  src={leader.portrait.src}
+                  src={portrait.src}
                 />
               </div>
             )}
@@ -203,7 +205,9 @@ export function FacultyCard({
           </div>
 
           <div className="flex-1 overflow-y-auto pt-4 pr-1">
-            <BioContent text={leader.bio ?? leader.brief} />
+            <BioContent
+              text={leader.bio.trim() === "" ? leader.brief : leader.bio}
+            />
           </div>
         </DialogContent>
       </Dialog>

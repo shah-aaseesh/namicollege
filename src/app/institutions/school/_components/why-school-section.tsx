@@ -5,10 +5,11 @@ import { Reveal, RevealItem } from "@/components/motion/reveal";
 import { SplitText } from "@/components/motion/split-text";
 import { Icon } from "@/components/ui/icon";
 import { Eyebrow, P } from "@/components/ui/typography";
+import type { SchoolWhyContent } from "@/lib/cms/pages/school";
 import { ChevronDownIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
-export function WhySchoolSection() {
+export function WhySchoolSection({ why }: { why: SchoolWhyContent }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -32,13 +33,11 @@ export function WhySchoolSection() {
           <div className="lg:col-span-5">
             <Reveal>
               <div className="flex items-center gap-5">
-                <Eyebrow className="text-[#BD1B21]">
-                  NAMI International School
-                </Eyebrow>
+                <Eyebrow className="text-[#BD1B21]">{why.label}</Eyebrow>
                 <span className="h-px flex-1 bg-border" />
               </div>
               <SplitText as="h2" className="mt-4 text-ink">
-                Why Study at NAMI?
+                {why.title}
               </SplitText>
             </Reveal>
           </div>
@@ -48,58 +47,50 @@ export function WhySchoolSection() {
             <Reveal stagger={0.08}>
               <RevealItem>
                 <P className="text-base sm:text-lg font-body leading-relaxed text-ink text-justify [text-align-last:left] [hyphens:auto]">
-                  At NAMI International School, we believe education is about
-                  more than acquiring knowledge. It is about helping students
-                  understand the world, discover their strengths, build
-                  meaningful relationships, and grow into confident, responsible
-                  individuals. We create an environment where students are
-                  encouraged to ask questions, explore ideas, work with others,
-                  think critically, and connect what they learn with real-life
-                  experiences.
+                  {why.intro}
                 </P>
               </RevealItem>
 
-              {/* Expandable Second Paragraph */}
-              <div
-                className={cn(
-                  "grid transition-all duration-300 ease-in-out overflow-hidden",
-                  isExpanded
-                    ? "grid-rows-[1fr] opacity-100 mt-5 pt-5 border-t border-border"
-                    : "grid-rows-[0fr] opacity-0 mt-0 pt-0 border-t-0",
-                )}
-              >
-                <div className="overflow-hidden">
-                  <P className="text-base sm:text-lg font-body leading-relaxed text-ink-muted text-justify [text-align-last:left] [hyphens:auto]">
-                    Our educational approach is grounded in progressive
-                    education, with an emphasis on meaningful learning, student
-                    participation, inclusion, values, creativity, and personal
-                    growth. Through classroom learning, practical activities,
-                    creative pursuits, sports, community engagement, modern
-                    science and computer laboratories, and student well-being
-                    support, we help learners develop the confidence and
-                    competencies to succeed in higher education and life.
-                  </P>
-                </div>
-              </div>
-
-              {/* Read More / Read Less Toggle */}
-              <RevealItem className="mt-4">
-                <button
-                  aria-expanded={isExpanded}
-                  className="group inline-flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-wider text-accent transition-colors hover:text-primary-800 cursor-pointer"
-                  onClick={() => setIsExpanded((prev) => !prev)}
-                  type="button"
-                >
-                  <span>{isExpanded ? "Read Less" : "Read More"}</span>
-                  <Icon
+              {why.more.trim() === "" ? null : (
+                <>
+                  {/* Expandable Second Paragraph */}
+                  <div
                     className={cn(
-                      "size-3.5 transition-transform duration-300",
-                      isExpanded ? "rotate-180" : "group-hover:translate-y-0.5",
+                      "grid transition-all duration-300 ease-in-out overflow-hidden",
+                      isExpanded
+                        ? "grid-rows-[1fr] opacity-100 mt-5 pt-5 border-t border-border"
+                        : "grid-rows-[0fr] opacity-0 mt-0 pt-0 border-t-0",
                     )}
-                    icon={ChevronDownIcon}
-                  />
-                </button>
-              </RevealItem>
+                  >
+                    <div className="overflow-hidden">
+                      <P className="text-base sm:text-lg font-body leading-relaxed text-ink-muted text-justify [text-align-last:left] [hyphens:auto]">
+                        {why.more}
+                      </P>
+                    </div>
+                  </div>
+
+                  {/* Read More / Read Less Toggle */}
+                  <RevealItem className="mt-4">
+                    <button
+                      aria-expanded={isExpanded}
+                      className="group inline-flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-wider text-accent transition-colors hover:text-primary-800 cursor-pointer"
+                      onClick={() => setIsExpanded((prev) => !prev)}
+                      type="button"
+                    >
+                      <span>{isExpanded ? "Read Less" : "Read More"}</span>
+                      <Icon
+                        className={cn(
+                          "size-3.5 transition-transform duration-300",
+                          isExpanded
+                            ? "rotate-180"
+                            : "group-hover:translate-y-0.5",
+                        )}
+                        icon={ChevronDownIcon}
+                      />
+                    </button>
+                  </RevealItem>
+                </>
+              )}
             </Reveal>
           </div>
         </div>

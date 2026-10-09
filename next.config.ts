@@ -2,11 +2,26 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === "development";
 
+// Images and videos uploaded in the WordPress CMS are served from its origin.
+function wordpressUrl(): URL | null {
+  const raw = process.env.WORDPRESS_URL?.trim();
+  if (!raw) return null;
+  try {
+    return new URL(raw);
+  } catch {
+    return null;
+  }
+}
+
+const wordpress = wordpressUrl();
+const cmsOrigin = wordpress === null ? "" : ` ${wordpress.origin}`;
+
 const contentSecurityPolicy = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
+  `img-src 'self' data:${cmsOrigin}`,
+  `media-src 'self'${cmsOrigin}`,
   "font-src 'self'",
   "connect-src 'self'",
   "object-src 'none'",
@@ -33,6 +48,10 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
+  // The admissions route draws the logo into the PDF it sends to WordPress.
+  outputFileTracingIncludes: {
+    "/api/admissions": ["./public/logos/brand/nami-color.svg"],
+  },
   poweredByHeader: false,
   compress: true,
   images: {
@@ -42,6 +61,17 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 2592000,
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
+    remotePatterns:
+      wordpress === null
+        ? []
+        : [
+            {
+              protocol: wordpress.protocol === "http:" ? "http" : "https",
+              hostname: wordpress.hostname,
+              ...(wordpress.port ? { port: wordpress.port } : {}),
+              pathname: `${wordpress.pathname.replace(/\/+$/, "")}/wp-content/uploads/**`,
+            },
+          ],
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

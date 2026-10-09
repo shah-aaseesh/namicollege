@@ -12,9 +12,18 @@ import { H3, P } from "@/components/ui/typography";
 import { ArrowUpRightIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
+/** Edited in WordPress (Site Settings → Newsletter); see SiteNewsletterBand. */
+export type SiteCtaBandCopy = {
+  readonly qr: { readonly src: string; readonly alt: string } | null;
+  readonly namePlaceholder: string;
+  readonly emailPlaceholder: string;
+  readonly buttonLabel: string;
+};
+
 export type SiteCtaBandProps = {
   heading: string;
   standfirst: string;
+  copy: SiteCtaBandCopy;
   onFooterSeam?: boolean;
   className?: string;
 };
@@ -22,6 +31,7 @@ export type SiteCtaBandProps = {
 export function SiteCtaBand({
   heading,
   standfirst,
+  copy,
   onFooterSeam = false,
   className,
 }: SiteCtaBandProps) {
@@ -56,17 +66,19 @@ export function SiteCtaBand({
       <Reveal className="relative mx-auto max-w-page">
         <div className="field-ink flex flex-col items-start justify-between gap-y-6 rounded-2xl px-6 py-7 sm:px-10 sm:py-8 lg:flex-row lg:items-center lg:gap-x-8 lg:px-12 lg:py-7 shadow-lg">
           <div className="flex items-center gap-4 sm:gap-6">
-            <div className="shrink-0 overflow-hidden rounded-xl bg-white p-2 sm:p-2.5 shadow-md">
-              <Image
-                alt="Scan to subscribe to NAMI Newsletter"
-                className="size-20 sm:size-24 object-contain"
-                height={96}
-                priority
-                src="/sections/misc/newsletter-qr.png"
-                unoptimized
-                width={96}
-              />
-            </div>
+            {copy.qr === null ? null : (
+              <div className="shrink-0 overflow-hidden rounded-xl bg-white p-2 sm:p-2.5 shadow-md">
+                <Image
+                  alt={copy.qr.alt}
+                  className="size-20 sm:size-24 object-contain"
+                  height={96}
+                  priority
+                  src={copy.qr.src}
+                  unoptimized
+                  width={96}
+                />
+              </div>
+            )}
             <div className="max-w-sm sm:max-w-md">
               <H3 as="h2" id={headingId}>
                 {heading}
@@ -91,7 +103,7 @@ export function SiteCtaBand({
                   className="w-full min-w-0 border-input bg-transparent"
                   id={nameId}
                   name="name"
-                  placeholder="Your name"
+                  placeholder={copy.namePlaceholder}
                   type="text"
                 />
               </div>
@@ -105,7 +117,7 @@ export function SiteCtaBand({
                   className="w-full min-w-0 border-input bg-transparent"
                   id={emailId}
                   name="email"
-                  placeholder="you@example.com"
+                  placeholder={copy.emailPlaceholder}
                   type="email"
                 />
               </div>
@@ -115,7 +127,7 @@ export function SiteCtaBand({
                 type="submit"
                 className="shrink-0 bg-white text-primary-700 hover:bg-white/90"
               >
-                <span>Subscribe</span>
+                <span>{copy.buttonLabel}</span>
                 <Icon icon={ArrowUpRightIcon} />
               </Button>
             </div>

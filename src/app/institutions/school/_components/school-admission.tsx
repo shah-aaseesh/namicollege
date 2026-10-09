@@ -249,7 +249,12 @@ export function SchoolAdmission({
           <div className="overflow-visible flex justify-center w-full pt-4 pb-8">
             <ol className="flex items-start lg:-space-x-4 xl:-space-x-5 2xl:-space-x-6 w-full justify-center">
               {copy.steps.map((step, index) => (
-                <DiamondStepCard index={index} key={step.title} step={step} />
+                <DiamondStepCard
+                  index={index}
+                  // biome-ignore lint/suspicious/noArrayIndexKey: ordered CMS list
+                  key={`${index}-${step.title}`}
+                  step={step}
+                />
               ))}
             </ol>
           </div>
@@ -262,7 +267,8 @@ export function SchoolAdmission({
               <MobileStepCard
                 index={index}
                 isLast={index === copy.steps.length - 1}
-                key={step.title}
+                // biome-ignore lint/suspicious/noArrayIndexKey: ordered CMS list
+                key={`${index}-${step.title}`}
                 step={step}
               />
             ))}

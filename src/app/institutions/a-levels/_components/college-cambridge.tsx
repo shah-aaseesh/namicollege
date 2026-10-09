@@ -42,8 +42,10 @@ const PROPOSITION_THEMES = [
 ] as const;
 
 export function CollegeCambridge({
+  badge = "Cambridge A-Levels",
   copy,
 }: {
+  readonly badge?: string;
   readonly copy: CollegeCambridgeCopy;
 }) {
   return (
@@ -78,20 +80,23 @@ export function CollegeCambridge({
                   theme.borderColor,
                 )}
                 data-pinned-panel=""
-                key={proposition.title}
+                // biome-ignore lint/suspicious/noArrayIndexKey: ordered CMS list
+                key={`${index}-${proposition.title}`}
               >
                 <div className="flex items-center justify-between">
                   <H4 as="p" className={cn("font-bold", theme.numberColor)}>
                     {String(index + 1).padStart(2, "0")}
                   </H4>
-                  <span
-                    className={cn(
-                      "rounded-full px-3 py-0.5 text-xs font-semibold uppercase tracking-wider",
-                      theme.badgeBg,
-                    )}
-                  >
-                    Cambridge A-Levels
-                  </span>
+                  {badge.trim() === "" ? null : (
+                    <span
+                      className={cn(
+                        "rounded-full px-3 py-0.5 text-xs font-semibold uppercase tracking-wider",
+                        theme.badgeBg,
+                      )}
+                    >
+                      {badge}
+                    </span>
+                  )}
                 </div>
                 <H5 as="h3" className="mt-5 text-neutral-900 font-semibold">
                   {proposition.title}

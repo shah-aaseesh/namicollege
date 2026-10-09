@@ -1,23 +1,20 @@
 import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  A_LEVELS_CLUBS,
-  type ALevelsClub,
-} from "@/app/institutions/a-levels/_components/a-levels-clubs-copy";
+import type { ALevelsClub } from "@/app/institutions/a-levels/_components/a-levels-clubs-copy";
 import { Reveal, RevealItem } from "@/components/motion/reveal";
 import { Icon } from "@/components/ui/icon";
 import { Eyebrow, H2, H3, P } from "@/components/ui/typography";
 import { ArrowRightIcon } from "@/lib/icons";
 
 export function ClubOtherRail({
+  clubs,
   currentClub,
 }: {
   readonly currentClub: ALevelsClub;
+  readonly clubs: readonly ALevelsClub[];
 }) {
-  const otherClubs = A_LEVELS_CLUBS.filter(
-    (club) => club.slug !== currentClub.slug,
-  );
+  const otherClubs = clubs.filter((club) => club.slug !== currentClub.slug);
 
   return (
     <section className="gutter-x section-y bg-surface border-t border-border">

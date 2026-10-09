@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/motion/reveal";
 import { SectionHeader } from "@/components/shared/section-header";
 import { Icon } from "@/components/ui/icon";
+import { getSitePage } from "@/lib/cms/pages/site";
 import type { Campus, EntityRole } from "@/lib/content";
 import { content } from "@/lib/content";
 import {
@@ -49,7 +50,10 @@ export async function InstitutionContact({
   readonly id?: string;
   readonly institution: EntityRole;
 }) {
-  const profile = await content.getInstitution();
+  const [profile, { contactBlock: labels }] = await Promise.all([
+    content.getInstitution(),
+    getSitePage(),
+  ]);
   const entity = profile.entities[role];
   const entityContact = profile.contact.byEntity[role];
 
@@ -78,10 +82,7 @@ export async function InstitutionContact({
       id={id}
     >
       <div className="mx-auto max-w-page">
-        <SectionHeader
-          eyebrow="Get in Touch with NAMI"
-          title="Contact & Location"
-        />
+        <SectionHeader eyebrow={labels.label} title={labels.title} />
 
         <Reveal
           className="mt-6 sm:mt-8 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8 items-stretch"
@@ -97,7 +98,7 @@ export async function InstitutionContact({
                 </div>
                 <div className="min-w-0">
                   <span className="block text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-ink-muted">
-                    Campus Address
+                    {labels.addressLabel}
                   </span>
                   <p className="mt-0.5 font-medium text-ink text-sm sm:text-base leading-snug">
                     {campus.streetAddress ? `${campus.streetAddress}, ` : ""}
@@ -113,7 +114,7 @@ export async function InstitutionContact({
                 </div>
                 <div className="min-w-0">
                   <span className="block text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-ink-muted">
-                    Phone Numbers
+                    {labels.phoneLabel}
                   </span>
                   <Link
                     className="mt-0.5 block font-medium text-ink hover:text-accent transition-colors text-sm sm:text-base leading-snug"
@@ -133,7 +134,7 @@ export async function InstitutionContact({
                 </div>
                 <div className="min-w-0">
                   <span className="block text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-ink-muted">
-                    Email Inquiries
+                    {labels.emailLabel}
                   </span>
                   <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 font-medium text-ink text-sm sm:text-base leading-snug">
                     <Link
@@ -166,7 +167,7 @@ export async function InstitutionContact({
             {socials.length > 0 && (
               <div className="pt-3 border-t border-border/70 flex items-center justify-between gap-3">
                 <span className="text-xs font-semibold text-ink-muted">
-                  Follow {entity.name}
+                  {labels.followLabel} {entity.name}
                 </span>
                 <ul className="flex items-center gap-2">
                   {socials.map((social) => {

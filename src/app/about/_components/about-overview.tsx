@@ -1,20 +1,17 @@
 import Image from "next/image";
 import { Reveal, RevealItem } from "@/components/motion/reveal";
 import { SplitText } from "@/components/motion/split-text";
-import { Eyebrow, P } from "@/components/ui/typography";
-import type { ContentImage } from "@/lib/content";
-import { paragraphsOf, type RichText, type SectionCopy } from "@/lib/content";
+import { P } from "@/components/ui/typography";
+import type { AboutOverview as AboutOverviewContent } from "@/lib/cms/pages/about";
+import { hasImage } from "@/lib/cms/types";
 
 export function AboutOverview({
-  image = null,
   overview,
-  section,
 }: {
-  image?: ContentImage | null;
-  overview: RichText;
-  section: SectionCopy;
+  overview: AboutOverviewContent;
 }) {
-  const paragraphs = paragraphsOf(overview);
+  const paragraphs = overview.paragraphs.filter((item) => item.trim() !== "");
+  const image = hasImage(overview.image) ? overview.image : null;
 
   return (
     <section
@@ -23,16 +20,18 @@ export function AboutOverview({
     >
       <div className="mx-auto max-w-page">
         {/* Section Heading */}
-        <div>
-          <Reveal>
-            <SplitText
-              as="h2"
-              className="font-display text-3xl sm:text-4xl text-accent font-normal"
-            >
-              {section.eyebrow ?? "NAMI since 2012"}
-            </SplitText>
-          </Reveal>
-        </div>
+        {overview.title === "" ? null : (
+          <div>
+            <Reveal>
+              <SplitText
+                as="h2"
+                className="font-display text-3xl sm:text-4xl text-accent font-normal"
+              >
+                {overview.title}
+              </SplitText>
+            </Reveal>
+          </div>
+        )}
 
         {/* 2-Column Content Grid: Left Narrative & Right Image */}
         <div className="mt-6 sm:mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-x-10 xl:gap-x-12 items-stretch">
@@ -55,11 +54,11 @@ export function AboutOverview({
                   <Image
                     alt={image.alt}
                     className="h-full w-full object-cover object-left-top origin-top-left transition-transform duration-700 hover:scale-105"
-                    height={image.height}
+                    height={image.height || 1062}
                     loading="lazy"
                     sizes="(max-width: 1024px) 100vw, 560px"
                     src={image.src}
-                    width={image.width}
+                    width={image.width || 1600}
                   />
                 </figure>
               </Reveal>

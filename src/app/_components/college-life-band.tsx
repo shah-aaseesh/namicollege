@@ -4,9 +4,23 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { ContentImage } from "@/lib/content";
 
-const YOUTUBE_ID = "XW2vMPwdPg8";
+// Accepts a bare video ID or any youtube.com / youtu.be link pasted by an editor.
+function youtubeIdOf(value: string): string | null {
+  const trimmed = value.trim();
+  const match =
+    trimmed.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{6,20})/) ??
+    trimmed.match(/^([\w-]{6,20})$/);
+  return match?.[1] ?? null;
+}
 
-export function CollegeLifeBand({ poster }: { poster: ContentImage }) {
+export function CollegeLifeBand({
+  poster,
+  youtubeId,
+}: {
+  poster: ContentImage;
+  youtubeId: string;
+}) {
+  const videoId = youtubeIdOf(youtubeId);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -44,12 +58,12 @@ export function CollegeLifeBand({ poster }: { poster: ContentImage }) {
         width={poster.width}
       />
 
-      {isInView && (
+      {isInView && videoId !== null && (
         <iframe
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           aria-hidden="true"
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] pointer-events-none object-cover border-0"
-          src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?autoplay=1&mute=1&loop=1&playlist=${YOUTUBE_ID}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0`}
+          src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0`}
           tabIndex={-1}
           title="Campus Life Video"
         />

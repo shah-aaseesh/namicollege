@@ -12,11 +12,15 @@ import {
 } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/utils";
-import { type AlumniStory, alumniStories } from "./alumni-copy";
+import type { AlumniStory } from "./alumni-copy";
 
 export function AlumniStories({
   copy,
+  stories,
+  tabs,
 }: {
+  readonly stories: readonly AlumniStory[];
+  readonly tabs: readonly { readonly id: string; readonly label: string }[];
   readonly copy: {
     readonly eyebrow: string;
     readonly heading: string;
@@ -28,16 +32,10 @@ export function AlumniStories({
 
   const filteredStories =
     selectedWing === "all"
-      ? alumniStories
-      : alumniStories.filter((s) => s.institution === selectedWing);
+      ? stories
+      : stories.filter((s) => s.institution === selectedWing);
 
-  const wingFilters = [
-    { id: "all", label: "All Alumni" },
-    { id: "undergraduate", label: "Undergraduate Program" },
-    { id: "graduate", label: "Graduate Program" },
-    { id: "college", label: "A-Levels" },
-    { id: "higher-secondary", label: "Secondary School" },
-  ] as const;
+  const wingFilters = tabs;
 
   return (
     <section
@@ -65,9 +63,8 @@ export function AlumniStories({
               const isActive = selectedWing === tab.id;
               const count =
                 tab.id === "all"
-                  ? alumniStories.length
-                  : alumniStories.filter((s) => s.institution === tab.id)
-                      .length;
+                  ? stories.length
+                  : stories.filter((s) => s.institution === tab.id).length;
 
               return (
                 <button

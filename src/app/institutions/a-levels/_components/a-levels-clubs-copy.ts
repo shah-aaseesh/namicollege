@@ -1,7 +1,5 @@
 import type { ContentImage } from "@/lib/content";
 
-export type ALevelsClubSlug = "social-services" | "sports" | "arts-and-crafts";
-
 export type ALevelsClubActivity = {
   readonly title: string;
   readonly description: string;
@@ -17,7 +15,8 @@ export type ALevelsClubGalleryPhoto = {
 };
 
 export type ALevelsClub = {
-  readonly slug: ALevelsClubSlug;
+  /** The club page's web address: /institutions/a-levels/clubs/{slug}. */
+  readonly slug: string;
   readonly title: string;
   readonly category: string;
   readonly tagline: string;

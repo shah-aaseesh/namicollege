@@ -6,20 +6,15 @@ import { UpdateBoard } from "@/components/shared/update-board";
 import { buttonVariants } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { P } from "@/components/ui/typography";
-import type { ContentLink } from "@/lib/content";
+import type { HomeNotices } from "@/lib/cms/pages/home";
+import type { CmsLink } from "@/lib/cms/types";
 import { content } from "@/lib/content";
 import { ArrowRightIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
 const HOME_TEASER_COUNT = 3;
 
-function UpdateCta({
-  className,
-  link,
-}: {
-  className?: string;
-  link: ContentLink;
-}) {
+function UpdateCta({ className, link }: { className?: string; link: CmsLink }) {
   return (
     <Link
       className={cn(
@@ -34,38 +29,29 @@ function UpdateCta({
   );
 }
 
-export async function Updates() {
-  const [copy, allUpdates] = await Promise.all([
-    content.getHomeCopy(),
-    content.getUpdates(),
-  ]);
+export async function Updates({ notices }: { notices: HomeNotices }) {
+  const allUpdates = await content.getUpdates();
 
   const updates = allUpdates
     .filter((item) => item.kind === "notice" || item.kind === "news")
     .slice(0, HOME_TEASER_COUNT);
 
-  const section = copy.sections.updates;
-
-  const indexHref =
-    section.cta === null || section.cta.destination === "legacy"
-      ? null
-      : (section.cta.href as Route);
+  const hasButton =
+    notices.button.label.trim() !== "" && notices.button.href.trim() !== "";
+  const indexHref = hasButton ? (notices.button.href as Route) : null;
 
   return (
     <section className="gutter-x section-y-compact" id="updates">
       <div className="mx-auto max-w-page">
         <SectionHeader
-          action={
-            section.cta === null ? null : <UpdateCta link={section.cta} />
-          }
-          description={section.standfirst}
-          eyebrow={section.heading}
+          action={hasButton ? <UpdateCta link={notices.button} /> : null}
+          eyebrow={notices.label || undefined}
           layout="action"
-          title={section.eyebrow ?? "Notices"}
+          title={notices.title || undefined}
         />
 
-        {updates.length === 0 && section.emptyState !== null ? (
-          <P className="mt-8 max-w-xl">{section.emptyState}</P>
+        {updates.length === 0 && notices.emptyState.trim() !== "" ? (
+          <P className="mt-8 max-w-xl">{notices.emptyState}</P>
         ) : null}
 
         {updates.length === 0 ? null : (

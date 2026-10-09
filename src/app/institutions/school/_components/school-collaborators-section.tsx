@@ -20,93 +20,62 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { H4, P } from "@/components/ui/typography";
+import type { SchoolCollaboratorsContent } from "@/lib/cms/pages/school";
+import { hasImage } from "@/lib/cms/types";
 import { cn } from "@/lib/utils";
 
-export type SchoolCollaborator = {
-  readonly id: string;
-  readonly name: string;
-  readonly tagline: string;
-  readonly shortDescription: string;
-  readonly description: string;
-  readonly logo: string;
-  readonly accent: string;
-  readonly borderHover: string;
-};
-
-export const schoolCollaborators: readonly SchoolCollaborator[] = [
+// Partner tag colours cycle through the school palette in order.
+const ACCENTS = [
   {
-    id: "3di",
-    name: "3Di School",
-    tagline: "Design, Software & Emerging Tech",
-    shortDescription:
-      "Hands-on design and technology platform exploring creativity and software through practical projects.",
-    description:
-      "3Di School provides a hands-on design and technology platform where students explore creativity, software, and emerging technologies through practical projects.",
-    logo: "/logos/collaborators/3di.png",
     accent: "bg-[#BD1B21]/10 text-[#BD1B21] border-[#BD1B21]/20",
     borderHover: "hover:border-[#BD1B21]/50",
   },
   {
-    id: "play-nepal",
-    name: "Play Nepal",
-    tagline: "Movement, Focus & Physical Confidence",
-    shortDescription:
-      "Structured physical movement and team habits promoting active fitness and emotional well-being.",
-    description:
-      "Play Nepal helps students develop focus, physical confidence, teamwork, and active habits through joyful and structured movement. Their sessions also support students' emotional well-being and confidence.",
-    logo: "/logos/collaborators/play-nepal.png",
     accent: "bg-[#284540]/10 text-[#284540] border-[#284540]/20",
     borderHover: "hover:border-[#284540]/50",
   },
   {
-    id: "unmath",
-    name: "UnMath",
-    tagline: "Creative & Experiential Mathematics",
-    shortDescription:
-      "Joyful experiential math education connecting core concepts to creativity and real-world situations.",
-    description:
-      "The UnMath Programme helps students experience mathematics with greater joy and confidence by connecting mathematical concepts to creativity and real-life situations. It supports engaging and meaningful math learning.",
-    logo: "/logos/collaborators/unmath.png",
     accent: "bg-[#F7CD00]/20 text-[#8F4800] border-[#F7CD00]/40",
     borderHover: "hover:border-[#F7CD00]/60",
   },
   {
-    id: "mero-coding",
-    name: "Mero Coding",
-    tagline: "Coding & Computational Thinking",
-    shortDescription:
-      "Foundational coding and problem-solving skills empowering students to build interactive tech projects.",
-    description:
-      "Mero Coding introduces students to the fundamentals of coding and computational thinking. It helps students develop problem-solving, logical thinking, and creativity through coding activities. Students learn to create simple projects while building confidence with technology.",
-    logo: "/logos/collaborators/mero-coding.png",
     accent: "bg-[#0284C7]/10 text-[#0369A1] border-[#0284C7]/20",
     borderHover: "hover:border-[#0284C7]/50",
   },
   {
-    id: "samatva-wellness",
-    name: "Samatva Wellness",
-    tagline: "Mindfulness & Holistic Well-Being",
-    shortDescription:
-      "Holistic wellness and mindfulness sessions nurturing mental and emotional balance.",
-    description:
-      "NAMI International School collaborates with Samatva Wellness to support student well-being through regular wellness classes and workshops.",
-    logo: "/logos/collaborators/samatva-wellness.png",
     accent: "bg-[#9CC21A]/15 text-[#284540] border-[#9CC21A]/30",
     borderHover: "hover:border-[#9CC21A]/60",
   },
 ] as const;
 
+type SchoolCollaborator = SchoolCollaboratorsContent["items"][number] & {
+  readonly id: string;
+  readonly accent: string;
+  readonly borderHover: string;
+};
+
 export function SchoolCollaboratorsSection({
+  collaborators,
   id = "collaborators",
   className,
 }: {
+  readonly collaborators: SchoolCollaboratorsContent;
   readonly id?: string;
   readonly className?: string;
 }) {
+  const schoolCollaborators: readonly SchoolCollaborator[] = collaborators.items
+    .filter((item) => item.name.trim() !== "")
+    .map((item, index) => ({
+      ...item,
+      id: `collaborator-${index + 1}`,
+      ...(ACCENTS[index % ACCENTS.length] ?? ACCENTS[0]),
+    }));
   const [selectedCollab, setSelectedCollab] =
     useState<SchoolCollaborator | null>(null);
 
   const total = schoolCollaborators.length;
+
+  if (total === 0) return null;
 
   // Clone items if less than 8 for continuous infinite loop matching ECA / Clubs carousel
   const displayCollabs =
@@ -126,7 +95,7 @@ export function SchoolCollaboratorsSection({
       id={id}
     >
       <Carousel
-        aria-label="Our Learning Collaborators"
+        aria-label={collaborators.title || "Our Learning Collaborators"}
         aria-roledescription="carousel"
         autoplay={true}
         autoplayIntervalMs={2500}
@@ -152,10 +121,10 @@ export function SchoolCollaboratorsSection({
                 />
               </CarouselControls>
             }
-            description="We collaborate with premier specialized learning partners to complement classroom education and enrich student discovery."
-            eyebrow="Partners in Learning"
+            description={collaborators.description || undefined}
+            eyebrow={collaborators.label || undefined}
             layout="action"
-            title="Our Learning Collaborators"
+            title={collaborators.title || undefined}
           />
         </div>
 
@@ -175,14 +144,16 @@ export function SchoolCollaboratorsSection({
                   <div className="flex flex-col flex-1">
                     {/* Partner Logo */}
                     <div className="relative flex h-20 w-full items-center justify-center p-2 transition-transform duration-300 group-hover:scale-105">
-                      <Image
-                        alt={`${collab.name} logo`}
-                        className="max-h-16 w-auto max-w-[180px] object-contain drop-shadow-2xs"
-                        height={64}
-                        loading="lazy"
-                        src={collab.logo}
-                        width={180}
-                      />
+                      {hasImage(collab.logo) ? (
+                        <Image
+                          alt={collab.logo.alt || `${collab.name} logo`}
+                          className="max-h-16 w-auto max-w-[180px] object-contain drop-shadow-2xs"
+                          height={collab.logo.height || 64}
+                          loading="lazy"
+                          src={collab.logo.src}
+                          width={collab.logo.width || 180}
+                        />
+                      ) : null}
                     </div>
 
                     {/* Partner Tag & Name */}
@@ -246,13 +217,17 @@ export function SchoolCollaboratorsSection({
               {/* Modal Header with Logo & Partner Info */}
               <div className="flex items-center gap-4 pb-4 border-b border-[#EBE5D8]">
                 <div className="relative flex h-20 w-32 shrink-0 items-center justify-center p-1">
-                  <Image
-                    alt={`${selectedCollab.name} logo`}
-                    className="max-h-16 w-auto max-w-[130px] object-contain"
-                    height={64}
-                    src={selectedCollab.logo}
-                    width={130}
-                  />
+                  {hasImage(selectedCollab.logo) ? (
+                    <Image
+                      alt={
+                        selectedCollab.logo.alt || `${selectedCollab.name} logo`
+                      }
+                      className="max-h-16 w-auto max-w-[130px] object-contain"
+                      height={selectedCollab.logo.height || 64}
+                      src={selectedCollab.logo.src}
+                      width={selectedCollab.logo.width || 130}
+                    />
+                  ) : null}
                 </div>
                 <DialogHeader className="text-left min-w-0 flex-1">
                   <span

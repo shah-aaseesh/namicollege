@@ -1,23 +1,20 @@
 import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  SCHOOL_CLUBS,
-  type SchoolClub,
-} from "@/app/institutions/school/_components/school-clubs-copy";
+import type { SchoolClub } from "@/app/institutions/school/_components/school-clubs-copy";
 import { Reveal, RevealItem } from "@/components/motion/reveal";
 import { Icon } from "@/components/ui/icon";
 import { Eyebrow, H2, P } from "@/components/ui/typography";
 import { ArrowRightIcon } from "@/lib/icons";
 
 export function ClubOtherRail({
+  clubs,
   currentClub,
 }: {
   readonly currentClub: SchoolClub;
+  readonly clubs: readonly SchoolClub[];
 }) {
-  const otherClubs = SCHOOL_CLUBS.filter(
-    (club) => club.slug !== currentClub.slug,
-  );
+  const otherClubs = clubs.filter((club) => club.slug !== currentClub.slug);
 
   return (
     <section className="gutter-x section-y bg-surface border-t border-border">

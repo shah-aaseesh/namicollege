@@ -6,13 +6,23 @@ import { SectionHeader } from "@/components/shared/section-header";
 import { Icon } from "@/components/ui/icon";
 import { H3, P } from "@/components/ui/typography";
 import { ArrowRightIcon } from "@/lib/icons";
-import { A_LEVELS_CLUBS } from "./a-levels-clubs-copy";
+import type { ALevelsClub } from "./a-levels-clubs-copy";
 
 const CARD_SIZES =
   "(min-width: 1280px) 420px, (min-width: 1024px) 380px, (min-width: 768px) 360px, 100vw";
 
-export function ALevelsClubsSection() {
-  const total = A_LEVELS_CLUBS.length;
+export function ALevelsClubsSection({
+  clubs,
+  copy,
+}: {
+  readonly clubs: readonly ALevelsClub[];
+  readonly copy: {
+    readonly label: string;
+    readonly title: string;
+    readonly description: string;
+  };
+}) {
+  const total = clubs.length;
 
   if (total === 0) return null;
 
@@ -23,14 +33,14 @@ export function ALevelsClubsSection() {
     >
       <div className="mx-auto max-w-page">
         <SectionHeader
-          description="Student-led clubs fostering community engagement, competitive sports, and artistic creativity."
-          eyebrow="Extracurricular & Co-Curricular"
-          title="ECA & Clubs"
+          description={copy.description || undefined}
+          eyebrow={copy.label || undefined}
+          title={copy.title || undefined}
         />
 
         <Reveal className="mt-8 sm:mt-10 lg:mt-12" y={24}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 lg:gap-8 w-full">
-            {A_LEVELS_CLUBS.map((club) => {
+            {clubs.map((club) => {
               const clubHref =
                 `/institutions/a-levels/clubs/${club.slug}` as Route;
 

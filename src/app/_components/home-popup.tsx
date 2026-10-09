@@ -12,9 +12,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
+import type { HomePopup as HomePopupContent } from "@/lib/cms/pages/home";
 import { CloseIcon } from "@/lib/icons";
 
-export function HomePopup() {
+export function HomePopup({ popup }: { popup: HomePopupContent }) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -25,18 +26,27 @@ export function HomePopup() {
     return () => clearTimeout(timer);
   }, []);
 
+  const picture = (
+    <Image
+      alt={popup.image.alt}
+      className="h-auto w-full object-contain"
+      height={popup.image.height || 1200}
+      priority
+      sizes="(max-width: 640px) 92vw, (max-width: 768px) 480px, 520px"
+      src={popup.image.src}
+      width={popup.image.width || 1200}
+    />
+  );
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
         hideClose
         className="max-w-[92vw] sm:max-w-[480px] md:max-w-[520px] p-0 border-none bg-transparent shadow-none"
       >
-        <DialogTitle className="sr-only">
-          NAMI College Admission Open Announcement
-        </DialogTitle>
+        <DialogTitle className="sr-only">{popup.title}</DialogTitle>
         <DialogDescription className="sr-only">
-          Admission Open for BBA, BBS, BA, BCA, BIT, and +2 Programs at NAMI
-          College.
+          {popup.image.alt}
         </DialogDescription>
 
         <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/20 bg-neutral-950 shadow-2xl">
@@ -48,22 +58,17 @@ export function HomePopup() {
             <Icon icon={CloseIcon} className="size-4 sm:size-5" />
           </DialogClose>
 
-          {/* Ad Link */}
-          <Link
-            className="block relative overflow-hidden"
-            href={"/admissions" as Route}
-            onClick={() => setIsOpen(false)}
-          >
-            <Image
-              alt="NAMI College - Admission Open"
-              className="h-auto w-full object-contain"
-              height={1200}
-              priority
-              sizes="(max-width: 640px) 92vw, (max-width: 768px) 480px, 520px"
-              src="/sections/misc/popup ad 2.jpeg"
-              width={1200}
-            />
-          </Link>
+          {popup.href.trim() === "" ? (
+            picture
+          ) : (
+            <Link
+              className="block relative overflow-hidden"
+              href={popup.href as Route}
+              onClick={() => setIsOpen(false)}
+            >
+              {picture}
+            </Link>
+          )}
         </div>
       </DialogContent>
     </Dialog>

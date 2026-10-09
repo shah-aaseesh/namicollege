@@ -6,10 +6,9 @@ import {
   SparklesIcon,
   Tick02Icon,
 } from "@hugeicons/core-free-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { buttonVariants } from "@/components/ui/button";
 import {
   CheckboxField,
@@ -26,41 +25,8 @@ import {
   CheckIcon,
   CloseIcon,
 } from "@/lib/icons";
+import { type AlumniStoryFormData, alumniStorySchema } from "@/lib/schema";
 import { cn } from "@/lib/utils";
-
-const alumniStorySchema = z.object({
-  fullName: z.string().trim().min(2, "Please enter your full name"),
-  email: z.string().trim().email("Please enter a valid email address"),
-  phone: z.string().trim().optional(),
-  linkedin: z.string().trim().optional(),
-  photo: z.any().optional(),
-  wing: z.string().min(1, "Please select your academic wing"),
-  program: z.string().trim().min(2, "Please enter your programme name"),
-  graduationYear: z.string().trim().min(4, "Please enter your graduation year"),
-  currentRole: z.string().trim().optional(),
-  currentOrg: z.string().trim().optional(),
-  location: z
-    .string()
-    .trim()
-    .min(2, "Please enter your current city and country"),
-  storyHeadline: z
-    .string()
-    .trim()
-    .min(5, "Please give a short headline or key takeaway"),
-  experience: z
-    .string()
-    .trim()
-    .min(
-      20,
-      "Please share a few sentences about your experience (min 20 characters)",
-    ),
-  advice: z.string().trim().optional(),
-  consent: z.boolean().refine((val) => val === true, {
-    message: "You must agree to share your experience with NAMI",
-  }),
-});
-
-export type AlumniStoryFormData = z.infer<typeof alumniStorySchema>;
 
 const WING_OPTIONS = [
   {
@@ -123,8 +89,29 @@ function _createAlumniMailto(
   return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
+const MAX_PHOTO_BYTES = 4 * 1024 * 1024;
+
+/** The photo as base64 so it travels with the answers in one request. */
+function photoPayload(
+  file: File,
+): Promise<{ name: string; type: string; data: string }> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result ?? "");
+      resolve({
+        name: file.name,
+        type: file.type,
+        data: result.slice(result.indexOf(",") + 1),
+      });
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
 export function AlumniFormModal({
-  email: _email,
+  email,
   isOpen,
   onClose,
 }: {
@@ -183,6 +170,9 @@ export function AlumniFormModal({
     });
 
   const [submitting, setSubmitting] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+  // Hidden "website" field: people never see it, spam bots tend to fill it.
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
   const handleNextStep = async () => {
     let isValidStep = false;
@@ -206,10 +196,44 @@ export function AlumniFormModal({
 
   const onSubmit = async (data: AlumniStoryFormData) => {
     setSubmitting(true);
-    // Ready for direct headless WordPress API endpoint POST
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    setSubmittedData(data);
-    setSubmitting(false);
+    setSendError(null);
+    try {
+      const photo = data.photo instanceof File ? data.photo : null;
+      if (photo !== null && photo.size > MAX_PHOTO_BYTES) {
+        setSendError(
+          "The photo is larger than 4 MB. Please choose a smaller one.",
+        );
+        return;
+      }
+      const { photo: _photo, ...answers } = data;
+      const response = await fetch("/api/alumni", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          data: answers,
+          photo: photo === null ? null : await photoPayload(photo),
+          website: honeypotRef.current?.value ?? "",
+        }),
+      });
+      const result = (await response.json().catch(() => null)) as {
+        ok?: boolean;
+        message?: string;
+      } | null;
+      if (!response.ok || !result?.ok) {
+        setSendError(
+          result?.message ??
+            "Your story could not be sent right now. Please try again later.",
+        );
+        return;
+      }
+      setSubmittedData(data);
+    } catch {
+      setSendError(
+        "Your story could not be sent. Check your internet connection and try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -582,6 +606,28 @@ export function AlumniFormModal({
                   </div>
                 </div>
               )}
+
+              {sendError === null ? null : (
+                <p className="mt-5 text-xs sm:text-sm text-accent" role="alert">
+                  {sendError} You can also email {email}.
+                </p>
+              )}
+
+              <div
+                aria-hidden="true"
+                className="absolute -left-[9999px] size-px overflow-hidden"
+              >
+                <label>
+                  Website
+                  <input
+                    autoComplete="off"
+                    name="website"
+                    ref={honeypotRef}
+                    tabIndex={-1}
+                    type="text"
+                  />
+                </label>
+              </div>
 
               {/* Modal Footer Controls */}
               <div className="mt-7 pt-4 border-t border-border flex items-center justify-between gap-3">

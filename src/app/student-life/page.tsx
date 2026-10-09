@@ -1,23 +1,31 @@
 import type { Metadata } from "next";
 
+import { getStudentLifePage } from "@/lib/cms/pages/student-life";
 import { content } from "@/lib/content";
 import { createMetadata } from "@/lib/seo";
 import { CollegeLifeList } from "./_components/college-life-list";
-import { studentLifeCopy } from "./_components/student-life-copy";
 import { StudentLifeMasthead } from "./_components/student-life-masthead";
 
-export const metadata: Metadata = createMetadata({
-  path: "/student-life",
-  title: studentLifeCopy.meta.title,
-  description: studentLifeCopy.meta.description,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getStudentLifePage();
+  return createMetadata({
+    path: "/student-life",
+    title: seo.title,
+    description: seo.description,
+  });
+}
 
 export default async function StudentLifePage() {
-  const pillars = await content.getCampusLife();
+  const [page, pillars] = await Promise.all([
+    getStudentLifePage(),
+    content.getCampusLife(),
+  ]);
 
   return (
     <>
-      <StudentLifeMasthead copy={studentLifeCopy.masthead} />
+      <StudentLifeMasthead
+        copy={{ title: page.masthead.title, lead: page.masthead.description }}
+      />
       <CollegeLifeList pillars={pillars} />
     </>
   );

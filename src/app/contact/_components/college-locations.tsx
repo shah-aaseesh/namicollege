@@ -1,10 +1,12 @@
 import { Reveal } from "@/components/motion/reveal";
 import { SectionHeader } from "@/components/shared/section-header";
 import { Eyebrow, H3, P } from "@/components/ui/typography";
+import type { ContactPageContent } from "@/lib/cms/pages/contact";
 import type { Campus } from "@/lib/content";
 import { content } from "@/lib/content";
 import { cn } from "@/lib/utils";
-import { contactCopy } from "./contact-copy";
+
+type LocationsCopy = ContactPageContent["locations"];
 
 const MAP_ORIGIN = "https://www.google.com/maps";
 
@@ -21,8 +23,15 @@ function mapSrc(campus: Campus): string {
   return `${MAP_ORIGIN}?${params.toString()}`;
 }
 
-function LocationEntry({ campus, index }: { campus: Campus; index: number }) {
-  const copy = contactCopy.campuses;
+function LocationEntry({
+  campus,
+  copy,
+  index,
+}: {
+  campus: Campus;
+  copy: LocationsCopy;
+  index: number;
+}) {
   const flipped = index % 2 === 1;
 
   return (
@@ -66,21 +75,24 @@ function LocationEntry({ campus, index }: { campus: Campus; index: number }) {
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             src={mapSrc(campus)}
-            title={copy.mapTitle(campus.locality, campus.city)}
+            title={`Map of the ${campus.locality} area, ${campus.city}`}
             width={800}
           />
         </div>
         <p className="mt-3 font-body text-sm text-ink-muted">
-          {copy.mapNote(campus.locality)}
+          {copy.mapNote.replaceAll("{area}", campus.locality)}
         </p>
       </div>
     </li>
   );
 }
 
-export async function CollegeLocations() {
+export async function CollegeLocations({
+  copy,
+}: {
+  readonly copy: LocationsCopy;
+}) {
   const institution = await content.getInstitution();
-  const copy = contactCopy.campuses;
 
   if (institution.campuses.length === 0) return null;
 
@@ -88,15 +100,20 @@ export async function CollegeLocations() {
     <section className="gutter-x section-y" id="locations">
       <div className="mx-auto max-w-page">
         <SectionHeader
-          eyebrow={copy.heading}
-          title={copy.eyebrow ?? "Locations"}
-          description={copy.standfirst}
+          eyebrow={copy.label}
+          title={copy.title}
+          description={copy.description}
         />
 
         <Reveal className="mt-14 lg:mt-24" stagger={0.12}>
           <ul className="flex flex-col gap-y-12 sm:gap-y-16 lg:gap-y-28">
             {institution.campuses.map((campus, index) => (
-              <LocationEntry campus={campus} index={index} key={campus.id} />
+              <LocationEntry
+                campus={campus}
+                copy={copy}
+                index={index}
+                key={campus.id}
+              />
             ))}
           </ul>
         </Reveal>

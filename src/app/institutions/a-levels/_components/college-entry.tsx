@@ -43,30 +43,33 @@ export function CollegeEntry({ copy }: { readonly copy: CollegeEntryCopy }) {
             <SplitText as="h2" className="mt-0 text-ink">
               {copy.heading}
             </SplitText>
-            <RevealItem className="mt-8 lg:mt-10">
-              <Link
-                className={cn(
-                  buttonVariants({ size: "lg" }),
-                  "w-full justify-center gap-2 px-6 sm:w-auto bg-[#BD1B21] text-white hover:bg-[#9e1419] font-semibold shadow-md",
-                )}
-                href={copy.cta.href as Route}
-                rel={external ? "noopener noreferrer" : undefined}
-                target={external ? "_blank" : undefined}
-              >
-                <span>{copy.cta.label}</span>
-                <Icon className="size-4 text-white" icon={ArrowUpRightIcon} />
-              </Link>
-            </RevealItem>
+            {copy.cta.label.trim() === "" ? null : (
+              <RevealItem className="mt-8 lg:mt-10">
+                <Link
+                  className={cn(
+                    buttonVariants({ size: "lg" }),
+                    "w-full justify-center gap-2 px-6 sm:w-auto bg-[#BD1B21] text-white hover:bg-[#9e1419] font-semibold shadow-md",
+                  )}
+                  href={copy.cta.href as Route}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  target={external ? "_blank" : undefined}
+                >
+                  <span>{copy.cta.label}</span>
+                  <Icon className="size-4 text-white" icon={ArrowUpRightIcon} />
+                </Link>
+              </RevealItem>
+            )}
           </Reveal>
 
           <Reveal
             className="mt-14 flex flex-col gap-10 lg:col-span-6 lg:col-start-7 lg:mt-0"
             stagger={0.12}
           >
-            {copy.blocks.map((block) => (
+            {copy.blocks.map((block, index) => (
               <RevealItem
                 className="border-t border-border pt-6"
-                key={block.title}
+                // biome-ignore lint/suspicious/noArrayIndexKey: ordered CMS list
+                key={`${index}-${block.title}`}
               >
                 <H5 as="h3" className="text-ink font-semibold">
                   {block.title}

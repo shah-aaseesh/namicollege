@@ -4,19 +4,17 @@ import { Reveal, RevealItem } from "@/components/motion/reveal";
 import { SplitText } from "@/components/motion/split-text";
 import { buttonVariants } from "@/components/ui/button";
 import { Eyebrow, P } from "@/components/ui/typography";
-import { paragraphsOf, type RichText, type SectionCopy } from "@/lib/content";
+import type { HomeAbout } from "@/lib/cms/pages/home";
+import { isExternalHref } from "@/lib/cms/types";
 import { cn } from "@/lib/utils";
 
 import { HomepageVideoPlayer } from "./homepage-video-player";
 
-export async function About({
-  overview,
-  section,
-}: {
-  overview: RichText;
-  section: SectionCopy;
-}) {
-  const paragraphs = paragraphsOf(overview).slice(0, 2);
+export function About({ about }: { about: HomeAbout }) {
+  const paragraphs = about.paragraphs.filter((item) => item.trim() !== "");
+  const showButton =
+    about.button.label.trim() !== "" && about.button.href.trim() !== "";
+  const isExternal = isExternalHref(about.button.href);
 
   return (
     <section
@@ -27,7 +25,7 @@ export async function About({
         {/* Full-width Eyebrow Bar at top for clean horizontal alignment */}
         <Reveal>
           <div className="flex items-center gap-5">
-            <Eyebrow>{section.heading}</Eyebrow>
+            <Eyebrow>{about.label}</Eyebrow>
             <span className="h-px flex-1 bg-border" />
           </div>
         </Reveal>
@@ -39,7 +37,7 @@ export async function About({
               as="h2"
               className="font-display text-[2.1rem] sm:text-4xl text-accent font-semibold sm:font-normal"
             >
-              {section.eyebrow ?? "About NAMI"}
+              {about.title}
             </SplitText>
           </Reveal>
         </div>
@@ -50,9 +48,9 @@ export async function About({
           <div className="lg:col-span-6 flex flex-col">
             <Reveal className="h-full flex flex-col" y={16}>
               <HomepageVideoPlayer
-                poster="/videos/Homepage video thumbnails.png"
-                src="/videos/Final%20First%20Video.mp4"
-                title={section.heading ?? "NAMI College"}
+                poster={about.videoPoster.src || undefined}
+                src={about.videoSrc || undefined}
+                title={about.videoPoster.alt || about.label || "NAMI College"}
               />
             </Reveal>
           </div>
@@ -69,17 +67,21 @@ export async function About({
               ))}
             </Reveal>
 
-            <Reveal className="mt-6 sm:mt-8" y={10}>
-              <Link
-                className={cn(
-                  buttonVariants({ size: "lg", variant: "default" }),
-                  "w-full sm:w-auto text-center justify-center",
-                )}
-                href={"/about" as Route}
-              >
-                Read the Full Story
-              </Link>
-            </Reveal>
+            {showButton ? (
+              <Reveal className="mt-6 sm:mt-8" y={10}>
+                <Link
+                  className={cn(
+                    buttonVariants({ size: "lg", variant: "default" }),
+                    "w-full sm:w-auto text-center justify-center",
+                  )}
+                  href={about.button.href as Route}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  target={isExternal ? "_blank" : undefined}
+                >
+                  {about.button.label}
+                </Link>
+              </Reveal>
+            ) : null}
           </div>
         </div>
       </div>

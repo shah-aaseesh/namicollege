@@ -7,7 +7,8 @@ export type CollegeMilestone = {
   readonly year: number;
   readonly title: string;
   readonly body: string;
-  readonly logo?: string;
+  /** A bare path (bundled copy) or an image with its own alt text (CMS). */
+  readonly logo?: string | { readonly src: string; readonly alt: string };
 };
 
 export type CollegeMilestonesCopy = {
@@ -38,21 +39,30 @@ export function CollegeMilestones({
         <div className="mx-auto max-w-6xl">
           <Reveal className="mt-8 sm:mt-10 lg:mt-12" stagger={0.1} y={16}>
             <ol className="grid gap-6 sm:grid-cols-2 lg:gap-8">
-              {copy.milestones.map((milestone) => (
+              {copy.milestones.map((milestone, index) => (
                 <li
                   className="flex h-full flex-col rounded-2xl border border-border bg-white p-6 shadow-xs sm:p-8 hover:border-[#E9C355]/60 hover:shadow-md transition-all duration-300"
                   data-reveal-item=""
-                  key={milestone.year}
+                  // biome-ignore lint/suspicious/noArrayIndexKey: years may repeat
+                  key={`${index}-${milestone.year}`}
                 >
                   {/* Logo at top */}
                   {milestone.logo ? (
                     <div className="relative mb-6 h-12 w-36 shrink-0 sm:h-14 sm:w-44">
                       <Image
-                        alt="Cambridge Assessment International Education"
+                        alt={
+                          typeof milestone.logo === "string"
+                            ? "Cambridge Assessment International Education"
+                            : milestone.logo.alt
+                        }
                         className="object-contain object-left"
                         fill
                         sizes="176px"
-                        src={milestone.logo}
+                        src={
+                          typeof milestone.logo === "string"
+                            ? milestone.logo
+                            : milestone.logo.src
+                        }
                       />
                     </div>
                   ) : null}

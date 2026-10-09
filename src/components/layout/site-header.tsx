@@ -1,7 +1,9 @@
+import { getSitePage } from "@/lib/cms/pages/site";
+import { hasImage } from "@/lib/cms/types";
 import { content } from "@/lib/content";
 import { SiteHeaderShell } from "./site-header-shell";
 import type { SiteMetaLink } from "./site-nav-panel";
-import { SITE_NAV_ITEMS } from "./site-nav-sections";
+import type { SiteNavItem } from "./site-nav-sections";
 
 function channel(value: string | null, scheme: "mailto:"): SiteMetaLink | null {
   if (value === null) return null;
@@ -13,9 +15,26 @@ function channel(value: string | null, scheme: "mailto:"): SiteMetaLink | null {
 }
 
 export async function SiteHeader() {
-  const institution = await content.getInstitution();
-  const items = SITE_NAV_ITEMS;
+  const [institution, site] = await Promise.all([
+    content.getInstitution(),
+    getSitePage(),
+  ]);
+  const { menu } = site;
   const group = institution.entities.institute;
+
+  const items: SiteNavItem[] = menu.items.map((item) => ({
+    label: item.label,
+    href: item.href,
+    ...(item.descriptor.trim() === "" ? {} : { descriptor: item.descriptor }),
+    ...(item.children.length === 0
+      ? {}
+      : {
+          children: item.children.map((child) => ({
+            label: child.label,
+            href: child.href,
+          })),
+        }),
+  }));
 
   const places = institution.campuses.map(
     (campus) => `${campus.locality}, ${campus.city}`,
@@ -33,8 +52,13 @@ export async function SiteHeader() {
   return (
     <SiteHeaderShell
       items={items}
-      places={places}
       links={links}
+      panel={{
+        text: menu.panelText,
+        image: hasImage(menu.panelImage) ? menu.panelImage : null,
+        button: menu.panelButton.label.trim() === "" ? null : menu.panelButton,
+      }}
+      places={places}
       siteName={group.name}
     />
   );

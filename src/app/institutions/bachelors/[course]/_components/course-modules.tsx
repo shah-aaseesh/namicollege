@@ -49,6 +49,7 @@ function PlusMinusIcon({
 
 function ModuleRow({
   module,
+  panelId,
   isOpen,
   onToggle,
   showStatus,
@@ -56,6 +57,7 @@ function ModuleRow({
   columnCount,
 }: {
   readonly module: ProgrammeModule;
+  readonly panelId: string;
   readonly isOpen: boolean;
   readonly onToggle: () => void;
   readonly showStatus: boolean;
@@ -79,7 +81,7 @@ function ModuleRow({
         tabIndex={0}
         role="button"
         aria-expanded={isOpen}
-        aria-controls={`module-desc-${module.code}`}
+        aria-controls={panelId}
         className={cn(
           "group transition-colors cursor-pointer select-none focus-visible:outline-hidden focus-visible:bg-accent/[0.06]",
           isOpen ? "bg-accent/[0.05]" : "hover:bg-muted/30",
@@ -146,7 +148,7 @@ function ModuleRow({
         <tr className="bg-accent/[0.03] border-b border-border/80">
           <td colSpan={columnCount} className="p-3 sm:p-5">
             <div
-              id={`module-desc-${module.code}`}
+              id={panelId}
               className="space-y-3 rounded-xl border border-accent/25 bg-surface p-4 sm:p-5 shadow-2xs animate-in fade-in-50 duration-200"
             >
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/60 pb-3">
@@ -196,7 +198,8 @@ function StageAccordionItem({
   readonly isOpen: boolean;
   readonly onToggle: () => void;
 }) {
-  const [expandedModuleCodes, setExpandedModuleCodes] = useState<Set<string>>(
+  // Rows are tracked by position: two modules can share a code.
+  const [expandedModules, setExpandedModules] = useState<Set<number>>(
     new Set(),
   );
 
@@ -210,13 +213,13 @@ function StageAccordionItem({
   if (showStatus) columnCount += 1;
   if (showPrerequisites) columnCount += 1;
 
-  const toggleModule = (code: string) => {
-    setExpandedModuleCodes((prev) => {
+  const toggleModule = (index: number) => {
+    setExpandedModules((prev) => {
       const next = new Set(prev);
-      if (next.has(code)) {
-        next.delete(code);
+      if (next.has(index)) {
+        next.delete(index);
       } else {
-        next.add(code);
+        next.add(index);
       }
       return next;
     });
@@ -332,13 +335,15 @@ function StageAccordionItem({
                 </thead>
 
                 <tbody>
-                  {stage.modules.map((module) => (
+                  {stage.modules.map((module, index) => (
                     <ModuleRow
                       columnCount={columnCount}
-                      isOpen={expandedModuleCodes.has(module.code)}
-                      key={module.code}
+                      isOpen={expandedModules.has(index)}
+                      // biome-ignore lint/suspicious/noArrayIndexKey: module codes can repeat
+                      key={index}
                       module={module}
-                      onToggle={() => toggleModule(module.code)}
+                      onToggle={() => toggleModule(index)}
+                      panelId={`${stage.key}-module-${index + 1}`}
                       showPrerequisites={showPrerequisites}
                       showStatus={showStatus}
                     />

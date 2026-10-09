@@ -1,30 +1,26 @@
 import { Reveal, RevealItem } from "@/components/motion/reveal";
 import { SectionHeader } from "@/components/shared/section-header";
 import { Eyebrow, H4, H6, P } from "@/components/ui/typography";
-import type { Award, SectionCopy } from "@/lib/content";
+import type { AboutAwards as AboutAwardsContent } from "@/lib/cms/pages/about";
 
-export function AboutAwards({
-  awards,
-  section,
-}: {
-  awards: readonly Award[];
-  section: SectionCopy;
-}) {
-  const ordered = [...awards].sort((a, b) => b.year - a.year);
+export function AboutAwards({ awards }: { awards: AboutAwardsContent }) {
+  const ordered = awards.items
+    .filter((award) => award.title.trim() !== "")
+    .sort((a, b) => b.year - a.year);
   const [latest, ...rest] = ordered;
 
   return (
     <section className="gutter-x section-y" id="awards">
       <div className="mx-auto max-w-page">
         <SectionHeader
-          eyebrow={section.heading || undefined}
-          title={section.eyebrow ?? "Awards & Recognition"}
-          description={section.standfirst}
+          eyebrow={awards.label || undefined}
+          title={awards.title || undefined}
+          description={awards.description || undefined}
         />
 
         {latest === undefined ? (
-          section.emptyState === null ? null : (
-            <P className="mt-12 lg:w-5/12">{section.emptyState}</P>
+          awards.emptyState.trim() === "" ? null : (
+            <P className="mt-12 lg:w-5/12">{awards.emptyState}</P>
           )
         ) : (
           <div className="mt-10 lg:mt-14 lg:grid lg:grid-cols-12 lg:gap-x-10">
@@ -38,7 +34,7 @@ export function AboutAwards({
                   <H4 as="h3" className="mt-4">
                     {latest.title}
                   </H4>
-                  {latest.citation === null ? null : (
+                  {latest.citation.trim() === "" ? null : (
                     <P className="mt-5">{latest.citation}</P>
                   )}
                 </div>
@@ -50,10 +46,11 @@ export function AboutAwards({
                 className="mt-10 flex flex-col gap-8 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:gap-10"
                 stagger={0.1}
               >
-                {rest.map((award) => (
+                {rest.map((award, index) => (
                   <RevealItem
                     className="flex items-baseline gap-5 border-t border-border pt-5 sm:gap-8"
-                    key={award.id}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: awards are an ordered CMS list
+                    key={`${index}-${award.title}`}
                   >
                     <p className="shrink-0 font-display text-3xl leading-none text-ink-muted">
                       {award.year}
@@ -63,7 +60,7 @@ export function AboutAwards({
                       <H6 as="h3" className="mt-2">
                         {award.title}
                       </H6>
-                      {award.citation === null ? null : (
+                      {award.citation.trim() === "" ? null : (
                         <P className="mt-3 text-sm">{award.citation}</P>
                       )}
                     </div>

@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  type ClubSlug,
-  findSchoolClub,
-  SCHOOL_CLUBS,
-} from "@/app/institutions/school/_components/school-clubs-copy";
+import { getSchoolClubs } from "@/lib/cms/pages/clubs";
 import { createMetadata } from "@/lib/seo";
 import { ClubActivities } from "./_components/club-activities";
 import { ClubGallery } from "./_components/club-gallery";
@@ -14,10 +10,17 @@ import { ClubOtherRail } from "./_components/club-other-rail";
 import { ClubOverview } from "./_components/club-overview";
 import { ClubSkills } from "./_components/club-skills";
 
-export const dynamicParams = false;
+// Clubs added in WordPress after the build still get a page.
+export const dynamicParams = true;
 
-export function generateStaticParams(): { club: ClubSlug }[] {
-  return SCHOOL_CLUBS.map((club) => ({ club: club.slug }));
+async function findClub(slug: string) {
+  const clubs = await getSchoolClubs();
+  return { clubs, club: clubs.find((item) => item.slug === slug) ?? null };
+}
+
+export async function generateStaticParams(): Promise<{ club: string }[]> {
+  const clubs = await getSchoolClubs();
+  return clubs.map((club) => ({ club: club.slug }));
 }
 
 type Props = {
@@ -26,7 +29,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { club: slug } = await params;
-  const club = findSchoolClub(slug);
+  const { club } = await findClub(slug);
 
   if (!club) {
     return createMetadata({ path: "/institutions/school" });
@@ -47,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ClubDetailPage({ params }: Props) {
   const { club: slug } = await params;
-  const club = findSchoolClub(slug);
+  const { club, clubs } = await findClub(slug);
 
   if (!club) {
     notFound();
@@ -61,7 +64,7 @@ export default async function ClubDetailPage({ params }: Props) {
       <ClubGallery club={club} />
       <ClubSkills club={club} />
       <ClubJoinCta club={club} />
-      <ClubOtherRail currentClub={club} />
+      <ClubOtherRail clubs={clubs} currentClub={club} />
     </>
   );
 }

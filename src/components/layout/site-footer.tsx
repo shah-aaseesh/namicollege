@@ -3,7 +3,14 @@ import Link from "next/link";
 import { Reveal } from "@/components/motion/reveal";
 import { Icon } from "@/components/ui/icon";
 import { Eyebrow } from "@/components/ui/typography";
-import { content } from "@/lib/content";
+import { getSitePage } from "@/lib/cms/pages/site";
+import {
+  content,
+  type EntityContactChannel,
+  type EntityRole,
+  type SocialPlatform,
+  type SocialProfile,
+} from "@/lib/content";
 import { institutionPath } from "@/lib/content/institutions";
 import {
   FacebookIcon,
@@ -14,32 +21,146 @@ import {
   TikTokIcon,
   YouTubeIcon,
 } from "@/lib/icons";
-import { SiteCtaBand } from "./site-cta-band";
 import { SiteFooterWordmark } from "./site-footer-wordmark";
+import { SiteNewsletterBand } from "./site-newsletter-band";
 
-const FOOTER_NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  { label: "Admissions", href: "/admissions" },
-  { label: "Documents & Downloads", href: "/documents" },
-  { label: "Student Life", href: "/student-life" },
-  { label: "Photo Gallery", href: "/gallery" },
-  { label: "Alumni", href: "/alumni" },
-  { label: "Notices & Events", href: "/notices" },
-] as const;
+// WhatsApp has its own floating button, so the footer leaves it out.
+const FOOTER_SOCIAL_ICONS: Partial<
+  Record<SocialPlatform, typeof FacebookIcon>
+> = {
+  facebook: FacebookIcon,
+  instagram: InstagramIcon,
+  linkedin: LinkedInIcon,
+  youtube: YouTubeIcon,
+  tiktok: TikTokIcon,
+};
+
+function telHref(num: string): Route {
+  return `tel:${(num.split("/")[0] ?? "").replace(/[^+\d]/g, "")}` as Route;
+}
+
+function EntityContacts({
+  ariaPrefix,
+  channel,
+  className,
+  detailsClassName,
+  href,
+  name,
+  socials,
+  tagline,
+}: {
+  readonly ariaPrefix: string;
+  readonly channel: EntityContactChannel;
+  readonly className: string;
+  readonly detailsClassName: string;
+  readonly href: string;
+  readonly name: string;
+  readonly socials: readonly SocialProfile[];
+  readonly tagline: string;
+}) {
+  // Each institution links to its own Facebook page when it has one.
+  const links = socials.map((social) =>
+    social.platform === "facebook" && channel.facebook
+      ? { ...social, href: channel.facebook }
+      : social,
+  );
+  const phones = channel.phone.split(", ").filter((num) => num !== "");
+
+  return (
+    <div className={className}>
+      <Link href={href as Route} className="group block">
+        <span className="block font-body text-sm font-semibold text-white transition-colors group-hover:text-white group-hover:underline underline-offset-4">
+          {name}
+        </span>
+        <span className="mt-0.5 block font-body text-xs text-white/75">
+          {tagline}
+        </span>
+      </Link>
+
+      <div className={detailsClassName}>
+        {phones.length === 0 ? null : (
+          <div className="flex items-center gap-2 text-white/90">
+            <Icon icon={PhoneIcon} className="size-3.5 shrink-0 text-white" />
+            <div className="flex flex-col">
+              {phones.map((num) => (
+                <Link
+                  key={num}
+                  href={telHref(num)}
+                  className="transition-colors hover:text-white"
+                >
+                  {num}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+        {channel.email === "" ? null : (
+          <Link
+            href={`mailto:${channel.email}` as Route}
+            className="flex items-center gap-2 text-white/90 transition-colors hover:text-white"
+          >
+            <Icon icon={MailIcon} className="size-3.5 shrink-0 text-white" />
+            <span>{channel.email}</span>
+          </Link>
+        )}
+        {channel.admissionsEmail && (
+          <Link
+            href={`mailto:${channel.admissionsEmail}` as Route}
+            className="flex items-center gap-2 text-white/90 transition-colors hover:text-white"
+          >
+            <Icon icon={MailIcon} className="size-3.5 shrink-0 text-white" />
+            <span>{channel.admissionsEmail}</span>
+          </Link>
+        )}
+      </div>
+
+      {links.length === 0 ? null : (
+        <div className="mt-3 flex items-center gap-2">
+          {links.map((social) => {
+            const icon = FOOTER_SOCIAL_ICONS[social.platform];
+            if (!icon) return null;
+            return (
+              <Link
+                key={social.platform}
+                href={social.href as Route}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
+                aria-label={`${ariaPrefix} ${social.label}`}
+              >
+                <Icon icon={icon} className="size-3.5" />
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export async function SiteFooter() {
-  const institution = await content.getInstitution();
+  const [institution, site] = await Promise.all([
+    content.getInstitution(),
+    getSitePage(),
+  ]);
   const { contact, entities } = institution;
+  const { footer } = site;
   const group = entities.institute;
+
+  const socials = contact.socialProfiles.filter(
+    (social) => FOOTER_SOCIAL_ICONS[social.platform] !== undefined,
+  );
+
+  const entityProps = (role: EntityRole, ariaPrefix: string) => ({
+    ariaPrefix,
+    channel: contact.byEntity[role],
+    name: entities[role].name,
+    socials,
+  });
 
   return (
     <>
-      <SiteCtaBand
-        heading="Subscribe to our Newsletter"
-        onFooterSeam
-        standfirst={group.name}
-      />
+      <SiteNewsletterBand onFooterSeam standfirst={group.name} />
 
       <footer className="field-brand border-t border-primary-800/80">
         <div className="gutter-x py-10 sm:py-12 lg:py-14">
@@ -58,14 +179,11 @@ export async function SiteFooter() {
                   <SiteFooterWordmark name={group.name} />
                 </Link>
 
-                <p className="mt-4 font-body text-xs font-normal leading-relaxed text-white/90 text-justify">
-                  Naaya Aayam Multi-Disciplinary Institute (NAMI) is an
-                  educational entity established in 2012, committed to advancing
-                  human capital through world-class education, global standards
-                  and holistic development while empowering individuals with the
-                  knowledge, skills and leadership capabilities to create
-                  meaningful impact locally and globally.
-                </p>
+                {footer.about.trim() === "" ? null : (
+                  <p className="mt-4 font-body text-xs font-normal leading-relaxed text-white/90 text-justify">
+                    {footer.about}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -74,11 +192,12 @@ export async function SiteFooter() {
                 as="h2"
                 className="text-xs font-semibold uppercase tracking-widest text-white"
               >
-                Quick Links
+                {footer.quickLinksTitle}
               </Eyebrow>
               <ul className="mt-4 space-y-2.5 font-body text-xs">
-                {FOOTER_NAV_LINKS.map((item) => (
-                  <li key={item.href}>
+                {footer.quickLinks.map((item, index) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: links are an ordered CMS list
+                  <li key={index}>
                     <Link
                       href={item.href as Route}
                       className="inline-block py-1 text-white/85 transition-colors hover:text-white hover:underline underline-offset-4"
@@ -95,364 +214,31 @@ export async function SiteFooter() {
                 as="h2"
                 className="text-xs font-semibold uppercase tracking-widest text-white"
               >
-                Institutions & Contacts
+                {footer.contactsTitle}
               </Eyebrow>
 
               <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <div className="border-t border-white/15 pt-4">
-                  <Link
-                    href={institutionPath("school")}
-                    className="group block"
-                  >
-                    <span className="block font-body text-sm font-semibold text-white transition-colors group-hover:text-white group-hover:underline underline-offset-4">
-                      {entities.school.name}
-                    </span>
-                    <span className="mt-0.5 block font-body text-xs text-white/75">
-                      School & +2 NEB
-                    </span>
-                  </Link>
-
-                  <div className="mt-3 space-y-1.5 font-body text-xs">
-                    <div className="flex items-center gap-2 text-white/90">
-                      <Icon
-                        icon={PhoneIcon}
-                        className="size-3.5 shrink-0 text-white"
-                      />
-                      <div className="flex flex-col">
-                        {contact.byEntity.school.phone
-                          .split(", ")
-                          .map((num) => (
-                            <Link
-                              key={num}
-                              href={
-                                `tel:${(num.split("/")[0] ?? "").replace(/[^+\d]/g, "")}` as Route
-                              }
-                              className="transition-colors hover:text-white"
-                            >
-                              {num}
-                            </Link>
-                          ))}
-                      </div>
-                    </div>
-                    <Link
-                      href={`mailto:${contact.byEntity.school.email}` as Route}
-                      className="flex items-center gap-2 text-white/90 transition-colors hover:text-white"
-                    >
-                      <Icon
-                        icon={MailIcon}
-                        className="size-3.5 shrink-0 text-white"
-                      />
-                      <span>{contact.byEntity.school.email}</span>
-                    </Link>
-                    {contact.byEntity.school.admissionsEmail && (
-                      <Link
-                        href={
-                          `mailto:${contact.byEntity.school.admissionsEmail}` as Route
-                        }
-                        className="flex items-center gap-2 text-white/90 transition-colors hover:text-white"
-                      >
-                        <Icon
-                          icon={MailIcon}
-                          className="size-3.5 shrink-0 text-white"
-                        />
-                        <span>{contact.byEntity.school.admissionsEmail}</span>
-                      </Link>
-                    )}
-                  </div>
-
-                  <div className="mt-3 flex items-center gap-2">
-                    <Link
-                      href={
-                        (contact.byEntity.school.facebook ??
-                          "https://www.facebook.com/share/1DpZc6ubM8/?mibextid=wwXIfr") as Route
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI School Facebook"
-                    >
-                      <Icon icon={FacebookIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={"https://www.instagram.com/nami.college" as Route}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI School Instagram"
-                    >
-                      <Icon icon={InstagramIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={
-                        "https://www.linkedin.com/company/13186439/" as Route
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI School LinkedIn"
-                    >
-                      <Icon icon={LinkedInIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={"https://www.youtube.com/@naminepal" as Route}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI School YouTube"
-                    >
-                      <Icon icon={YouTubeIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={
-                        "https://www.tiktok.com/@nami.college?_r=1&_t=ZS-99xxwcx4jFE" as Route
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI School TikTok"
-                    >
-                      <Icon icon={TikTokIcon} className="size-3.5" />
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="border-t border-white/15 pt-4">
-                  <Link
-                    href={institutionPath("college")}
-                    className="group block"
-                  >
-                    <span className="block font-body text-sm font-semibold text-white transition-colors group-hover:text-white group-hover:underline underline-offset-4">
-                      {entities.college.name}
-                    </span>
-                    <span className="mt-0.5 block font-body text-xs text-white/75">
-                      Cambridge Assessment GCE A Levels
-                    </span>
-                  </Link>
-
-                  <div className="mt-3 space-y-1.5 font-body text-xs">
-                    <div className="flex items-center gap-2 text-white/90">
-                      <Icon
-                        icon={PhoneIcon}
-                        className="size-3.5 shrink-0 text-white"
-                      />
-                      <div className="flex flex-col">
-                        {contact.byEntity.college.phone
-                          .split(", ")
-                          .map((num) => (
-                            <Link
-                              key={num}
-                              href={
-                                `tel:${(num.split("/")[0] ?? "").replace(/[^+\d]/g, "")}` as Route
-                              }
-                              className="transition-colors hover:text-white"
-                            >
-                              {num}
-                            </Link>
-                          ))}
-                      </div>
-                    </div>
-                    <Link
-                      href={`mailto:${contact.byEntity.college.email}` as Route}
-                      className="flex items-center gap-2 text-white/90 transition-colors hover:text-white"
-                    >
-                      <Icon
-                        icon={MailIcon}
-                        className="size-3.5 shrink-0 text-white"
-                      />
-                      <span>{contact.byEntity.college.email}</span>
-                    </Link>
-                    {contact.byEntity.college.admissionsEmail && (
-                      <Link
-                        href={
-                          `mailto:${contact.byEntity.college.admissionsEmail}` as Route
-                        }
-                        className="flex items-center gap-2 text-white/90 transition-colors hover:text-white"
-                      >
-                        <Icon
-                          icon={MailIcon}
-                          className="size-3.5 shrink-0 text-white"
-                        />
-                        <span>{contact.byEntity.college.admissionsEmail}</span>
-                      </Link>
-                    )}
-                  </div>
-
-                  <div className="mt-3 flex items-center gap-2">
-                    <Link
-                      href={
-                        (contact.byEntity.college.facebook ??
-                          "https://www.facebook.com/share/1513mfhP69m/?mibextid=wwXIfr") as Route
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI College Facebook"
-                    >
-                      <Icon icon={FacebookIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={"https://www.instagram.com/nami.college" as Route}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI College Instagram"
-                    >
-                      <Icon icon={InstagramIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={
-                        "https://www.linkedin.com/company/13186439/" as Route
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI College LinkedIn"
-                    >
-                      <Icon icon={LinkedInIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={"https://www.youtube.com/@naminepal" as Route}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI College YouTube"
-                    >
-                      <Icon icon={YouTubeIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={
-                        "https://www.tiktok.com/@nami.college?_r=1&_t=ZS-99xxwcx4jFE" as Route
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI College TikTok"
-                    >
-                      <Icon icon={TikTokIcon} className="size-3.5" />
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="border-t border-white/15 pt-4 sm:col-span-2">
-                  <Link
-                    href={institutionPath("bachelors")}
-                    className="group block"
-                  >
-                    <span className="block font-body text-sm font-semibold text-white transition-colors group-hover:text-white group-hover:underline underline-offset-4">
-                      {entities.institute.name}
-                    </span>
-                    <span className="mt-0.5 block font-body text-xs text-white/75">
-                      Undergraduate & Postgraduate Programmes
-                    </span>
-                  </Link>
-
-                  <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-1.5 font-body text-xs">
-                    <div className="flex items-center gap-2 text-white/90">
-                      <Icon
-                        icon={PhoneIcon}
-                        className="size-3.5 shrink-0 text-white"
-                      />
-                      <div className="flex flex-col">
-                        {contact.byEntity.institute.phone
-                          .split(", ")
-                          .map((num) => (
-                            <Link
-                              key={num}
-                              href={
-                                `tel:${(num.split("/")[0] ?? "").replace(/[^+\d]/g, "")}` as Route
-                              }
-                              className="transition-colors hover:text-white"
-                            >
-                              {num}
-                            </Link>
-                          ))}
-                      </div>
-                    </div>
-                    <Link
-                      href={
-                        `mailto:${contact.byEntity.institute.email}` as Route
-                      }
-                      className="flex items-center gap-2 text-white/90 transition-colors hover:text-white"
-                    >
-                      <Icon
-                        icon={MailIcon}
-                        className="size-3.5 shrink-0 text-white"
-                      />
-                      <span>{contact.byEntity.institute.email}</span>
-                    </Link>
-                    {contact.byEntity.institute.admissionsEmail && (
-                      <Link
-                        href={
-                          `mailto:${contact.byEntity.institute.admissionsEmail}` as Route
-                        }
-                        className="flex items-center gap-2 text-white/90 transition-colors hover:text-white"
-                      >
-                        <Icon
-                          icon={MailIcon}
-                          className="size-3.5 shrink-0 text-white"
-                        />
-                        <span>
-                          {contact.byEntity.institute.admissionsEmail}
-                        </span>
-                      </Link>
-                    )}
-                  </div>
-
-                  <div className="mt-3 flex items-center gap-2">
-                    <Link
-                      href={
-                        (contact.byEntity.institute.facebook ??
-                          "https://www.facebook.com/share/1CS5HvZ6xf/?mibextid=wwXIfr") as Route
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI Institute Facebook"
-                    >
-                      <Icon icon={FacebookIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={"https://www.instagram.com/nami.college" as Route}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI Institute Instagram"
-                    >
-                      <Icon icon={InstagramIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={
-                        "https://www.linkedin.com/company/13186439/" as Route
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI Institute LinkedIn"
-                    >
-                      <Icon icon={LinkedInIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={"https://www.youtube.com/@naminepal" as Route}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI Institute YouTube"
-                    >
-                      <Icon icon={YouTubeIcon} className="size-3.5" />
-                    </Link>
-                    <Link
-                      href={
-                        "https://www.tiktok.com/@nami.college?_r=1&_t=ZS-99xxwcx4jFE" as Route
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white hover:text-primary-700 hover:scale-110"
-                      aria-label="NAMI Institute TikTok"
-                    >
-                      <Icon icon={TikTokIcon} className="size-3.5" />
-                    </Link>
-                  </div>
-                </div>
+                <EntityContacts
+                  {...entityProps("school", "NAMI School")}
+                  className="border-t border-white/15 pt-4"
+                  detailsClassName="mt-3 space-y-1.5 font-body text-xs"
+                  href={institutionPath("school")}
+                  tagline={footer.schoolTagline}
+                />
+                <EntityContacts
+                  {...entityProps("college", "NAMI College")}
+                  className="border-t border-white/15 pt-4"
+                  detailsClassName="mt-3 space-y-1.5 font-body text-xs"
+                  href={institutionPath("college")}
+                  tagline={footer.collegeTagline}
+                />
+                <EntityContacts
+                  {...entityProps("institute", "NAMI Institute")}
+                  className="border-t border-white/15 pt-4 sm:col-span-2"
+                  detailsClassName="mt-3 flex flex-wrap items-center gap-x-6 gap-y-1.5 font-body text-xs"
+                  href={institutionPath("bachelors")}
+                  tagline={footer.instituteTagline}
+                />
               </div>
             </div>
           </Reveal>
@@ -471,26 +257,20 @@ export async function SiteFooter() {
               . All rights reserved.
             </p>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-body text-neutral-400 justify-center sm:justify-end">
-              <Link
-                href={"/documents" as Route}
-                className="hover:text-white transition-colors underline-offset-4 hover:underline"
-              >
-                Official Documents
-              </Link>
-              <span className="text-neutral-600">•</span>
-              <Link
-                href={"/privacy" as Route}
-                className="hover:text-white transition-colors underline-offset-4 hover:underline"
-              >
-                Privacy Policy
-              </Link>
-              <span className="text-neutral-600">•</span>
-              <Link
-                href={"/terms" as Route}
-                className="hover:text-white transition-colors underline-offset-4 hover:underline"
-              >
-                Terms & Conditions
-              </Link>
+              {footer.bottomLinks.map((item, index) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: links are an ordered CMS list
+                <span className="contents" key={index}>
+                  {index === 0 ? null : (
+                    <span className="text-neutral-600">•</span>
+                  )}
+                  <Link
+                    href={item.href as Route}
+                    className="hover:text-white transition-colors underline-offset-4 hover:underline"
+                  >
+                    {item.label}
+                  </Link>
+                </span>
+              ))}
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@
 import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { SCHOOL_CLUBS } from "@/app/institutions/school/_components/school-clubs-copy";
+import type { SchoolClub } from "@/app/institutions/school/_components/school-clubs-copy";
 import { Reveal } from "@/components/motion/reveal";
 import { SectionHeader } from "@/components/shared/section-header";
 import {
@@ -25,13 +25,21 @@ const CARD_SIZES =
   "(min-width: 1280px) 350px, (min-width: 1024px) 340px, (min-width: 640px) 310px, 78vw";
 
 export function InstitutionClubsSection({
+  clubs,
+  copy,
   tone = "surface",
   className,
 }: {
+  readonly clubs: readonly SchoolClub[];
+  readonly copy: {
+    readonly label: string;
+    readonly title: string;
+    readonly description: string;
+  };
   readonly tone?: InstitutionClubsTone;
   readonly className?: string;
 }) {
-  const total = SCHOOL_CLUBS.length;
+  const total = clubs.length;
 
   if (total === 0) return null;
 
@@ -39,10 +47,10 @@ export function InstitutionClubsSection({
   const displayClubs =
     total > 1 && total < 8
       ? [
-          ...SCHOOL_CLUBS.map((c) => ({ ...c, itemKey: `${c.slug}-1` })),
-          ...SCHOOL_CLUBS.map((c) => ({ ...c, itemKey: `${c.slug}-2` })),
+          ...clubs.map((c) => ({ ...c, itemKey: `${c.slug}-1` })),
+          ...clubs.map((c) => ({ ...c, itemKey: `${c.slug}-2` })),
         ]
-      : SCHOOL_CLUBS.map((c) => ({ ...c, itemKey: c.slug }));
+      : clubs.map((c) => ({ ...c, itemKey: c.slug }));
 
   return (
     <section
@@ -54,7 +62,7 @@ export function InstitutionClubsSection({
       id="eca-clubs"
     >
       <Carousel
-        aria-label="ECA & Clubs"
+        aria-label={copy.title || "ECA & Clubs"}
         aria-roledescription="carousel"
         autoplay={true}
         autoplayIntervalMs={2500}
@@ -80,10 +88,10 @@ export function InstitutionClubsSection({
                 />
               </CarouselControls>
             }
-            description="Five vibrant student-led clubs nurturing physical vitality, creative expression, leadership, social empathy, and scientific inquiry."
-            eyebrow="Extracurricular & Co-Curricular"
+            description={copy.description || undefined}
+            eyebrow={copy.label || undefined}
             layout="action"
-            title="ECA & Clubs"
+            title={copy.title || undefined}
           />
         </div>
 

@@ -28,6 +28,7 @@ export type SiteRoute = {
   priority: number;
 };
 
+// Club and course pages are added by src/app/sitemap.ts from the CMS lists.
 export const siteRoutes: readonly SiteRoute[] = [
   { path: "/", changeFrequency: "weekly", priority: 1 },
   { path: "/about", changeFrequency: "monthly", priority: 0.8 },
@@ -38,79 +39,14 @@ export const siteRoutes: readonly SiteRoute[] = [
     priority: 0.9,
   },
   {
-    path: "/institutions/school/clubs/sports-club",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
-    path: "/institutions/school/clubs/art-and-literature-club",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
-    path: "/institutions/school/clubs/event-management-club",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
-    path: "/institutions/school/clubs/social-service-club",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
-    path: "/institutions/school/clubs/science-and-technology-club",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
     path: institutionPath("college"),
     changeFrequency: "monthly",
     priority: 0.9,
   },
   {
-    path: "/institutions/a-levels/clubs/social-services",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
-    path: "/institutions/a-levels/clubs/sports",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
-    path: "/institutions/a-levels/clubs/environment",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
-    path: "/institutions/a-levels/clubs/arts-and-crafts",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
     path: institutionPath("bachelors"),
     changeFrequency: "monthly",
     priority: 0.9,
-  },
-  {
-    path: "/institutions/bachelors/computer-science",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
-    path: "/institutions/bachelors/environmental-science",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
-    path: "/institutions/bachelors/environmental-studies",
-    changeFrequency: "monthly",
-    priority: 0.8,
-  },
-  {
-    path: "/institutions/bachelors/business-administration",
-    changeFrequency: "monthly",
-    priority: 0.8,
   },
   { path: "/admissions", changeFrequency: "weekly", priority: 0.9 },
   { path: "/faculty", changeFrequency: "monthly", priority: 0.7 },

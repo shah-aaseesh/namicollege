@@ -1,20 +1,20 @@
+import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Parallax } from "@/components/motion/parallax";
 import { buttonVariants } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Standfirst } from "@/components/ui/typography";
-import type { AboutCopy } from "@/lib/content";
+import type { AboutHero as AboutHeroContent } from "@/lib/cms/pages/about";
+import { isExternalHref } from "@/lib/cms/types";
 import { ArrowRightIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
-export function AboutHero({ copy }: { copy: AboutCopy }) {
-  const images =
-    copy.openingImages && copy.openingImages.length > 0
-      ? copy.openingImages
-      : copy.openingImage
-        ? [copy.openingImage]
-        : [];
+export function AboutHero({ hero }: { hero: AboutHeroContent }) {
+  const images = hero.images.map((item) => item.image);
+  const showButton =
+    hero.button.label.trim() !== "" && hero.button.href.trim() !== "";
+  const isExternal = isExternalHref(hero.button.href);
 
   return (
     <section
@@ -25,31 +25,35 @@ export function AboutHero({ copy }: { copy: AboutCopy }) {
         <div className="lg:grid lg:grid-cols-12 lg:gap-x-8 xl:gap-x-12 items-start">
           <div className="lg:col-span-6 xl:col-span-6">
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-normal tracking-tight leading-[1.1] text-balance text-ink">
-              {copy.title}
+              {hero.title}
             </h1>
           </div>
 
           <div className="mt-5 max-w-xl lg:col-span-6 xl:col-span-6 lg:mt-0 flex flex-col justify-start">
-            {copy.standfirst === "" ? null : (
+            {hero.standfirst === "" ? null : (
               <Standfirst className="text-neutral-700 text-sm sm:text-base leading-relaxed">
-                {copy.standfirst}
+                {hero.standfirst}
               </Standfirst>
             )}
-            <div className="mt-4 sm:mt-5">
-              <Link
-                className={cn(
-                  buttonVariants({ size: "lg", variant: "default" }),
-                  "group gap-2 px-5 w-fit inline-flex items-center justify-start",
-                )}
-                href={"/faculty"}
-              >
-                <span>Meet the People Behind NAMI</span>
-                <Icon
-                  className="size-4 transition-transform group-hover:translate-x-1"
-                  icon={ArrowRightIcon}
-                />
-              </Link>
-            </div>
+            {showButton ? (
+              <div className="mt-4 sm:mt-5">
+                <Link
+                  className={cn(
+                    buttonVariants({ size: "lg", variant: "default" }),
+                    "group gap-2 px-5 w-fit inline-flex items-center justify-start",
+                  )}
+                  href={hero.button.href as Route}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  target={isExternal ? "_blank" : undefined}
+                >
+                  <span>{hero.button.label}</span>
+                  <Icon
+                    className="size-4 transition-transform group-hover:translate-x-1"
+                    icon={ArrowRightIcon}
+                  />
+                </Link>
+              </div>
+            ) : null}
           </div>
         </div>
 
@@ -62,12 +66,12 @@ export function AboutHero({ copy }: { copy: AboutCopy }) {
               alt={images[0].alt}
               className="h-[38vh] sm:h-[44vh] lg:h-[48vh] xl:h-[54vh] max-h-[440px] lg:max-h-[520px] xl:max-h-[580px] w-full object-cover object-left-top"
               fetchPriority="high"
-              height={images[0].height}
+              height={images[0].height || 400}
               loading="eager"
               priority
               sizes="(max-width: 1024px) 100vw, 1200px"
               src={images[0].src}
-              width={images[0].width}
+              width={images[0].width || 1200}
             />
           </Parallax>
         ) : (
@@ -75,7 +79,8 @@ export function AboutHero({ copy }: { copy: AboutCopy }) {
             {images.map((img, idx) => (
               <div
                 className="group relative aspect-[4/3] sm:aspect-[4/3] lg:aspect-[16/11] xl:aspect-[4/3] w-full overflow-hidden rounded-2xl lg:rounded-3xl bg-neutral-100 border border-neutral-200/80 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1"
-                key={img.src}
+                // biome-ignore lint/suspicious/noArrayIndexKey: images are an ordered CMS list
+                key={`${idx}-${img.src}`}
               >
                 <Image
                   alt={img.alt}

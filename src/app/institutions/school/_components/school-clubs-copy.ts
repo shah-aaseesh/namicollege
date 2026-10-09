@@ -1,12 +1,5 @@
 import type { ContentImage } from "@/lib/content";
 
-export type ClubSlug =
-  | "sports-club"
-  | "art-and-literature-club"
-  | "event-management-club"
-  | "social-service-club"
-  | "science-and-technology-club";
-
 export type ClubActivity = {
   readonly title: string;
   readonly description: string;
@@ -22,7 +15,8 @@ export type ClubGalleryPhoto = {
 };
 
 export type SchoolClub = {
-  readonly slug: ClubSlug;
+  /** The club page's web address: /institutions/school/clubs/{slug}. */
+  readonly slug: string;
   readonly title: string;
   readonly category: string;
   readonly tagline: string;

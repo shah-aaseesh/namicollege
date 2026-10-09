@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/carousel";
 import { Icon } from "@/components/ui/icon";
 import { Eyebrow, Standfirst } from "@/components/ui/typography";
-import type { ContentLink } from "@/lib/content";
+import type { HomeHero } from "@/lib/cms/pages/home";
+import { type CmsLink, isExternalHref } from "@/lib/cms/types";
 import { content } from "@/lib/content";
 import { ArrowUpRightIcon, MortarboardIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
@@ -23,12 +24,12 @@ function HeroCta({
   link,
   variant,
 }: {
-  link: ContentLink;
+  link: CmsLink;
   variant: "default" | "outline";
 }) {
-  if (link.destination === "legacy") return null;
+  if (link.label.trim() === "" || link.href.trim() === "") return null;
 
-  const isExternal = link.destination === "external";
+  const isExternal = isExternalHref(link.href);
 
   return (
     <Link
@@ -46,13 +47,9 @@ function HeroCta({
   );
 }
 
-export async function Hero() {
-  const [copy, institution] = await Promise.all([
-    content.getHomeCopy(),
-    content.getInstitution(),
-  ]);
+export async function Hero({ hero }: { hero: HomeHero }) {
+  const institution = await content.getInstitution();
 
-  const { hero } = copy;
   const socials = institution.contact.socialProfiles.filter(
     (profile) => profile.destination === "external",
   );
@@ -63,7 +60,7 @@ export async function Hero() {
     splitAt === -1 ? hero.headline : hero.headline.slice(0, splitAt + 1);
   const tail = splitAt === -1 ? null : hero.headline.slice(splitAt + 2);
 
-  const heroSlides = hero.images;
+  const heroSlides = hero.slides.map((slide) => slide.image);
 
   return (
     <section
@@ -128,7 +125,8 @@ export async function Hero() {
                   {heroSlides.map((slide, position) => (
                     <CarouselItem
                       className="relative overflow-hidden"
-                      key={slide.src}
+                      // biome-ignore lint/suspicious/noArrayIndexKey: editors may reuse one image across slides
+                      key={`${position}-${slide.src}`}
                     >
                       <Parallax className="absolute inset-0" speed={0.94}>
                         <Image

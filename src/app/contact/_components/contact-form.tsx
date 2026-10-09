@@ -4,16 +4,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { Route } from "next";
 import Link from "next/link";
 import type { FocusEvent, FormEvent } from "react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { buttonVariants } from "@/components/ui/button";
 import { SelectField, TextareaField, TextField } from "@/components/ui/form";
 import { Icon } from "@/components/ui/icon";
 import { H5, P } from "@/components/ui/typography";
+import type { ContactPageContent } from "@/lib/cms/pages/contact";
 import { ArrowUpRightIcon } from "@/lib/icons";
 import { type ContactFormData, contactSchema } from "@/lib/schema";
 import { cn } from "@/lib/utils";
-import { contactCopy } from "./contact-copy";
 
 const FIELDS = ["name", "email", "phone", "topic", "message"] as const;
 
@@ -34,31 +34,36 @@ function controlOf(form: HTMLFormElement, name: FieldName): FormControl | null {
 }
 
 export function ContactForm({
+  copy,
   email,
   topics,
 }: {
+  copy: ContactPageContent["form"];
   email: string;
   topics: readonly string[];
 }) {
   const [attempted, setAttempted] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const copy = contactCopy.form;
+  const [sendError, setSendError] = useState<string | null>(null);
+  // Hidden "website" field: people never see it, spam bots tend to fill it.
+  const honeypotRef = useRef<HTMLInputElement>(null);
   const topicOptions = useMemo(
     () => topics.map((topic) => ({ value: topic, label: topic })),
     [topics],
   );
-  const { control, trigger, getFieldState, reset } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
-    mode: "onTouched",
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      topic: "",
-      message: "",
-    },
-  });
+  const { control, trigger, getFieldState, getValues, reset } =
+    useForm<ContactFormData>({
+      resolver: zodResolver(contactSchema),
+      mode: "onTouched",
+      defaultValues: {
+        name: "",
+        email: "",
+        phone: "",
+        topic: "",
+        message: "",
+      },
+    });
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -77,12 +82,37 @@ export function ContactForm({
     }
 
     setIsSubmitting(true);
-    // Ready for headless WordPress API POST
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    setIsSuccess(true);
-    setIsSubmitting(false);
-    reset();
-    setAttempted(false);
+    setSendError(null);
+    setIsSuccess(false);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          data: getValues(),
+          website: honeypotRef.current?.value ?? "",
+        }),
+      });
+      const result = (await response.json().catch(() => null)) as {
+        ok?: boolean;
+        message?: string;
+      } | null;
+      if (!response.ok || !result?.ok) {
+        setSendError(
+          result?.message ?? "Your message could not be sent right now.",
+        );
+        return;
+      }
+      setIsSuccess(true);
+      reset();
+      setAttempted(false);
+    } catch {
+      setSendError(
+        "Your message could not be sent. Check your internet connection and try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function handleBlur(event: FocusEvent<HTMLFormElement>) {
@@ -102,11 +132,10 @@ export function ContactForm({
           role="status"
         >
           <H5 as="h3" className="text-emerald-950 font-semibold mb-1">
-            Thank you! Your message has been sent.
+            {copy.successTitle}
           </H5>
           <P className="text-emerald-800 text-sm sm:text-base">
-            We have received your inquiry and our team will get back to you
-            shortly.
+            {copy.successText}
           </P>
         </div>
       )}
@@ -117,11 +146,26 @@ export function ContactForm({
         onBlur={handleBlur}
         onSubmit={handleSubmit}
       >
+        <div
+          aria-hidden="true"
+          className="absolute -left-[9999px] size-px overflow-hidden"
+        >
+          <label>
+            Website
+            <input
+              autoComplete="off"
+              name="website"
+              ref={honeypotRef}
+              tabIndex={-1}
+              type="text"
+            />
+          </label>
+        </div>
         <TextField
           autoComplete="name"
           className="font-body text-base text-ink placeholder:text-ink-muted"
           control={control}
-          label={copy.labels.name}
+          label={copy.nameLabel}
           name="name"
           required
           type="text"
@@ -131,7 +175,7 @@ export function ContactForm({
           autoComplete="email"
           className="font-body text-base text-ink placeholder:text-ink-muted"
           control={control}
-          label={copy.labels.email}
+          label={copy.emailLabel}
           name="email"
           required
           type="email"
@@ -141,7 +185,7 @@ export function ContactForm({
           autoComplete="tel"
           className="font-body text-base text-ink placeholder:text-ink-muted"
           control={control}
-          label={copy.labels.phone}
+          label={copy.phoneLabel}
           name="phone"
           required
           type="tel"
@@ -150,7 +194,7 @@ export function ContactForm({
         <SelectField
           className="font-body text-base text-ink"
           control={control}
-          label={copy.labels.topic}
+          label={copy.topicLabel}
           name="topic"
           options={topicOptions}
           placeholder={copy.topicPlaceholder}
@@ -161,7 +205,7 @@ export function ContactForm({
           <TextareaField
             className="font-body text-base text-ink resize-y placeholder:text-ink-muted"
             control={control}
-            label={copy.labels.message}
+            label={copy.messageLabel}
             maxLength={2000}
             name="message"
             required
@@ -169,13 +213,28 @@ export function ContactForm({
           />
         </div>
 
+        {sendError === null ? null : (
+          <p
+            className="font-body text-sm text-accent sm:col-span-2"
+            role="alert"
+          >
+            {sendError} {copy.directPrompt}{" "}
+            <Link
+              className="underline underline-offset-4"
+              href={`mailto:${email}` as Route}
+            >
+              {email}
+            </Link>
+          </p>
+        )}
+
         <div className="flex flex-col items-start gap-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
           <button
             className={cn(buttonVariants({ size: "lg" }), "w-full sm:w-auto")}
             disabled={isSubmitting}
             type="submit"
           >
-            {isSubmitting ? "Sending message..." : copy.submit}
+            {isSubmitting ? "Sending message..." : copy.submitLabel}
             <Icon icon={ArrowUpRightIcon} />
           </button>
           <p className="font-body text-sm text-ink-muted">

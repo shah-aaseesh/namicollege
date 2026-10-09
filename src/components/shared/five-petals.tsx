@@ -7,11 +7,17 @@ export type Petal = {
   meaning: string;
 };
 
-export function FivePetals({ petals }: { petals: readonly Petal[] }) {
+export function FivePetals({
+  petals,
+  title = "The Five Petals & Core Values",
+}: {
+  petals: readonly Petal[];
+  title?: string;
+}) {
   return (
     <div className="mx-auto max-w-page">
       <div className="mb-10 lg:mb-12">
-        <Eyebrow>The Five Petals & Core Values</Eyebrow>
+        <Eyebrow>{title}</Eyebrow>
       </div>
 
       <Reveal
@@ -25,7 +31,7 @@ export function FivePetals({ petals }: { petals: readonly Petal[] }) {
             data-reveal-item=""
           >
             <div className="mb-3 font-display text-sm tracking-wide text-accent/80">
-              Petal 0{i + 1}
+              Petal {String(i + 1).padStart(2, "0")}
             </div>
             <H6 as="dt">{petal.name}</H6>
             <P as="dd" className="mt-3 text-ink-muted leading-relaxed">

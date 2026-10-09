@@ -28,7 +28,6 @@ import {
   type InquiryCourse,
 } from "@/lib/content/institutions";
 import {
-  ArrowLeftIcon,
   ArrowRightIcon,
   CalendarIcon,
   CheckIcon,
@@ -343,6 +342,11 @@ export function MultiStepForm() {
   const [isPreparingPdf, setIsPreparingPdf] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [pdfError, setPdfError] = useState<string | null>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [sendFailed, setSendFailed] = useState(false);
+  const [reference, setReference] = useState<string | null>(null);
+  // Hidden "website" field: people never see it, spam bots tend to fill it.
+  const honeypotRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const confirmationRef = useRef<HTMLHeadingElement>(null);
@@ -540,12 +544,40 @@ export function MultiStepForm() {
     }
 
     setPdfError(null);
-    setIsSubmitted(true);
-  };
-
-  const resumeEditing = () => {
-    setPdfError(null);
-    setIsSubmitted(false);
+    setSendFailed(false);
+    setIsSending(true);
+    try {
+      const response = await fetch("/api/admissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          data: admissionsSchema.parse(getValues()),
+          website: honeypotRef.current?.value ?? "",
+        }),
+      });
+      const result = (await response.json().catch(() => null)) as {
+        ok?: boolean;
+        reference?: string | null;
+        message?: string;
+      } | null;
+      if (!response.ok || !result?.ok) {
+        setSendFailed(true);
+        setSubmitError(
+          result?.message ??
+            "Your application could not be sent right now. Please try again, or download your PDF instead.",
+        );
+        return;
+      }
+      setReference(result.reference ?? null);
+      setIsSubmitted(true);
+    } catch {
+      setSendFailed(true);
+      setSubmitError(
+        "Your application could not be sent. Check your internet connection and try again, or download your PDF instead.",
+      );
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const downloadPdf = async () => {
@@ -968,6 +1000,21 @@ export function MultiStepForm() {
           onSubmit={(event) => event.preventDefault()}
           className="flex-1 p-6 md:p-10 lg:p-12 flex flex-col justify-between"
         >
+          <div
+            aria-hidden="true"
+            className="absolute -left-[9999px] size-px overflow-hidden"
+          >
+            <label>
+              Website
+              <input
+                autoComplete="off"
+                name="website"
+                ref={honeypotRef}
+                tabIndex={-1}
+                type="text"
+              />
+            </label>
+          </div>
           {isSubmitted ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center gap-6 py-12">
               <span className="flex items-center justify-center size-16 rounded-full bg-accent text-accent-ink">
@@ -981,12 +1028,17 @@ export function MultiStepForm() {
                   tabIndex={-1}
                   className="text-ink"
                 >
-                  Your inquiry form is complete
+                  Your application has been sent
                 </H5>
+                {reference ? (
+                  <P className="font-semibold text-ink">
+                    Reference: {reference}
+                  </P>
+                ) : null}
                 <P className="text-ink-muted">
-                  Every answer has been checked. Download your summary as a PDF
-                  and bring it with you, or go back if you want to change
-                  something.
+                  Thank you. The admissions office has received your application
+                  and will contact you. Download a copy as a PDF for your
+                  records and bring it with you.
                 </P>
               </div>
 
@@ -1007,14 +1059,6 @@ export function MultiStepForm() {
                   {isPreparingPdf ? "Preparing PDF" : "Download PDF"}
                   <Icon icon={DownloadIcon} className="size-4" />
                 </Button>
-                <Button
-                  type="button"
-                  size="lg"
-                  onClick={resumeEditing}
-                  className="gap-2 px-6 bg-transparent border border-border text-ink hover:bg-muted shadow-none"
-                >
-                  <Icon icon={ArrowLeftIcon} className="size-4" /> Edit answers
-                </Button>
               </div>
             </div>
           ) : (
@@ -1025,10 +1069,29 @@ export function MultiStepForm() {
 
               <div className="mt-12 pt-6 border-t border-border flex flex-col gap-4">
                 {submitError && (
-                  <P role="alert" className="text-xs text-accent">
-                    {submitError}
-                  </P>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <P role="alert" className="text-xs text-accent">
+                      {submitError}
+                    </P>
+                    {sendFailed ? (
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={downloadPdf}
+                        disabled={isPreparingPdf}
+                        className="gap-2 bg-transparent border border-border text-ink hover:bg-muted shadow-none"
+                      >
+                        {isPreparingPdf ? "Preparing PDF" : "Download PDF"}
+                        <Icon icon={DownloadIcon} className="size-4" />
+                      </Button>
+                    ) : null}
+                  </div>
                 )}
+                {pdfError && !isSubmitted ? (
+                  <P role="alert" className="text-xs text-accent">
+                    {pdfError}
+                  </P>
+                ) : null}
 
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <Button
@@ -1057,9 +1120,11 @@ export function MultiStepForm() {
                       type="button"
                       size="lg"
                       onClick={submitForm}
+                      disabled={isSending}
                       className="gap-2 px-6"
                     >
-                      Submit form <Icon icon={CheckIcon} className="size-4" />
+                      {isSending ? "Sending…" : "Submit application"}{" "}
+                      <Icon icon={CheckIcon} className="size-4" />
                     </Button>
                   )}
                 </div>
@@ -1081,8 +1146,9 @@ export function AdmissionsFormSection() {
             Start Your Application
           </H2>
           <P className="text-ink-muted text-base sm:text-lg">
-            Tell us about yourself in the inquiry form below, then download your
-            answers as a PDF. Everything stays on your device.
+            Tell us about yourself in the form below and submit it. Your
+            application goes straight to our admissions office, and you can
+            download a copy as a PDF.
           </P>
         </div>
 

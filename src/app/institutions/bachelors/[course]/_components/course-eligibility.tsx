@@ -64,9 +64,10 @@ export function CourseEligibility({
               </thead>
 
               <tbody className="divide-y divide-border/60">
-                {course.entry.map((item) => (
+                {course.entry.map((item, index) => (
                   <tr
-                    key={item.label}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: requirements are an ordered CMS list
+                    key={index}
                     className="hover:bg-muted/20 transition-colors"
                   >
                     <th

@@ -12,72 +12,45 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Icon } from "@/components/ui/icon";
+import type { BachelorsPageContent } from "@/lib/cms/pages/bachelors";
+import { hasImage } from "@/lib/cms/types";
 import { CheckIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
+import { MOU_PARTNERS } from "./mou-partners";
 
-export type MouPartner = {
-  readonly id: string;
-  readonly organization: string;
-  readonly logo: string;
-  readonly domain: string;
-  readonly logoClass?: string;
-};
+const DEFAULT_LOGO_CLASS = "max-h-20 w-auto max-w-[200px] sm:max-w-[220px]";
 
-export const MOU_PARTNERS: readonly MouPartner[] = [
-  {
-    id: "websurfer",
-    organization: "Web Surfer The Broad Band Company",
-    logo: "/logos/mou/websurfer-logo-brighter1920x658-removebg-preview.png",
-    domain: "Broadband & Telecommunications",
-    logoClass: "max-h-20 w-auto max-w-[210px] sm:max-w-[230px]",
-  },
-  {
-    id: "machan",
-    organization: "Machan Wildlife Resort Pvt. Ltd",
-    logo: "/logos/mou/machian-removebg-preview.png",
-    domain: "Eco-Tourism & Hospitality",
-    logoClass: "max-h-24 w-auto max-w-[170px] sm:max-w-[190px]",
-  },
-  {
-    id: "suraj-interior",
-    organization: "Suraj Interior And Designers Pvt. Ltd",
-    logo: "/logos/mou/Suraj-removebg-preview.png",
-    domain: "Architecture & Interior Design",
-    logoClass: "max-h-24 w-auto max-w-[160px] sm:max-w-[180px]",
-  },
-  {
-    id: "cross-web",
-    organization: "Cross Web Office Automation Pvt. Ltd",
-    logo: "/logos/mou/Cross_web-removebg-preview.png",
-    domain: "Office Automation & IT Solutions",
-    logoClass: "max-h-22 w-auto max-w-[180px] sm:max-w-[200px]",
-  },
-  {
-    id: "startup-discovery",
-    organization: "Startup Discovery Asia",
-    logo: "/logos/mou/Startup_Discovery-removebg-preview.png",
-    domain: "Incubation & Venture Acceleration",
-    logoClass: "max-h-20 w-auto max-w-[210px] sm:max-w-[230px]",
-  },
-];
+function logoClassOf(src: string): string {
+  return (
+    MOU_PARTNERS.find((partner) => partner.logo === src)?.logoClass ??
+    DEFAULT_LOGO_CLASS
+  );
+}
 
 export function MouPartnersSection({
   className,
+  copy,
   id = "mou-partners",
 }: {
   readonly className?: string;
+  readonly copy: BachelorsPageContent["mou"];
   readonly id?: string;
 }) {
-  const total = MOU_PARTNERS.length;
+  const partners = copy.partners.filter(
+    (partner) => partner.organization.trim() !== "" && hasImage(partner.logo),
+  );
+  const total = partners.length;
+
+  if (total === 0) return null;
 
   // Duplicate for smooth, uninterrupted carousel looping across all viewport widths
   const displayPartners =
     total > 1 && total < 8
       ? [
-          ...MOU_PARTNERS.map((p) => ({ ...p, itemKey: `${p.id}-1` })),
-          ...MOU_PARTNERS.map((p) => ({ ...p, itemKey: `${p.id}-2` })),
+          ...partners.map((p, i) => ({ ...p, itemKey: `${i}-1` })),
+          ...partners.map((p, i) => ({ ...p, itemKey: `${i}-2` })),
         ]
-      : MOU_PARTNERS.map((p) => ({ ...p, itemKey: p.id }));
+      : partners.map((p, i) => ({ ...p, itemKey: String(i) }));
 
   return (
     <section
@@ -94,7 +67,7 @@ export function MouPartnersSection({
       />
 
       <Carousel
-        aria-label="MoU Signed Partners"
+        aria-label={copy.title}
         aria-roledescription="carousel"
         autoplay={true}
         autoplayIntervalMs={2500}
@@ -120,10 +93,10 @@ export function MouPartnersSection({
                 />
               </CarouselControls>
             }
-            description="Naaya Aayam Multi-Disciplinary Institute establishes institutional MoUs with leading enterprises across technology, hospitality, architecture, and innovation sectors to foster real-world industrial exposure, student internships, and dynamic career pathways."
-            eyebrow="Strategic Alliances"
+            description={copy.description || undefined}
+            eyebrow={copy.label}
             layout="action"
-            title="MoU Signed Partners"
+            title={copy.title}
           />
         </div>
 
@@ -142,14 +115,14 @@ export function MouPartnersSection({
                   <div className="relative flex h-28 sm:h-32 w-full items-center justify-center rounded-xl bg-white px-5 py-3 border border-border/40 shadow-xs transition-all duration-300 group-hover:border-[#BD1B21]/20 group-hover:shadow-md">
                     <div className="flex items-center justify-center size-full">
                       <Image
-                        alt={`${partner.organization} logo`}
+                        alt={partner.logo.alt || `${partner.organization} logo`}
                         className={cn(
                           "object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-2xs",
-                          partner.logoClass,
+                          logoClassOf(partner.logo.src),
                         )}
                         height={96}
                         loading="lazy"
-                        src={partner.logo}
+                        src={partner.logo.src}
                         width={240}
                       />
                     </div>
@@ -175,7 +148,7 @@ export function MouPartnersSection({
                         <Icon className="size-2.5" icon={CheckIcon} />
                       </span>
                       <span className="font-body text-xs font-medium text-ink-muted transition-colors group-hover:text-ink">
-                        Verified MoU Partner
+                        {copy.badge}
                       </span>
                     </div>
                   </div>

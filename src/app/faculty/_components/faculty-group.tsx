@@ -1,21 +1,25 @@
 import { H2 } from "@/components/ui/typography";
-import type { Leader } from "@/lib/content";
+import type { FacultyPerson } from "@/lib/cms/pages/faculty";
 import { cn } from "@/lib/utils";
 import { FacultyCard } from "./faculty-card";
 import { FacultyGroupTrack } from "./faculty-group-track";
 
 export function FacultyGroup({
   id,
+  isBoard = false,
   isFirstGroup = false,
-  leaders,
+  people,
   title,
 }: {
   readonly id?: string;
+  /** The board never scrolls sideways and splits 7 members into rows of 4 + 3. */
+  readonly isBoard?: boolean;
   readonly isFirstGroup?: boolean;
-  readonly leaders: readonly Leader[];
+  readonly people: readonly FacultyPerson[];
   readonly title: string;
 }) {
-  const isScrollable = leaders.length > 4 && title !== "Board of Directors";
+  const leaders = people.filter((person) => person.name.trim() !== "");
+  const isScrollable = leaders.length > 4 && !isBoard;
   const isSolo = leaders.length === 1;
 
   if (leaders.length === 0) return null;
@@ -36,7 +40,7 @@ export function FacultyGroup({
   );
 
   // 4 in a row (Row 1) and 3 in a row (Row 2) for Board of Directors
-  if (title === "Board of Directors" && leaders.length === 7) {
+  if (isBoard && leaders.length === 7) {
     const row1 = leaders.slice(0, 4);
     const row2 = leaders.slice(4, 7);
 
@@ -53,7 +57,8 @@ export function FacultyGroup({
                   className="w-full"
                   index={index}
                   isFirstGroup={isFirstGroup}
-                  key={leader.id}
+                  // biome-ignore lint/suspicious/noArrayIndexKey: people are an ordered CMS list
+                  key={`${index}-${leader.name}`}
                   leader={leader}
                 />
               ))}
@@ -66,7 +71,8 @@ export function FacultyGroup({
                   className="w-full"
                   index={index + 4}
                   isFirstGroup={isFirstGroup}
-                  key={leader.id}
+                  // biome-ignore lint/suspicious/noArrayIndexKey: people are an ordered CMS list
+                  key={`${index + 4}-${leader.name}`}
                   leader={leader}
                 />
               ))}
@@ -84,7 +90,8 @@ export function FacultyGroup({
       isFirstGroup={isFirstGroup}
       isScrollable={isScrollable}
       isSolo={isSolo}
-      key={leader.id}
+      // biome-ignore lint/suspicious/noArrayIndexKey: people are an ordered CMS list
+      key={`${index}-${leader.name}`}
       leader={leader}
     />
   ));

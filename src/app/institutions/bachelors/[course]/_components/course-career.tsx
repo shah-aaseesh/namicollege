@@ -46,10 +46,11 @@ export function CourseCareer({
                 Key Industry Sectors & Roles
               </span>
               <ul className="flex flex-wrap gap-2 sm:gap-2.5">
-                {course.careerSectors.map((sector) => (
+                {course.careerSectors.map((sector, index) => (
                   <li
                     className="rounded-full border border-white/30 bg-white/10 backdrop-blur-xs px-3.5 py-1.5 font-body text-xs sm:text-sm font-medium text-white shadow-2xs transition-all duration-200 hover:bg-white hover:text-accent"
-                    key={sector}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: sectors are an ordered CMS list
+                    key={index}
                   >
                     {sector}
                   </li>

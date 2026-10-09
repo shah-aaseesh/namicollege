@@ -22,7 +22,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { H4, H5, P } from "@/components/ui/typography";
-import type { SectionCopy, Vacancy } from "@/lib/content";
+import type {
+  CareersPageContent,
+  VacancyWithRequirements,
+} from "@/lib/cms/pages/careers";
+import type { SectionCopy } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { employmentTypeLabel } from "./careers-copy";
 
@@ -57,11 +61,25 @@ function VacanciesHeader({
   );
 }
 
-function VacancyCard({ item }: { readonly item: Vacancy }) {
+type Application = CareersPageContent["application"];
+
+function VacancyCard({
+  application,
+  item,
+}: {
+  readonly application: Application;
+  readonly item: VacancyWithRequirements;
+}) {
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const mailtoHref = `mailto:careers@nami.edu.np?subject=Application%20for%20${encodeURIComponent(
+  const email = application.email.trim();
+  const checklist =
+    item.requirements.length > 0 ? item.requirements : application.checklist;
+  const [instructionsBefore, instructionsAfter = ""] =
+    application.instructions.split("{email}");
+
+  const mailtoHref = `mailto:${email}?subject=Application%20for%20${encodeURIComponent(
     item.title,
   )}%20-%20[Your%20Name]&body=Dear%20NAMI%20Recruitment%20Committee,%0D%0A%0D%0AI%20would%20like%20to%20apply%20for%20the%20${encodeURIComponent(
     item.title,
@@ -71,7 +89,7 @@ function VacancyCard({ item }: { readonly item: Vacancy }) {
 
   const handleCopyEmail = async () => {
     try {
-      await navigator.clipboard.writeText("careers@nami.edu.np");
+      await navigator.clipboard.writeText(email);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
@@ -150,25 +168,19 @@ function VacancyCard({ item }: { readonly item: Vacancy }) {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
               <H5 className="text-sm font-semibold text-ink uppercase tracking-wider">
-                Application Checklist
+                {application.checklistTitle}
               </H5>
               <ul className="mt-3 flex flex-col gap-2 text-xs sm:text-sm">
-                <li className="flex items-start gap-2">
-                  <span className="text-accent">•</span>
-                  <span>Updated Curriculum Vitae (CV) & Recent Photograph</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-accent">•</span>
-                  <span>Copies of Academic Degrees & Transcripts</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-accent">•</span>
-                  <span>Cover Letter / Statement of Teaching Philosophy</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-accent">•</span>
-                  <span>Two Professional / Academic References</span>
-                </li>
+                {checklist.map((line, index) => (
+                  <li
+                    className="flex items-start gap-2"
+                    // biome-ignore lint/suspicious/noArrayIndexKey: lines are an ordered CMS list
+                    key={index}
+                  >
+                    <span className="text-accent">•</span>
+                    <span>{line}</span>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -177,12 +189,11 @@ function VacancyCard({ item }: { readonly item: Vacancy }) {
                 Submission Instructions
               </H5>
               <P className="mt-3 text-xs sm:text-sm">
-                Send all application materials to{" "}
-                <span className="font-semibold text-ink">
-                  careers@nami.edu.np
-                </span>{" "}
-                citing the position title in the subject line. Shortlisted
-                candidates will be contacted within 5 working days.
+                {instructionsBefore}
+                {application.instructions.includes("{email}") ? (
+                  <span className="font-semibold text-ink">{email}</span>
+                ) : null}
+                {instructionsAfter}
               </P>
               <div className="mt-4 flex items-center gap-3">
                 <Button
@@ -207,11 +218,13 @@ function VacancyCard({ item }: { readonly item: Vacancy }) {
 }
 
 export function CareersVacancies({
+  application,
   section,
   vacancies,
 }: {
+  readonly application: Application;
   readonly section: SectionCopy;
-  readonly vacancies: readonly Vacancy[];
+  readonly vacancies: readonly VacancyWithRequirements[];
 }) {
   const [selectedDept, setSelectedDept] = useState<string>("all");
   const [selectedType, setSelectedType] = useState<string>("all");
@@ -357,7 +370,11 @@ export function CareersVacancies({
         ) : (
           <ul className="mt-8 flex flex-col gap-6 lg:mt-10 lg:gap-8">
             {filteredVacancies.map((item) => (
-              <VacancyCard item={item} key={item.id} />
+              <VacancyCard
+                application={application}
+                item={item}
+                key={item.id}
+              />
             ))}
           </ul>
         )}

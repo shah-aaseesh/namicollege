@@ -237,3 +237,39 @@ export const contactSchema = z.object({
 });
 
 export type ContactFormData = z.infer<typeof contactSchema>;
+
+// The "Share your story" form on the Alumni page. The photo is checked
+// separately (it travels as base64 next to these answers).
+export const alumniStorySchema = z.object({
+  fullName: z.string().trim().min(2, "Please enter your full name"),
+  email: z.string().trim().email("Please enter a valid email address"),
+  phone: z.string().trim().optional(),
+  linkedin: z.string().trim().optional(),
+  photo: z.any().optional(),
+  wing: z.string().min(1, "Please select your academic wing"),
+  program: z.string().trim().min(2, "Please enter your programme name"),
+  graduationYear: z.string().trim().min(4, "Please enter your graduation year"),
+  currentRole: z.string().trim().optional(),
+  currentOrg: z.string().trim().optional(),
+  location: z
+    .string()
+    .trim()
+    .min(2, "Please enter your current city and country"),
+  storyHeadline: z
+    .string()
+    .trim()
+    .min(5, "Please give a short headline or key takeaway"),
+  experience: z
+    .string()
+    .trim()
+    .min(
+      20,
+      "Please share a few sentences about your experience (min 20 characters)",
+    ),
+  advice: z.string().trim().optional(),
+  consent: z.boolean().refine((val) => val === true, {
+    message: "You must agree to share your experience with NAMI",
+  }),
+});
+
+export type AlumniStoryFormData = z.infer<typeof alumniStorySchema>;
