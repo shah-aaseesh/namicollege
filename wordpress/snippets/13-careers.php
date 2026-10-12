@@ -205,7 +205,7 @@ add_filter(
   "masthead": {
     "label": "CAREERS",
     "title": "Careers at NAMI.",
-    "description": "Join an inspiring community of educators, scholars, and professionals dedicated to transformative teaching, research excellence, and world-class learning in Kathmandu.",
+    "description": "Join a community of educators, researchers and professionals committed to excellent teaching, impactful research and high-quality education in Kathmandu.",
     "buttonLabel": "Explore open positions",
     "image": {
       "src": "/sections/nami/event-climate-panel.jpg",
@@ -215,7 +215,7 @@ add_filter(
     }
   },
   "vacancies": {
-    "label": "Opportunities across our three academic wings.",
+    "label": "Career opportunities across our three academic institutions.",
     "title": "Open Positions",
     "description": "We invite dedicated educators, researchers, and academic professionals to join our faculty and operational teams in Kathmandu.",
     "emptyState": "There are no vacancies matching your selected filters at the moment. Explore other departments or write directly to careers@nami.edu.np."
@@ -238,15 +238,15 @@ add_filter(
     "items": [
       {
         "title": "Competitive Compensation",
-        "description": "Above-market salary scales with structured annual increments, performance incentives, and statutory Provident Fund & Gratuity."
+        "description": "Above-market salary scales, structured annual increments, performance incentives, and statutory provident fund and gratuity benefits."
       },
       {
         "title": "Professional Development",
         "description": "Periodic teacher training workshops led directly by Cambridge International and University of Northampton faculty leads."
       },
       {
-        "title": "Health & Accidental Coverage",
-        "description": "Comprehensive group health insurance and accident protection plans for all permanent faculty and operational members."
+        "title": "Health & Accident Insurance",
+        "description": "Comprehensive group health insurance and accident protection plans for all permanent faculty and operational staff."
       },
       {
         "title": "Tuition Concession for Children",
@@ -265,7 +265,7 @@ add_filter(
   "staff": {
     "label": "What our educators and team say about working at NAMI.",
     "title": "Faculty & Staff Voices",
-    "description": "Hear from lecturers, coordinators, and academic leaders about the collaborative culture, research support, and teaching freedom across our three wings.",
+    "description": "Hear from lecturers, coordinators, and academic leaders about the collaborative culture, research support, and teaching freedom across our three institutions.",
     "emptyState": "",
     "items": [
       {
@@ -386,7 +386,7 @@ add_filter(
         "degree": "BSc (Hons) Network Engineering",
         "graduatedYear": 2023,
         "supportType": "Lab Infrastructure & Industry Certifications",
-        "quote": "Hands-on server labs and networking modules at NAMI gave me practical troubleshooting skills before I even graduated. The career center helped connect my capstone project directly to hiring managers at F1Soft.",
+        "quote": "Hands-on server labs and networking modules at NAMI gave me practical troubleshooting skills before I even graduated. The career centre helped connect my capstone project directly to hiring managers at F1Soft.",
         "portrait": {
           "src": "/sections/nami/alumna-pragati-rai.jpg",
           "alt": "Portrait of Pragati Rai, NAMI A-Level alumna.",
@@ -401,7 +401,7 @@ add_filter(
         "degree": "BBA (Hons)",
         "graduatedYear": 2024,
         "supportType": "Corporate Internship & Alumni Network",
-        "quote": "NAMI's alumni network and career counseling office helped me secure my 6-month corporate internship, which converted into a permanent full-time offer upon graduation.",
+        "quote": "NAMI's alumni network and career counselling office helped me secure my 6-month corporate internship, which converted into a permanent full-time offer upon graduation.",
         "portrait": {
           "src": "/sections/nami/alumna-pragati-rai.jpg",
           "alt": "Portrait of Pragati Rai, NAMI A-Level alumna.",
@@ -412,7 +412,7 @@ add_filter(
     ]
   },
   "placement": {
-    "label": "The organisations and research bodies that collaborate with NAMI.",
+    "label": "Organisations and research bodies that collaborate with NAMI.",
     "title": "Industry & Academic Network",
     "image": {
       "src": "/sections/nami/event-climate-panel.jpg",

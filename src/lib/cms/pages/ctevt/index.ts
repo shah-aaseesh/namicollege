@@ -11,7 +11,10 @@ function filled(items: readonly string[]): string[] {
 }
 
 export const getCtevtPage = cache(async (): Promise<CtevtPageContent> => {
-  const merged = mergeWithDefaults(ctevtDefaults, await fetchCmsPage("ctevt"));
+  const merged = mergeWithDefaults(
+    ctevtDefaults,
+    await fetchCmsPage("ctevt", ctevtDefaults),
+  );
   return {
     ...merged,
     programmes: {

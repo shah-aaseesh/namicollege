@@ -88,7 +88,7 @@ export const aboutCopy: AboutCopy = {
       eyebrow: "Awards & Honours",
       heading: "",
       standfirst:
-        "Distinctions the institution and its students have carried home, and the bodies that conferred them.",
+        "Recognition received by the institution and its students, along with the organisations that conferred the awards.",
       cta: null,
       emptyState:
         "NAMI is compiling its awards record — this space is reserved for it.",

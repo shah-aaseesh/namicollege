@@ -75,6 +75,7 @@ add_filter(
 				<<<'NAMI_IMPORT'
 [
   {
+    "key": "school-dashain-holiday-notice-2026",
     "title": "Dashain Festival Holiday Notice",
     "date": "2026-09-20",
     "fields": {
@@ -95,6 +96,7 @@ add_filter(
     }
   },
   {
+    "key": "college-caie-examinations-notice-2026",
     "title": "CAIE Examinations Schedule & Guidelines",
     "date": "2026-09-20",
     "fields": {
@@ -115,6 +117,7 @@ add_filter(
     }
   },
   {
+    "key": "motivational-stories-second-session",
     "title": "Second Session of the most awaited talk program “Motivational Stories by Inspirational Leaders of Change”",
     "date": "2024-07-30",
     "fields": {
@@ -135,6 +138,7 @@ add_filter(
     }
   },
   {
+    "key": "motivational-stories-first-session",
     "title": "Motivational Stories by Inspirational Leaders of Change",
     "date": "2024-06-30",
     "fields": {
@@ -155,6 +159,7 @@ add_filter(
     }
   },
   {
+    "key": "nami-see-3x3-basketball-tournament",
     "title": "NAMI SEE 3x3 Basketball Tournament",
     "date": "2024-05-16",
     "fields": {
@@ -175,6 +180,7 @@ add_filter(
     }
   },
   {
+    "key": "social-camp",
     "title": "Social Camp",
     "date": "2024-01-27",
     "fields": {
@@ -195,6 +201,7 @@ add_filter(
     }
   },
   {
+    "key": "christmas-event-city-campus",
     "title": "Christmas Event, NAMI City College",
     "date": "2023-12-24",
     "fields": {
@@ -215,6 +222,7 @@ add_filter(
     }
   },
   {
+    "key": "christmas-blood-donation-drive",
     "title": "NAMI A-Level Students Embrace the Spirit of Giving through Christmas Blood Donation Drive",
     "date": "2023-12-22",
     "fields": {
@@ -235,6 +243,7 @@ add_filter(
     }
   },
   {
+    "key": "tour-of-mustang-and-muktinath",
     "title": "NAMI A Level Students Tour of Mustang & Muktinath",
     "date": "2023-12-08",
     "fields": {
@@ -255,6 +264,7 @@ add_filter(
     }
   },
   {
+    "key": "welcome-programme-kwality-beach-resort",
     "title": "NAMI A Levels: A Welcoming Spectacle at Kwality Beach Resort",
     "date": "2023-07-29",
     "fields": {
@@ -275,6 +285,7 @@ add_filter(
     }
   },
   {
+    "key": "eco-club-environment-day",
     "title": "Eco Club's Environment Day Programme",
     "date": "2023-06-05",
     "fields": {
@@ -295,6 +306,7 @@ add_filter(
     }
   },
   {
+    "key": "mascot-design-competition",
     "title": "Unleashing Creativity: The Ultimate College Mascot Design Competition",
     "date": "2023-05-03",
     "fields": {
@@ -315,6 +327,7 @@ add_filter(
     }
   },
   {
+    "key": "elite-2023",
     "title": "ELITE 2023",
     "date": "2023-03-31",
     "fields": {
@@ -335,6 +348,7 @@ add_filter(
     }
   },
   {
+    "key": "climate-change-panel-discussion",
     "title": "Panel Discussion on \"Climate Change: Impacts and the Global Response\"",
     "date": "2023-03-23",
     "fields": {
@@ -355,6 +369,7 @@ add_filter(
     }
   },
   {
+    "key": "welcome-undergrads-orientation-2022",
     "title": "Welcome Undergraduates Orientation 2022",
     "date": "2022-11-14",
     "fields": {
@@ -375,6 +390,7 @@ add_filter(
     }
   },
   {
+    "key": "convocation-day-2022",
     "title": "Triumph and Transition: NAMI's Grand Convocation Day 2022 at Yak & Yeti Hotel",
     "date": "2022-09-17",
     "fields": {
@@ -395,6 +411,7 @@ add_filter(
     }
   },
   {
+    "key": "world-environment-day-plantation",
     "title": "Plantation Programme on the Occasion of World Environment Day",
     "date": "2022-06-05",
     "fields": {

@@ -7,13 +7,6 @@ import {
   homeHeroSlide5,
   homeHeroSlide6,
   homeHeroSlide7,
-  homeHeroSlide8,
-  homeHeroSlide9,
-  homeHeroSlide10,
-  homeHeroSlide11,
-  homeHeroSlide12,
-  homeHeroSlide13,
-  homeHeroSlide14,
 } from "./images";
 
 export const homeCopy: HomeCopy = {
@@ -40,13 +33,6 @@ export const homeCopy: HomeCopy = {
       homeHeroSlide5,
       homeHeroSlide6,
       homeHeroSlide7,
-      homeHeroSlide8,
-      homeHeroSlide9,
-      homeHeroSlide10,
-      homeHeroSlide11,
-      homeHeroSlide12,
-      homeHeroSlide13,
-      homeHeroSlide14,
     ],
   },
   sections: {

@@ -8,7 +8,10 @@ import type { HomePageContent } from "./types";
 export type * from "./types";
 
 export const getHomePage = cache(async (): Promise<HomePageContent> => {
-  const merged = mergeWithDefaults(homeDefaults, await fetchCmsPage("home"));
+  const merged = mergeWithDefaults(
+    homeDefaults,
+    await fetchCmsPage("home", homeDefaults),
+  );
   return {
     ...merged,
     hero: {

@@ -11,7 +11,7 @@ import { fetchCmsPage } from "../../client";
 import { type CmsCollectionItem, fetchCmsCollection } from "../../collections";
 import { mergeWithDefaults } from "../../merge";
 import { hasImage, isExternalHref } from "../../types";
-import { noticesDefaults, noticeTemplate } from "./defaults";
+import { noticeImports, noticesDefaults, noticeTemplate } from "./defaults";
 import type { NoticeFields, NoticesPageContent } from "./types";
 
 export type * from "./types";
@@ -28,7 +28,10 @@ const KINDS: readonly UpdateKind[] = [
 const INSTITUTIONS = ["school", "college", "institute"] as const;
 
 export const getNoticesPage = cache(async (): Promise<NoticesPageContent> => {
-  return mergeWithDefaults(noticesDefaults, await fetchCmsPage("notices"));
+  return mergeWithDefaults(
+    noticesDefaults,
+    await fetchCmsPage("notices", noticesDefaults),
+  );
 });
 
 function dateOrNull(value: string) {
@@ -83,6 +86,7 @@ export const getAllUpdates = cache(async (): Promise<readonly Update[]> => {
   const collection = await fetchCmsCollection(
     NOTICE_COLLECTION,
     noticeTemplate,
+    noticeImports,
   );
   if (collection === null) return bundledUpdates;
 

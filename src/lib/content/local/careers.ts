@@ -32,7 +32,7 @@ export const vacancies: readonly Vacancy[] = [
     employmentType: "contract",
     location: "New Baneshwor, Kathmandu",
     summary:
-      "Prepare and maintain the environmental science laboratory, support practical sessions and field work, and keep equipment, reagents and safety records in order.",
+      "Prepare and maintain the environmental science laboratory, support practical sessions and fieldwork, and keep equipment, reagents and safety records in order.",
     postedAt: isoDate("2026-08-12"),
     closesAt: isoDate("2026-09-30"),
   },

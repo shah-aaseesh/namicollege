@@ -37,9 +37,9 @@ export const alumniDefaults: AlumniPageContent = {
   },
   wings: {
     allTab: "All Alumni",
-    undergraduateTab: "Undergraduate Program",
+    undergraduateTab: "Undergraduate Programme",
     undergraduateCard: cardLabel("undergraduate", "Undergraduate Programme"),
-    graduateTab: "Graduate Program",
+    graduateTab: "Graduate Programme",
     graduateCard: cardLabel("graduate", "Graduate Programme"),
     collegeTab: "A-Levels",
     collegeCard: cardLabel("college", "A-Levels"),
@@ -112,5 +112,5 @@ export const alumniImports = alumniStories.map((story, index) => {
     interview: story.pdfData.interviewQnA.map((item) => ({ ...item })),
     skills: [...story.pdfData.skillsAcquired],
   };
-  return { title: story.name, date: importDate(index), fields };
+  return { key: story.id, title: story.name, date: importDate(index), fields };
 });

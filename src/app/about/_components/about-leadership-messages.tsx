@@ -58,9 +58,6 @@ export function AboutLeadershipMessages({
           {messages.map((leader, index) => {
             const isExpanded = expandedCard === leader.id;
             const isReversed = index % 2 !== 0;
-            const visibleParagraphs = isExpanded
-              ? leader.message
-              : leader.message.slice(0, 2);
 
             return (
               <div
@@ -105,8 +102,8 @@ export function AboutLeadershipMessages({
 
                   {/* Message Column */}
                   <div className="flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-accent/10 text-accent border border-accent/20 mb-4">
+                    <div className="flex flex-col lg:flex-1">
+                      <div className="self-start inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-accent/10 text-accent border border-accent/20 mb-4">
                         <span>{leader.badge}</span>
                       </div>
 
@@ -117,16 +114,36 @@ export function AboutLeadershipMessages({
                         </blockquote>
                       )}
 
-                      {/* Message Paragraphs */}
-                      <div className="space-y-4">
-                        {visibleParagraphs.map((paragraph, pIndex) => (
-                          <P
-                            key={pIndex}
-                            className="text-sm sm:text-base text-ink/85 leading-relaxed text-justify [text-align-last:left]"
-                          >
-                            {paragraph}
-                          </P>
-                        ))}
+                      {/* Message Paragraphs: collapsed, phones show the first two;
+                          desktop fills the space beside the portrait and fades out. */}
+                      <div
+                        className={cn(
+                          "relative",
+                          !isExpanded && "lg:flex-1 lg:min-h-40",
+                        )}
+                      >
+                        <div
+                          className={cn(
+                            "space-y-4",
+                            !isExpanded &&
+                              "lg:absolute lg:inset-0 lg:overflow-hidden",
+                          )}
+                        >
+                          {leader.message.map((paragraph, pIndex) => (
+                            <P
+                              key={pIndex}
+                              className={cn(
+                                "text-sm sm:text-base text-ink/85 leading-relaxed text-justify [text-align-last:left]",
+                                !isExpanded && pIndex >= 2 && "hidden lg:block",
+                              )}
+                            >
+                              {paragraph}
+                            </P>
+                          ))}
+                        </div>
+                        {isExpanded ? null : (
+                          <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-20 bg-gradient-to-t from-surface-raised to-transparent lg:block" />
+                        )}
                       </div>
                     </div>
 

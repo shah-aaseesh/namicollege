@@ -31,9 +31,9 @@ import { cn } from "@/lib/utils";
 const WING_OPTIONS = [
   {
     value: "Undergraduate Program",
-    label: "Undergraduate Program (BSc. / BBA)",
+    label: "Undergraduate Programme (BSc. / BBA)",
   },
-  { value: "Graduate Program", label: "Graduate Program (MSc / MBA)" },
+  { value: "Graduate Program", label: "Graduate Programme (MSc / MBA)" },
   { value: "Cambridge A Levels", label: "Cambridge A Levels (NAMI College)" },
   {
     value: "Secondary School",

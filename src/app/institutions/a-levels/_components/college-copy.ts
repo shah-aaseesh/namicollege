@@ -28,22 +28,28 @@ const principalPortrait: ContentImage = {
 
 const heroSlides: readonly ContentImage[] = [
   {
-    src: "/sections/general/17.jpg",
-    alt: "NAMI College practical laboratory and science equipment.",
-    width: 1500,
-    height: 1000,
+    src: "/hero/a levles hero section/NAMI_College_Last_Day_Celebration.webp",
+    alt: "NAMI College GCE A Level students celebrating farewell and last day together on campus.",
+    width: 2400,
+    height: 1030,
   },
   {
-    src: "/sections/general/18.jpg",
-    alt: "NAMI College campus facilities and learning environment.",
-    width: 1280,
-    height: 853,
+    src: "/hero/a levles hero section/Group_Portrait_at_Sandy_Beach_Resort.webp",
+    alt: "NAMI College A Level students and faculty gathered for an excursion group portrait at Sandy Beach Resort, Sukute.",
+    width: 2400,
+    height: 1030,
   },
   {
-    src: "/sections/general/19.jpg",
-    alt: "NAMI College campus grounds and facilities.",
-    width: 1500,
-    height: 1000,
+    src: "/hero/a levles hero section/Mountain_Valley_Adventure_Group_Photo.webp",
+    alt: "NAMI College students enjoying an academic adventure trip in a scenic mountain valley.",
+    width: 2400,
+    height: 1030,
+  },
+  {
+    src: "/hero/a levles hero section/Visionary_Basketball_Team_Runner-Up_Ceremony.webp",
+    alt: "NAMI College basketball team receiving runner-up trophies and certificates at the 2nd NAMI SEE 3x3 Tournament.",
+    width: 2400,
+    height: 1030,
   },
 ];
 

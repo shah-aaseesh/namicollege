@@ -10,7 +10,7 @@ export type * from "./types";
 export const getALevelsPage = cache(async (): Promise<ALevelsPageContent> => {
   const merged = mergeWithDefaults(
     aLevelsDefaults,
-    await fetchCmsPage("a-levels"),
+    await fetchCmsPage("a-levels", aLevelsDefaults),
   );
   return {
     ...merged,

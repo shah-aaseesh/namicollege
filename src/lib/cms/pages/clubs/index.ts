@@ -38,6 +38,7 @@ function clubOf(club: CmsClub, slug: string): Club {
     tagline: club.tagline,
     metaDescription: club.metaDescription,
     coverImage: club.coverImage,
+    ...(hasImage(club.heroImage) ? { heroImage: club.heroImage } : {}),
     overview: filled(club.overview),
     quote: { text: club.quoteText, author: club.quoteAuthor },
     objectives: filled(club.objectives),
@@ -65,7 +66,10 @@ function clubsOf(items: readonly CmsClub[]): Club[] {
 }
 
 export const getClubsPage = cache(async (): Promise<ClubsPageContent> => {
-  return mergeWithDefaults(clubsDefaults, await fetchCmsPage("clubs"));
+  return mergeWithDefaults(
+    clubsDefaults,
+    await fetchCmsPage("clubs", clubsDefaults),
+  );
 });
 
 export const getSchoolClubs = cache(async (): Promise<readonly Club[]> => {

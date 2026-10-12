@@ -64,7 +64,7 @@ export function AboutHero({ hero }: { hero: AboutHeroContent }) {
           >
             <Image
               alt={images[0].alt}
-              className="h-[38vh] sm:h-[44vh] lg:h-[48vh] xl:h-[54vh] max-h-[440px] lg:max-h-[520px] xl:max-h-[580px] w-full object-cover object-left-top"
+              className="aspect-3/2 sm:aspect-2/1 w-full object-cover object-left-top"
               fetchPriority="high"
               height={images[0].height || 400}
               loading="eager"

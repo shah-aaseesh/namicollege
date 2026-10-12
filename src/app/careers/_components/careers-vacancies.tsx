@@ -32,7 +32,7 @@ import { employmentTypeLabel } from "./careers-copy";
 
 const fullDate = new Intl.DateTimeFormat("en-GB", {
   day: "numeric",
-  month: "short",
+  month: "long",
   year: "numeric",
   timeZone: "UTC",
 });
@@ -143,7 +143,7 @@ function VacancyCard({
             href={mailtoHref}
             className={cn(buttonVariants({ size: "default" }), "gap-1.5")}
           >
-            <span>Apply via Email</span>
+            <span>Apply by Email</span>
             <Icon icon={ArrowUpRight01Icon} className="size-4" />
           </a>
 
@@ -295,7 +295,7 @@ export function CareersVacancies({
 
             <div className="flex items-center gap-2">
               <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted mr-1">
-                Type:
+                Employment Type:
               </span>
               <Select
                 value={selectedType}

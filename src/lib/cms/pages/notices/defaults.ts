@@ -54,5 +54,10 @@ export const noticeImports = updates.map((update) => {
     buttonLink: link?.href ?? "",
     image: cmsImage(update.image),
   };
-  return { title: update.title, date: update.publishedAt, fields };
+  return {
+    key: update.id,
+    title: update.title,
+    date: update.publishedAt,
+    fields,
+  };
 });

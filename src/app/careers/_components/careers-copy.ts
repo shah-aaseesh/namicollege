@@ -28,7 +28,7 @@ export type FirstJobStory = {
 const vacanciesSection: SectionCopy = {
   navLabel: "Vacancies",
   eyebrow: "Open Positions",
-  heading: "Opportunities across our three academic wings.",
+  heading: "Career opportunities across our three academic institutions.",
   standfirst:
     "We invite dedicated educators, researchers, and academic professionals to join our faculty and operational teams in Kathmandu.",
   cta: null,
@@ -45,7 +45,7 @@ const partnersPanel: ContentImage = {
 
 const placement: CareerPlacementCopy = {
   eyebrow: "Industry & Academic Network",
-  heading: "The organisations and research bodies that collaborate with NAMI.",
+  heading: "Organisations and research bodies that collaborate with NAMI.",
   image: partnersPanel,
   label: "NAMI industry and technology partner logos",
 };
@@ -55,7 +55,7 @@ const staffTestimonialsSection: SectionCopy = {
   eyebrow: "Faculty & Staff Voices",
   heading: "What our educators and team say about working at NAMI.",
   standfirst:
-    "Hear from lecturers, coordinators, and academic leaders about the collaborative culture, research support, and teaching freedom across our three wings.",
+    "Hear from lecturers, coordinators, and academic leaders about the collaborative culture, research support, and teaching freedom across our three institutions.",
   cta: null,
   emptyState: null,
 };
@@ -161,7 +161,7 @@ export const firstJobStories: readonly FirstJobStory[] = [
     graduatedYear: 2023,
     supportType: "Lab Infrastructure & Industry Certifications",
     quote:
-      "Hands-on server labs and networking modules at NAMI gave me practical troubleshooting skills before I even graduated. The career center helped connect my capstone project directly to hiring managers at F1Soft.",
+      "Hands-on server labs and networking modules at NAMI gave me practical troubleshooting skills before I even graduated. The career centre helped connect my capstone project directly to hiring managers at F1Soft.",
     portrait: pragatiRaiPortrait,
   },
   {
@@ -173,7 +173,7 @@ export const firstJobStories: readonly FirstJobStory[] = [
     graduatedYear: 2024,
     supportType: "Corporate Internship & Alumni Network",
     quote:
-      "NAMI's alumni network and career counseling office helped me secure my 6-month corporate internship, which converted into a permanent full-time offer upon graduation.",
+      "NAMI's alumni network and career counselling office helped me secure my 6-month corporate internship, which converted into a permanent full-time offer upon graduation.",
     portrait: pragatiRaiPortrait,
   },
 ];
@@ -188,7 +188,7 @@ export const careersCopy = {
     eyebrow: "CAREERS",
     heading: "Careers at NAMI.",
     standfirst:
-      "Join an inspiring community of educators, scholars, and professionals dedicated to transformative teaching, research excellence, and world-class learning in Kathmandu.",
+      "Join a community of educators, researchers and professionals committed to excellent teaching, impactful research and high-quality education in Kathmandu.",
     cta: "Explore open positions",
     image: {
       src: "/sections/nami/event-climate-panel.jpg",
@@ -205,15 +205,15 @@ export const careersCopy = {
     items: [
       {
         title: "Competitive Compensation",
-        desc: "Above-market salary scales with structured annual increments, performance incentives, and statutory Provident Fund & Gratuity.",
+        desc: "Above-market salary scales, structured annual increments, performance incentives, and statutory provident fund and gratuity benefits.",
       },
       {
         title: "Professional Development",
         desc: "Periodic teacher training workshops led directly by Cambridge International and University of Northampton faculty leads.",
       },
       {
-        title: "Health & Accidental Coverage",
-        desc: "Comprehensive group health insurance and accident protection plans for all permanent faculty and operational members.",
+        title: "Health & Accident Insurance",
+        desc: "Comprehensive group health insurance and accident protection plans for all permanent faculty and operational staff.",
       },
       {
         title: "Tuition Concession for Children",

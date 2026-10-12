@@ -129,7 +129,7 @@ add_filter(
   },
   "banner": {
     "title": "Prefer applying completely online?",
-    "text": "You can fill out the dynamic digital inquiry and application form directly in your browser without printing.",
+    "text": "You can fill out the dynamic digital enquiry and application form directly in your browser without printing.",
     "button": {
       "label": "Online Admissions Portal →",
       "href": "/admissions"
@@ -180,6 +180,7 @@ add_filter(
 				<<<'NAMI_IMPORT'
 [
   {
+    "key": "nami-book",
     "title": "NAMI Institutional Book & Profile",
     "date": "2026-09-30",
     "fields": {
@@ -193,6 +194,7 @@ add_filter(
     }
   },
   {
+    "key": "application-bachelors",
     "title": "Bachelors & Masters Degree Application Form",
     "date": "2026-09-29",
     "fields": {
@@ -206,6 +208,7 @@ add_filter(
     }
   },
   {
+    "key": "application-a-levels",
     "title": "Cambridge International A-Level Application Form",
     "date": "2026-09-28",
     "fields": {
@@ -213,33 +216,35 @@ add_filter(
       "institution": "College",
       "description": "Official admission form for Cambridge Assessment International Education (CAIE) AS and A Level programmes across Science, Business, and Humanities streams at NAMI College.",
       "file": "/documents/NAMI_College_A_Level_Application_Form.pdf",
-      "fileSize": "255 KB",
+      "fileSize": "285 KB",
       "note": "Academic Intake 2026",
       "featured": true
     }
   },
   {
+    "key": "application-school-plus-two",
     "title": "NAMI International School (+2 Higher Secondary) Application Form",
     "date": "2026-09-27",
     "fields": {
       "category": "admissions",
       "institution": "School",
-      "description": "Official enrollment form for National Examinations Board (NEB) Grade XI & XII (+2 Science & Management) at NAMI International School.",
+      "description": "Official enrolment form for National Examinations Board (NEB) Grade XI & XII (+2 Science & Management) at NAMI International School.",
       "file": "/documents/Application_form_nami_international_school_plus_2.pdf",
-      "fileSize": "3.03 MB",
+      "fileSize": "3.08 MB",
       "note": "Academic Intake 2026",
       "featured": false
     }
   },
   {
+    "key": "application-school-primary",
     "title": "NAMI International School (Primary School) Admission Form",
     "date": "2026-09-26",
     "fields": {
       "category": "admissions",
       "institution": "School",
-      "description": "Official enrollment and student record application form for primary learners (Grades I through VII) at NAMI International School.",
+      "description": "Official enrolment and student record application form for primary learners (Grades I through VII) at NAMI International School.",
       "file": "/documents/Nami International School (Primary) Admission form.pdf",
-      "fileSize": "135 KB",
+      "fileSize": "226 KB",
       "note": "Academic Intake 2026",
       "featured": false
     }

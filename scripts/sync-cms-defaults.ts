@@ -2,39 +2,15 @@
 // into its WordPress snippet, so the admin screens start pre-filled with the
 // content the site ships today. Run with: npm run cms:defaults
 //
+// Core 1.3+ also fetches the same content from the live site (/api/cms/content),
+// so these copies are only the fallback for when the site cannot be reached.
+//
 // A snippet holds one JSON block per marker: <<<'NAMI_JSON' (page defaults)
 // and, for collections, <<<'NAMI_IMPORT' (items offered for one-click import).
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { aLevelsDefaults } from "../src/lib/cms/pages/a-levels/defaults";
-import { aboutDefaults } from "../src/lib/cms/pages/about/defaults";
-import {
-  alumniDefaults,
-  alumniImports,
-} from "../src/lib/cms/pages/alumni/defaults";
-import { bachelorsDefaults } from "../src/lib/cms/pages/bachelors/defaults";
-import { careersDefaults } from "../src/lib/cms/pages/careers/defaults";
-import { clubsDefaults } from "../src/lib/cms/pages/clubs/defaults";
-import { contactDefaults } from "../src/lib/cms/pages/contact/defaults";
-import { ctevtDefaults } from "../src/lib/cms/pages/ctevt/defaults";
-import {
-  documentImports,
-  documentsDefaults,
-} from "../src/lib/cms/pages/documents/defaults";
-import { facultyDefaults } from "../src/lib/cms/pages/faculty/defaults";
-import {
-  galleryDefaults,
-  galleryImports,
-} from "../src/lib/cms/pages/gallery/defaults";
-import { homeDefaults } from "../src/lib/cms/pages/home/defaults";
-import {
-  noticeImports,
-  noticesDefaults,
-} from "../src/lib/cms/pages/notices/defaults";
-import { schoolDefaults } from "../src/lib/cms/pages/school/defaults";
-import { siteDefaults } from "../src/lib/cms/pages/site/defaults";
-import { studentLifeDefaults } from "../src/lib/cms/pages/student-life/defaults";
+import { CODE_COLLECTIONS, CODE_PAGES } from "../src/lib/cms/code-content";
 
 // Run from the project root (npm scripts always are).
 const SNIPPETS = join(process.cwd(), "wordpress", "snippets");
@@ -43,34 +19,55 @@ const PAGES: readonly {
   file: string;
   blocks: Readonly<Record<string, unknown>>;
 }[] = [
-  { file: "02-home-page.php", blocks: { NAMI_JSON: homeDefaults } },
-  { file: "03-about-page.php", blocks: { NAMI_JSON: aboutDefaults } },
-  { file: "04-faculty-page.php", blocks: { NAMI_JSON: facultyDefaults } },
-  { file: "05-school-page.php", blocks: { NAMI_JSON: schoolDefaults } },
-  { file: "06-a-levels-page.php", blocks: { NAMI_JSON: aLevelsDefaults } },
-  { file: "07-bachelors-page.php", blocks: { NAMI_JSON: bachelorsDefaults } },
-  { file: "08-ctevt-page.php", blocks: { NAMI_JSON: ctevtDefaults } },
-  { file: "09-site-settings.php", blocks: { NAMI_JSON: siteDefaults } },
-  { file: "10-clubs.php", blocks: { NAMI_JSON: clubsDefaults } },
+  { file: "02-home-page.php", blocks: { NAMI_JSON: CODE_PAGES.home } },
+  { file: "03-about-page.php", blocks: { NAMI_JSON: CODE_PAGES.about } },
+  { file: "04-faculty-page.php", blocks: { NAMI_JSON: CODE_PAGES.faculty } },
+  { file: "05-school-page.php", blocks: { NAMI_JSON: CODE_PAGES.school } },
+  {
+    file: "06-a-levels-page.php",
+    blocks: { NAMI_JSON: CODE_PAGES["a-levels"] },
+  },
+  {
+    file: "07-bachelors-page.php",
+    blocks: { NAMI_JSON: CODE_PAGES.bachelors },
+  },
+  { file: "08-ctevt-page.php", blocks: { NAMI_JSON: CODE_PAGES.ctevt } },
+  { file: "09-site-settings.php", blocks: { NAMI_JSON: CODE_PAGES.site } },
+  { file: "10-clubs.php", blocks: { NAMI_JSON: CODE_PAGES.clubs } },
   {
     file: "12-notices.php",
-    blocks: { NAMI_JSON: noticesDefaults, NAMI_IMPORT: noticeImports },
+    blocks: {
+      NAMI_JSON: CODE_PAGES.notices,
+      NAMI_IMPORT: CODE_COLLECTIONS["notice-items"],
+    },
   },
-  { file: "13-careers.php", blocks: { NAMI_JSON: careersDefaults } },
+  { file: "13-careers.php", blocks: { NAMI_JSON: CODE_PAGES.careers } },
   {
     file: "14-gallery.php",
-    blocks: { NAMI_JSON: galleryDefaults, NAMI_IMPORT: galleryImports },
+    blocks: {
+      NAMI_JSON: CODE_PAGES.gallery,
+      NAMI_IMPORT: CODE_COLLECTIONS["gallery-items"],
+    },
   },
   {
     file: "15-documents.php",
-    blocks: { NAMI_JSON: documentsDefaults, NAMI_IMPORT: documentImports },
+    blocks: {
+      NAMI_JSON: CODE_PAGES.documents,
+      NAMI_IMPORT: CODE_COLLECTIONS.documents,
+    },
   },
-  { file: "16-contact.php", blocks: { NAMI_JSON: contactDefaults } },
+  { file: "16-contact.php", blocks: { NAMI_JSON: CODE_PAGES.contact } },
   {
     file: "17-alumni.php",
-    blocks: { NAMI_JSON: alumniDefaults, NAMI_IMPORT: alumniImports },
+    blocks: {
+      NAMI_JSON: CODE_PAGES.alumni,
+      NAMI_IMPORT: CODE_COLLECTIONS["alumni-stories"],
+    },
   },
-  { file: "18-student-life.php", blocks: { NAMI_JSON: studentLifeDefaults } },
+  {
+    file: "18-student-life.php",
+    blocks: { NAMI_JSON: CODE_PAGES["student-life"] },
+  },
 ];
 
 for (const page of PAGES) {

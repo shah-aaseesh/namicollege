@@ -8,5 +8,8 @@ export type * from "./types";
 
 export const getFacultyPage = cache(
   async (): Promise<FacultyPageContent> =>
-    mergeWithDefaults(facultyDefaults, await fetchCmsPage("faculty")),
+    mergeWithDefaults(
+      facultyDefaults,
+      await fetchCmsPage("faculty", facultyDefaults),
+    ),
 );

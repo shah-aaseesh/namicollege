@@ -50,7 +50,7 @@ export function ClubOtherRail({
                 <div className="relative aspect-16/10 w-full overflow-hidden bg-neutral-900">
                   <Image
                     alt={club.coverImage.alt}
-                    className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="size-full origin-top-left object-cover object-left-top transition-transform duration-500 group-hover:scale-105"
                     height={club.coverImage.height}
                     sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                     src={club.coverImage.src}

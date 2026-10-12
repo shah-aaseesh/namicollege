@@ -22,6 +22,8 @@ export type ALevelsClub = {
   readonly tagline: string;
   readonly metaDescription: string;
   readonly coverImage: ContentImage;
+  /** Banner at the top of the club page; the card photo when left out. */
+  readonly heroImage?: ContentImage;
   readonly overview: readonly string[];
   readonly quote: {
     readonly text: string;
@@ -275,7 +277,7 @@ export const A_LEVELS_CLUBS: readonly ALevelsClub[] = [
       height: 3000,
     },
     overview: [
-      "The Arts and Crafts Club at NAMI College provides a vibrant open studio for young artists, sculptors, graphic illustrators, and craftspeople. It celebrates aesthetic creativity as a vital counterpoint to academic rigor, encouraging students to experiment with diverse mediums and techniques.",
+      "The Arts and Crafts Club at NAMI College provides a vibrant open studio for young artists, sculptors, graphic illustrators, and craftspeople. It celebrates aesthetic creativity as a vital counterpoint to academic rigour, encouraging students to experiment with diverse mediums and techniques.",
       "Members collaborate on fine art exhibitions, theatrical stage set designs, festive campus installations, pottery and clay sculpting, and visual branding for major college festivals.",
     ],
     quote: {

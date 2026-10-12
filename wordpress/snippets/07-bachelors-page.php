@@ -343,42 +343,50 @@ add_filter(
     "slides": [
       {
         "image": {
-          "src": "/hero/careers/careers-hero.jpg",
-          "alt": "NAMI Higher Education student sports tournament and campus life.",
-          "width": 1500,
-          "height": 1000
+          "src": "/hero/naya udam watermarked ones/Graduates_Celebrate_Class_of_2025_2400x1030_NAMI_watermarked.webp",
+          "alt": "NAMI and University of Northampton undergraduate graduates celebrating convocation Class of 2025.",
+          "width": 2048,
+          "height": 878
         }
       },
       {
         "image": {
-          "src": "/hero/about/about-hero.jpg",
-          "alt": "NAMI Higher Education faculty, students, and graduation ceremony.",
-          "width": 1500,
-          "height": 1000
+          "src": "/hero/naya udam watermarked ones/NAMI_Speed_Internship_Group_Portrait_2400x1030_NAMI_watermarked.webp",
+          "alt": "Undergraduate students shortlisted for the NYEF x NAMI Speed Internship Program with faculty and coordinators.",
+          "width": 2048,
+          "height": 878
         }
       },
       {
         "image": {
-          "src": "/hero/a-levels/a-levels-hero.jpg",
-          "alt": "NAMI Higher Education campus facilities and learning environment.",
-          "width": 1280,
-          "height": 853
+          "src": "/hero/naya udam watermarked ones/Global_Career_Seminar_Auditorium_2400x1030_NAMI_watermarked.webp",
+          "alt": "Students attending a Global Career Opportunities seminar in the NAMI auditorium.",
+          "width": 2048,
+          "height": 878
         }
       },
       {
         "image": {
-          "src": "/hero/bachelors/bachelors-hero.jpg",
-          "alt": "NAMI Higher Education academic campus and community.",
-          "width": 1500,
-          "height": 1000
+          "src": "/hero/naya udam watermarked ones/Lively_Modern_Classroom_Seminar_2400x1030_NAMI_watermarked.webp",
+          "alt": "Undergraduate students interacting during an interactive seminar in a modern lecture hall.",
+          "width": 2048,
+          "height": 878
         }
       },
       {
         "image": {
-          "src": "/hero/school/school-hero.jpg",
-          "alt": "NAMI Higher Education practical laboratories and campus life.",
-          "width": 1500,
-          "height": 1000
+          "src": "/hero/naya udam watermarked ones/Traditional_Dancers_Under_Blue_Lights_2400x1030_NAMI_watermarked.webp",
+          "alt": "Students performing traditional cultural dance during college events and celebrations.",
+          "width": 2048,
+          "height": 878
+        }
+      },
+      {
+        "image": {
+          "src": "/hero/naya udam watermarked ones/Futsal_Teams_Under_Covered_Pitch_2400x1030_NAMI_watermarked.webp",
+          "alt": "Student futsal teams lined up on the covered pitch during a sports tournament.",
+          "width": 2048,
+          "height": 878
         }
       }
     ]
@@ -428,8 +436,8 @@ add_filter(
         },
         "dark": true,
         "overview": [
-          "The University of Northampton is a leading British public university located on its purpose-built £330 million Waterside Campus in England. Globally recognized as the UK's first Ashoka U Changemaker Campus and commended for teaching excellence under the British Teaching Excellence Framework (TEF), the university champions social innovation, enterprise, and high graduate outcomes.",
-          "Since 2012, NAMI has operated in direct academic partnership with the University of Northampton to deliver accredited undergraduate and postgraduate degrees in Kathmandu. Programmes follow identical curricula, assessment frameworks, and moderation from external UK examiners, granting graduates authentic British degrees recognized internationally."
+          "The University of Northampton is a leading British public university located on its purpose-built £330 million Waterside Campus in England. Globally recognised as the UK's first Ashoka U Changemaker Campus and commended for teaching excellence under the British Teaching Excellence Framework (TEF), the university champions social innovation, enterprise, and high graduate outcomes.",
+          "Since 2012, NAMI has operated in direct academic partnership with the University of Northampton to deliver accredited undergraduate and postgraduate degrees in Kathmandu. Programmes follow identical curricula, assessment frameworks, and moderation from external UK examiners, granting graduates authentic British degrees recognised internationally."
         ],
         "note": "",
         "metrics": [
@@ -482,7 +490,7 @@ add_filter(
         "leaderMessage": [
           "At the University of Northampton, we believe higher education has the transformative power to develop future leaders, ignite innovation, and deliver real social impact. Our long-standing collaboration with Naaya Aayam Multi-Disciplinary Institute (NAMI) in Kathmandu is a testament to this global mission.",
           "Through this partnership, students in Nepal engage in rigorous, career-focused degree programmes in Computing, Software Engineering, Network Engineering, Environmental Science, and Business Administration. These programmes are delivered under our exacting academic standards, incorporating experiential learning and technological literacy.",
-          "We take immense pride in the achievements of NAMI graduates who continue to excel across international technology companies, research organizations, and entrepreneurial ventures. We look forward to deepening our academic collaboration and welcoming future cohorts into our global community."
+          "We take immense pride in the achievements of NAMI graduates who continue to excel across international technology companies, research organisations, and entrepreneurial ventures. We look forward to deepening our academic collaboration and welcoming future cohorts into our global community."
         ]
       },
       {
@@ -1783,7 +1791,7 @@ add_filter(
   "pearson": {
     "label": "OFFICIAL TESTING CENTRE",
     "title": "Pearson VUE-Authorized Test Center",
-    "description": "NAMI is an officially authorized Pearson VUE test center, empowering students and professionals across Nepal to take internationally recognized IT certifications, academic assessments, and global professional licensure examinations in a secure, state-of-the-art testing facility.",
+    "description": "NAMI is an officially authorised Pearson VUE test centre, empowering students and professionals across Nepal to take internationally recognised IT certifications, academic assessments, and global professional licensure examinations in a secure, state-of-the-art testing facility.",
     "logo": {
       "src": "/sections/misc/pearson-vue.jpg",
       "alt": "Pearson VUE-Authorized Test Center Logo",

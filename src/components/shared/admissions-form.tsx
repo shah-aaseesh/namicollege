@@ -614,9 +614,9 @@ export function MultiStepForm() {
               <SelectField
                 control={control}
                 name="program"
-                label="Program"
+                label="Programme"
                 options={PROGRAM_OPTIONS}
-                placeholder="Select a program"
+                placeholder="Select a programme"
                 required
                 onValueChange={selectCourse}
               />
@@ -921,7 +921,7 @@ export function MultiStepForm() {
       <div className="bg-surface border border-border rounded-2xl shadow-sm flex flex-col md:flex-row min-h-[600px]">
         <div className="bg-muted w-full md:w-64 lg:w-80 p-6 md:p-8 shrink-0 border-b md:border-b-0 md:border-r border-border rounded-t-2xl md:rounded-tr-none md:rounded-l-2xl">
           <H6 as="h2" className="font-semibold text-ink mb-8">
-            Inquiry Form
+            Enquiry Form
           </H6>
           <ul className="space-y-6">
             {steps.map((step, index) => {

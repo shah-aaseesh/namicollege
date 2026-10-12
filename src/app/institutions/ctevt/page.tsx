@@ -129,7 +129,7 @@ export default async function CtevtAffiliationPage() {
             </Reveal>
           )}
 
-          {/* CTEVT-Approved Training Programs Table */}
+          {/* CTEVT-Approved Training Programmes Table */}
           {programmes.items.length === 0 ? null : (
             <section className="space-y-6">
               <Reveal className="flex flex-col gap-3">

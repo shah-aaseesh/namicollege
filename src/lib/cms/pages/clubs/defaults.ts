@@ -18,6 +18,7 @@ function clubOf(club: SchoolClub): CmsClub {
     tagline: club.tagline,
     metaDescription: club.metaDescription,
     coverImage: cmsImage(club.coverImage),
+    heroImage: cmsImage(club.heroImage ?? null),
     overview: [...club.overview],
     quoteText: club.quote.text,
     quoteAuthor: club.quote.author,

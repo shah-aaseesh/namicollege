@@ -597,6 +597,7 @@ add_filter(
 				<<<'NAMI_IMPORT'
 [
   {
+    "key": "moment-1",
     "title": "WebSurfer Industry AI & Computing Lab",
     "date": "2026-09-30",
     "fields": {
@@ -616,6 +617,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-2",
     "title": "A-Levels Campus Life & Student Celebrations",
     "date": "2026-09-29",
     "fields": {
@@ -635,6 +637,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-3",
     "title": "Higher Secondary Holi Fest & Campus Celebrations",
     "date": "2026-09-28",
     "fields": {
@@ -654,6 +657,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-4",
     "title": "Primary Interactive Smart Classroom",
     "date": "2026-09-27",
     "fields": {
@@ -673,6 +677,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-5",
     "title": "A-Levels Inter-House Basketball League",
     "date": "2026-09-26",
     "fields": {
@@ -692,6 +697,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-6",
     "title": "Cross Web Data Innovation & Computing Laboratory",
     "date": "2026-09-25",
     "fields": {
@@ -711,6 +717,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-7",
     "title": "A-Levels Cultural Fest & Stage Performances",
     "date": "2026-09-24",
     "fields": {
@@ -730,6 +737,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-8",
     "title": "Inspirational Quote Card",
     "date": "2026-09-23",
     "fields": {
@@ -749,6 +757,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-9",
     "title": "Primary Junior Explorers Walk",
     "date": "2026-09-22",
     "fields": {
@@ -768,6 +777,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-10",
     "title": "University Convocation & Degree Award Ceremony",
     "date": "2026-09-21",
     "fields": {
@@ -787,6 +797,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-11",
     "title": "Annual Music Fest Live Performance",
     "date": "2026-09-20",
     "fields": {
@@ -806,6 +817,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-12",
     "title": "A-Levels Graduating Class Farewell Gala",
     "date": "2026-09-19",
     "fields": {
@@ -825,6 +837,7 @@ add_filter(
     }
   },
   {
+    "key": "bachelors-academic-ai3",
     "title": "WebSurfer Telecom & High-Performance Computing Seminar",
     "date": "2026-09-18",
     "fields": {
@@ -844,6 +857,7 @@ add_filter(
     }
   },
   {
+    "key": "bachelors-academic-internship",
     "title": "Startup Discovery Asia Corporate Internship Induction",
     "date": "2026-09-17",
     "fields": {
@@ -863,6 +877,7 @@ add_filter(
     }
   },
   {
+    "key": "bachelors-event-climate-ai",
     "title": "Machan Eco-Tourism & Climate AI Symposium",
     "date": "2026-09-16",
     "fields": {
@@ -882,6 +897,7 @@ add_filter(
     }
   },
   {
+    "key": "bachelors-event-climate-ai-panel",
     "title": "Machan Wildlife Resort Sustainability Panel",
     "date": "2026-09-15",
     "fields": {
@@ -901,6 +917,7 @@ add_filter(
     }
   },
   {
+    "key": "bachelors-event-pitchday",
     "title": "Startup Discovery Asia Venture Pitch Day",
     "date": "2026-09-14",
     "fields": {
@@ -920,6 +937,7 @@ add_filter(
     }
   },
   {
+    "key": "bachelors-event-pitchday-presentation",
     "title": "Cross Web Office Automation & Software Showcase",
     "date": "2026-09-13",
     "fields": {
@@ -939,6 +957,7 @@ add_filter(
     }
   },
   {
+    "key": "bachelors-event-suraj-interior",
     "title": "Suraj Interior Architecture & Space Design Study",
     "date": "2026-09-12",
     "fields": {
@@ -958,6 +977,7 @@ add_filter(
     }
   },
   {
+    "key": "bachelors-event-graduation-gala",
     "title": "Graduating Batch Convocation Celebration",
     "date": "2026-09-11",
     "fields": {
@@ -977,6 +997,7 @@ add_filter(
     }
   },
   {
+    "key": "bachelors-sports-esport",
     "title": "Inter-University Esports League & Gaming Arena",
     "date": "2026-09-10",
     "fields": {
@@ -996,6 +1017,7 @@ add_filter(
     }
   },
   {
+    "key": "bachelors-sports-esport-finals",
     "title": "Campus Esports Championship Grand Finals",
     "date": "2026-09-09",
     "fields": {
@@ -1015,6 +1037,7 @@ add_filter(
     }
   },
   {
+    "key": "bachelors-college-life-tour",
     "title": "University Educational Excursion & Field Study",
     "date": "2026-09-08",
     "fields": {
@@ -1034,6 +1057,7 @@ add_filter(
     }
   },
   {
+    "key": "a-level-academic-1",
     "title": "Cambridge A-Levels Classroom & Academic Seminars",
     "date": "2026-09-07",
     "fields": {
@@ -1053,6 +1077,7 @@ add_filter(
     }
   },
   {
+    "key": "a-level-academic-2",
     "title": "A-Levels Science Laboratory & Research Practicals",
     "date": "2026-09-06",
     "fields": {
@@ -1072,6 +1097,7 @@ add_filter(
     }
   },
   {
+    "key": "a-level-academic-3",
     "title": "Cambridge Interactive Learning Sessions",
     "date": "2026-09-05",
     "fields": {
@@ -1091,6 +1117,7 @@ add_filter(
     }
   },
   {
+    "key": "a-level-sports-karate",
     "title": "A-Levels Martial Arts & Karate Demonstration",
     "date": "2026-09-04",
     "fields": {
@@ -1110,6 +1137,7 @@ add_filter(
     }
   },
   {
+    "key": "a-level-sports-gala",
     "title": "A-Levels Sports Gala & Track Competitions",
     "date": "2026-09-03",
     "fields": {
@@ -1129,6 +1157,7 @@ add_filter(
     }
   },
   {
+    "key": "a-level-sports-futsal",
     "title": "A-Levels Futsal Championship Tournament",
     "date": "2026-09-02",
     "fields": {
@@ -1148,6 +1177,7 @@ add_filter(
     }
   },
   {
+    "key": "a-level-sports-indoor",
     "title": "Indoor Games, Badminton & Table Tennis",
     "date": "2026-09-01",
     "fields": {
@@ -1167,6 +1197,7 @@ add_filter(
     }
   },
   {
+    "key": "a-level-sports-awards",
     "title": "Annual Sports Award & Medal Distribution",
     "date": "2026-08-31",
     "fields": {
@@ -1186,6 +1217,7 @@ add_filter(
     }
   },
   {
+    "key": "a-level-events-farewell-2",
     "title": "Farewell Felicitations & Batch Celebration",
     "date": "2026-08-30",
     "fields": {
@@ -1205,6 +1237,7 @@ add_filter(
     }
   },
   {
+    "key": "a-level-events-freshers",
     "title": "A-Levels Orientation & Welcome Reception",
     "date": "2026-08-29",
     "fields": {
@@ -1224,6 +1257,7 @@ add_filter(
     }
   },
   {
+    "key": "a-level-social-services-camp",
     "title": "Mustang Academic & Community Service Trip",
     "date": "2026-08-28",
     "fields": {
@@ -1243,6 +1277,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-hotel-management",
     "title": "Hotel Management Culinary & Table Service Practicals",
     "date": "2026-08-27",
     "fields": {
@@ -1262,6 +1297,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-hotel-management-2",
     "title": "Hospitality Industry Simulation Laboratory",
     "date": "2026-08-26",
     "fields": {
@@ -1281,6 +1317,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-kist-fair",
     "title": "KIST Science & Technology Innovation Fair 2081",
     "date": "2026-08-25",
     "fields": {
@@ -1300,6 +1337,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-kist-fair-2",
     "title": "Robotics & Hardware Prototype Demonstration",
     "date": "2026-08-24",
     "fields": {
@@ -1319,6 +1357,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-event-plastic",
     "title": "Zero Plastic 2040 Campus Sustainability Pledge",
     "date": "2026-08-23",
     "fields": {
@@ -1338,6 +1377,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-art-competition",
     "title": "Intra-School Visual Arts & Creative Painting Contest",
     "date": "2026-08-22",
     "fields": {
@@ -1357,6 +1397,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-art-competition-2",
     "title": "Fine Arts Exhibition & Gallery Presentation",
     "date": "2026-08-21",
     "fields": {
@@ -1376,6 +1417,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-social-service",
     "title": "Youth Social Service Club Community Drive",
     "date": "2026-08-20",
     "fields": {
@@ -1395,6 +1437,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-social-service-2",
     "title": "Campus Blood Donation & Health Campaign",
     "date": "2026-08-19",
     "fields": {
@@ -1414,6 +1457,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-sports-1",
     "title": "Basketball Tournament 2082 Championship Victory",
     "date": "2026-08-18",
     "fields": {
@@ -1433,6 +1477,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-sports-2",
     "title": "Inter-College Basketball Championship Match",
     "date": "2026-08-17",
     "fields": {
@@ -1452,6 +1497,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-futsal",
     "title": "Annual +2 Futsal Championship League",
     "date": "2026-08-16",
     "fields": {
@@ -1471,6 +1517,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-higher-sec-tour",
     "title": "Higher Secondary Educational & Cultural Excursion",
     "date": "2026-08-15",
     "fields": {
@@ -1490,6 +1537,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-1",
     "title": "Math Olympiad & Mental Math Champions",
     "date": "2026-08-14",
     "fields": {
@@ -1509,6 +1557,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-2",
     "title": "Basantapur Heritage & History Excursion",
     "date": "2026-08-13",
     "fields": {
@@ -1528,6 +1577,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-3",
     "title": "Interactive Human Number Line Activity",
     "date": "2026-08-12",
     "fields": {
@@ -1547,6 +1597,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-4",
     "title": "World Day for Cultural Diversity Celebrations",
     "date": "2026-08-11",
     "fields": {
@@ -1566,6 +1617,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-5",
     "title": "National Literacy & Book Reading Week",
     "date": "2026-08-10",
     "fields": {
@@ -1585,6 +1637,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-6",
     "title": "Claymation & Creative Art Workshop",
     "date": "2026-08-09",
     "fields": {
@@ -1604,6 +1657,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-7",
     "title": "Field Trip to the National Museum of Nepal",
     "date": "2026-08-08",
     "fields": {
@@ -1623,6 +1677,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-8",
     "title": "Play Nepal Inter-School Obstacle Course Challenge",
     "date": "2026-08-07",
     "fields": {
@@ -1642,6 +1697,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-9",
     "title": "International Open Friendship Taekwondo Championship",
     "date": "2026-08-06",
     "fields": {
@@ -1661,6 +1717,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-10",
     "title": "3Di School Innovation & Science Exploration",
     "date": "2026-08-05",
     "fields": {
@@ -1680,6 +1737,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-11",
     "title": "Zero Waste & Ecological Stewardship Workshop",
     "date": "2026-08-04",
     "fields": {
@@ -1699,6 +1757,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-12",
     "title": "Mero Coding Robotics & Project Model Making",
     "date": "2026-08-03",
     "fields": {
@@ -1718,6 +1777,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-13",
     "title": "Mero Coding Digital Logic & Career Horizons",
     "date": "2026-08-02",
     "fields": {
@@ -1737,6 +1797,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-14",
     "title": "Samatva Wellness Yoga & Mindfulness Practice",
     "date": "2026-08-01",
     "fields": {
@@ -1756,6 +1817,7 @@ add_filter(
     }
   },
   {
+    "key": "moment-primary-15",
     "title": "Samatva Oral Health & Hygiene Awareness Camp",
     "date": "2026-07-31",
     "fields": {

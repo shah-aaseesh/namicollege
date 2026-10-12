@@ -10,7 +10,7 @@ export type * from "./types";
 export const getSchoolPage = cache(async (): Promise<SchoolPageContent> => {
   const merged = mergeWithDefaults(
     schoolDefaults,
-    await fetchCmsPage("school"),
+    await fetchCmsPage("school", schoolDefaults),
     schoolShape,
   );
   return {

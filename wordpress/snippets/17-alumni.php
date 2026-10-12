@@ -152,10 +152,10 @@ add_filter(
     "description": "From Kathmandu to global institutions across 15+ countries, NAMI graduates are leading innovation in computing, sustainable development, business, and research.",
     "buttonLabel": "Explore Alumni Spotlights",
     "image": {
-      "src": "/hero/alumni/alumni-hero.jpg",
-      "alt": "NAMI Alumni network and graduation celebration.",
-      "width": 1500,
-      "height": 1000
+      "src": "/alumni/alumni hero.jpeg",
+      "alt": "NAMI Class of 2025 graduates celebrate at convocation ceremony.",
+      "width": 654,
+      "height": 424
     }
   },
   "stories": {
@@ -165,9 +165,9 @@ add_filter(
   },
   "wings": {
     "allTab": "All Alumni",
-    "undergraduateTab": "Undergraduate Program",
+    "undergraduateTab": "Undergraduate Programme",
     "undergraduateCard": "Undergraduate Programme",
-    "graduateTab": "Graduate Program",
+    "graduateTab": "Graduate Programme",
     "graduateCard": "Graduate Programme",
     "collegeTab": "A-Levels",
     "collegeCard": "A-Levels",
@@ -176,28 +176,28 @@ add_filter(
   },
   "metrics": {
     "label": "COMMUNITY & SCALE",
-    "title": "A Legacy of Excellence Across Fourteen Years",
+    "title": "A Legacy of Excellence Since 2012",
     "description": "Our alumni form a connected global community of researchers, technology leaders, entrepreneurs, and scholars.",
     "items": [
       {
         "stat": "8,000+",
         "label": "Total Alumni",
-        "detail": "Graduates across all academic programmes since 2012."
+        "detail": "Graduates from all academic programmes since 2012."
       },
       {
         "stat": "5,000+",
         "label": "NEB 10+2 Alumni",
-        "detail": "Science and Management graduates advancing into top institutions."
+        "detail": "Science and Management graduates progressing to leading institutions."
       },
       {
         "stat": "2,500+",
         "label": "UG & PG Degree Holders",
-        "detail": "University of Northampton (UK) accredited Bachelor's and Master's degree holders."
+        "detail": "Holders of University of Northampton (UK) accredited bachelor's and master's degrees."
       },
       {
         "stat": "500+",
         "label": "Cambridge A Level Scholars",
-        "detail": "Studying in world-leading universities across the UK, US, and Australia."
+        "detail": "Studying at world-leading universities in the UK, the US and Australia."
       }
     ]
   },
@@ -738,6 +738,7 @@ add_filter(
 				<<<'NAMI_IMPORT'
 [
   {
+    "key": "reesav-rokka",
     "title": "Reesav Rokka",
     "date": "2026-09-30",
     "fields": {
@@ -810,6 +811,7 @@ add_filter(
     }
   },
   {
+    "key": "daniel-sapkota",
     "title": "Daniel Sapkota",
     "date": "2026-09-29",
     "fields": {
@@ -888,6 +890,7 @@ add_filter(
     }
   },
   {
+    "key": "abhishek-gautam",
     "title": "Abhishek Gautam",
     "date": "2026-09-28",
     "fields": {
@@ -959,6 +962,7 @@ add_filter(
     }
   },
   {
+    "key": "denish-tuladhar",
     "title": "Denish Tuladhar",
     "date": "2026-09-27",
     "fields": {
@@ -981,8 +985,8 @@ add_filter(
       ],
       "keyQuote": "Receiving the Best Emerging Performer Award within just three months of joining Agni Group has been one of my proudest achievements. Looking back, NAMI was more than just a place where I earned my degree—it was where I built the foundation for the career I have today.",
       "story": [
-        "Denish Tuladhar first heard about NAMI through a friend who spoke highly of its academic standards and its unique three-year Bachelor's degree programme. Motivated by NAMI's reputation for providing quality education within a shorter duration, it allowed him to balance both his studies and his professional ambitions in an environment that offered the flexibility and rigor he was looking for.",
-        "His experience at NAMI was both enriching and transformative. The faculty members were approachable, knowledgeable, and always encouraged active participation. The learning environment emphasized teamwork, presentations, case studies, and real-world problem solving, which helped him build confidence, communication skills, and leadership abilities.",
+        "Denish Tuladhar first heard about NAMI through a friend who spoke highly of its academic standards and its unique three-year Bachelor's degree programme. Motivated by NAMI's reputation for providing quality education within a shorter duration, it allowed him to balance both his studies and his professional ambitions in an environment that offered the flexibility and rigour he was looking for.",
+        "His experience at NAMI was both enriching and transformative. The faculty members were approachable, knowledgeable, and always encouraged active participation. The learning environment emphasised teamwork, presentations, case studies, and real-world problem solving, which helped him build confidence, communication skills, and leadership abilities.",
         "The most valuable aspect of his education at NAMI was its emphasis on research-based assignments, practical learning, and professional development. The curriculum encouraged analytical thinking, project-based learning, and collaboration, preparing him to adapt quickly to workplace challenges throughout his career.",
         "After completing his studies, Denish began his career in healthcare marketing at KIST Teaching Hospital, where he worked on branding, digital marketing campaigns, strategic partnerships, and event management, giving him valuable exposure to integrated marketing and communication strategies.",
         "Currently, Denish is working at Agni Group as a Marketing Executive, specializing in Mahindra's BEV and SUV segment. In this role, he develops and executes marketing strategies including product launch planning, digital campaigns, event management, content creation, influencer collaborations, dealership marketing, and brand-building initiatives across Nepal.",
@@ -1021,7 +1025,7 @@ add_filter(
         },
         {
           "question": "How would you describe the overall learning environment and experience at NAMI during your time as a student?",
-          "answer": "My experience at NAMI was both enriching and transformative. The faculty members were approachable, knowledgeable and always encouraged active participation. The learning environment emphasized teamwork, presentations, case studies and real-world problem solving, which helped me build confidence, communication skills and leadership abilities. Beyond academics, NAMI encouraged students to think critically and develop practical skills that prepared us for the professional world."
+          "answer": "My experience at NAMI was both enriching and transformative. The faculty members were approachable, knowledgeable and always encouraged active participation. The learning environment emphasised teamwork, presentations, case studies and real-world problem solving, which helped me build confidence, communication skills and leadership abilities. Beyond academics, NAMI encouraged students to think critically and develop practical skills that prepared us for the professional world."
         },
         {
           "question": "Which aspects of your education at NAMI have been most valuable in shaping your academic and professional journey?",
@@ -1055,6 +1059,7 @@ add_filter(
     }
   },
   {
+    "key": "avni-adhikari",
     "title": "Avni Adhikari",
     "date": "2026-09-26",
     "fields": {
@@ -1155,6 +1160,7 @@ add_filter(
     }
   },
   {
+    "key": "yunisha-basnet",
     "title": "Yunisha Basnet",
     "date": "2026-09-25",
     "fields": {
@@ -1171,7 +1177,7 @@ add_filter(
       "company": "NAMI International School",
       "location": "Kathmandu, Nepal",
       "highlights": [
-        "Secondary School Management stream alumna (Class of 2026) recognized for active participation and academic dedication.",
+        "Secondary School Management stream alumna (Class of 2026) recognised for active participation and academic dedication.",
         "Experienced comprehensive guidance and mentorship from friendly, understanding faculty members throughout her studies.",
         "Thrived in NAMI's peaceful, green campus environment, building lifelong friendships and collaborative learning habits."
       ],

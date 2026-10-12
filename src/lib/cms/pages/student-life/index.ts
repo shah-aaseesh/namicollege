@@ -15,7 +15,7 @@ export const getStudentLifePage = cache(
   async (): Promise<StudentLifePageContent> => {
     return mergeWithDefaults(
       studentLifeDefaults,
-      await fetchCmsPage("student-life"),
+      await fetchCmsPage("student-life", studentLifeDefaults),
     );
   },
 );

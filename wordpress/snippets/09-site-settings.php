@@ -536,7 +536,7 @@ add_filter(
     "title": "Contact & Location",
     "addressLabel": "Campus Address",
     "phoneLabel": "Phone Numbers",
-    "emailLabel": "Email Inquiries",
+    "emailLabel": "Email Enquiries",
     "followLabel": "Follow"
   },
   "floating": {

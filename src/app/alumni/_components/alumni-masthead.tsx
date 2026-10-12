@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { CareersMastheadCopy } from "@/app/careers/_components/careers-masthead";
 import { buttonVariants } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { Eyebrow, Standfirst } from "@/components/ui/typography";
+import { Standfirst } from "@/components/ui/typography";
 import { ArrowRightIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
@@ -55,14 +55,14 @@ export function AlumniMasthead({
           <div className="lg:col-span-5">
             <div className="relative">
               <div className="absolute -inset-2.5 rounded-[2rem] bg-gradient-to-tr from-primary-700/20 via-primary-500/10 to-transparent -z-10 blur-xs" />
-              <div className="relative aspect-4/3 sm:aspect-16/10 lg:aspect-4/3 overflow-hidden rounded-3xl border border-primary-200/60 shadow-lg shadow-primary-900/5">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-2xl sm:rounded-3xl border border-primary-200/60 shadow-lg shadow-primary-900/5">
                 <Image
                   src={copy.image.src}
                   alt={copy.image.alt}
                   fill
                   priority
                   sizes="(min-width: 1024px) 42vw, 92vw"
-                  className="object-cover"
+                  className="object-cover object-left-top"
                 />
               </div>
             </div>

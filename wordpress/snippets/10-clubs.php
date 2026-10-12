@@ -34,7 +34,8 @@ add_filter(
 					'title'           => array( 'type' => 'text', 'label' => 'Club name' ),
 					'category'        => array( 'type' => 'text', 'label' => 'Category', 'placeholder' => 'Athletics & Physical Fitness' ),
 					'tagline'         => array( 'type' => 'textarea', 'label' => 'Short description (on the card)', 'rows' => 2 ),
-					'coverImage'      => $image( 'Cover photo', 'Used on the card and at the top of the club page. A club without a cover photo is hidden.' ),
+					'coverImage'      => $image( 'Card photo', 'Shown on the club card. Also used at the top of the club page when there is no hero photo. A club without a card photo is hidden.' ),
+					'heroImage'       => $image( 'Hero photo', 'The big banner at the top of the club page. Leave empty to use the card photo.' ),
 					'metaDescription' => array( 'type' => 'textarea', 'label' => 'Search & sharing description', 'rows' => 2, 'help' => 'How the club page appears in Google and on social media. About 150 characters.' ),
 					'overview'        => array( 'type' => 'paragraphs', 'label' => 'About the club', 'rows' => 8 ),
 					'quoteText'       => array( 'type' => 'textarea', 'label' => 'Highlighted quote', 'rows' => 2 ),
@@ -119,10 +120,16 @@ add_filter(
         "tagline": "Fostering athleticism, discipline, teamwork, and sportsmanship through competitive and recreational sports.",
         "metaDescription": "NAMI International School Sports Club promotes fitness, inter-house leagues, basketball tournaments, and football championships for all student grades.",
         "coverImage": {
-          "src": "/gallery/Sports Club/Annual Sports Meet/Basketball-upright.jpg",
-          "alt": "NAMI International School students engaged in competitive sports and basketball tournaments.",
-          "width": 2400,
-          "height": 3200
+          "src": "/clubs/sports club card.jpeg",
+          "alt": "A NAMI International School student holding a 2025 medal and a first-position football certificate from the International Sports Friendship Championship.",
+          "width": 1086,
+          "height": 1448
+        },
+        "heroImage": {
+          "src": "/clubs/sports club hero.jpeg",
+          "alt": "A NAMI International School student lunging during a cone drill on the school sports court as teammates watch.",
+          "width": 1600,
+          "height": 686
         },
         "overview": [
           "The NAMI Sports Club is dedicated to building strong physical health, stamina, and camaraderie among students. We believe sports teach values that extend far beyond the pitch — resilience under pressure, strategic thinking, mutual trust, and humble victory.",
@@ -225,10 +232,16 @@ add_filter(
         "tagline": "Igniting imagination, storytelling, poetic expression, visual arts, and literary appreciation.",
         "metaDescription": "Explore creative writing, fine arts, drama, poetry, and publishing with the NAMI International School Art and Literature Club.",
         "coverImage": {
-          "src": "/gallery/Art and literature/Art Competition/20251224_101654.jpg",
-          "alt": "Students showcasing artistic creativity and live painting during the school art competition.",
-          "width": 4000,
-          "height": 3000
+          "src": "/clubs/arts and literature card.jpeg",
+          "alt": "A young NAMI International School student smiling with a red-painted hand after a handprint art activity.",
+          "width": 1087,
+          "height": 1447
+        },
+        "heroImage": {
+          "src": "/clubs/arts and literature hero.jpeg",
+          "alt": "NAMI International School children gathered around a table watching a hands-on art and craft activity.",
+          "width": 1600,
+          "height": 686
         },
         "overview": [
           "The Art and Literature Club serves as the creative heartbeat of NAMI International School. It is an open studio and salon where young authors, poets, painters, illustrators, and theatrical performers converge to celebrate the beauty of human expression.",
@@ -331,10 +344,16 @@ add_filter(
         "tagline": "Orchestrating memorable school functions, cultural galas, assemblies, and stage productions.",
         "metaDescription": "Learn public relations, stage lighting, sound engineering, logistics, and executive event coordination with NAMI Event Management Club.",
         "coverImage": {
-          "src": "/gallery/Event Management/Award & Cultural/DSC08026.JPG",
-          "alt": "NAMI International School auditorium stage and cultural performance prepared for a grand student production.",
-          "width": 4734,
-          "height": 4000
+          "src": "/clubs/event club card.jpeg",
+          "alt": "Students in formal wear with event lanyards taking part in an audience discussion, one speaking into a microphone.",
+          "width": 1536,
+          "height": 1024
+        },
+        "heroImage": {
+          "src": "/clubs/school event management club.jpeg",
+          "alt": "Teachers on the NAMI International School auditorium stage at the Happy Children's Day 2026 programme.",
+          "width": 1600,
+          "height": 686
         },
         "overview": [
           "The Event Management Club is the powerhouse behind every major event, assembly, cultural festival, and ceremony at NAMI International School. Students learn the intricate arts of event design, timeline planning, sound engineering, backstage coordination, and hospitality management.",
@@ -437,10 +456,16 @@ add_filter(
         "tagline": "Cultivating empathy, humanitarian outreach, environmental stewardship, and civic responsibility.",
         "metaDescription": "Engage in community service camps, environmental tree plantation, disaster relief drives, and social welfare with NAMI Social Service Club.",
         "coverImage": {
-          "src": "/gallery/Social Service Club/Donation Camp/4-upright.jpg",
-          "alt": "NAMI International School students distributing relief materials during a community service outreach camp.",
-          "width": 1800,
-          "height": 2400
+          "src": "/clubs/social club card.jpeg",
+          "alt": "NAMI International School students in traditional Nepali dress smiling together in a classroom.",
+          "width": 1448,
+          "height": 1086
+        },
+        "heroImage": {
+          "src": "/clubs/social club.jpeg",
+          "alt": "NAMI students in gloves and masks gathered outside the campus for a clean-up drive, with garbage bags and drinking water.",
+          "width": 1600,
+          "height": 686
         },
         "overview": [
           "Rooted in the NAMI philosophy that education must contribute meaningfully to society, the Social Service Club instills deep civic consciousness and active compassion in every member. We believe that true education is measured by how effectively we uplift those around us.",
@@ -543,10 +568,16 @@ add_filter(
         "tagline": "Exploring scientific frontiers, robotics, software coding, and experimental discovery.",
         "metaDescription": "Build robots, code software, conduct laboratory experiments, and innovate at the NAMI International School Science and Technology Club.",
         "coverImage": {
-          "src": "/gallery/Science & Tech/bio Excursion/IMG-4c57ac4b6ca59fd28fd1d147218f6fe3-V.jpg",
-          "alt": "Students conducting biological field research and science experiments in the advanced NAMI science laboratory.",
+          "src": "/clubs/science and tech card.jpeg",
+          "alt": "NAMI International School students showing their science models, including a layers-of-the-atmosphere model, at a model-making event.",
           "width": 1600,
-          "height": 900
+          "height": 901
+        },
+        "heroImage": {
+          "src": "/clubs/science and tech hero.jpeg",
+          "alt": "NAMI International School students doing filtration experiments in the school science laboratory.",
+          "width": 1600,
+          "height": 686
         },
         "overview": [
           "The Science and Technology Club is a dynamic incubator for young inventors, coders, aspiring engineers, and curious researchers. From building autonomous micro-robots and writing Python algorithms to conducting chemical titration experiments, members explore how STEM transforms our world.",
@@ -658,6 +689,12 @@ add_filter(
           "width": 1190,
           "height": 793
         },
+        "heroImage": {
+          "src": "",
+          "alt": "",
+          "width": 0,
+          "height": 0
+        },
         "overview": [
           "The Social Services Club at NAMI College embodies the belief that academic brilliance must be matched with social empathy and active civic leadership. The club offers Cambridge A-Level students a structured platform to understand social realities and organize tangible relief for underserved communities across Nepal.",
           "From running annual educational and winter-relief camps in remote hill districts to hosting blood donation drives and partnering with local grassroots shelters, members develop profound empathy, logistical acumen, and ethical leadership."
@@ -763,6 +800,12 @@ add_filter(
           "alt": "NAMI College A-Levels basketball championship awards ceremony in the campus auditorium.",
           "width": 1500,
           "height": 1000
+        },
+        "heroImage": {
+          "src": "",
+          "alt": "",
+          "width": 0,
+          "height": 0
         },
         "overview": [
           "The Sports Club at NAMI College is dedicated to cultivating physical fitness, mental toughness, and athletic sportsmanship among A-Level students. Balancing rigorous Cambridge academics with energetic physical play, the club provides an outlet for students to excel on courts, fields, and tracks.",
@@ -870,8 +913,14 @@ add_filter(
           "width": 4000,
           "height": 3000
         },
+        "heroImage": {
+          "src": "",
+          "alt": "",
+          "width": 0,
+          "height": 0
+        },
         "overview": [
-          "The Arts and Crafts Club at NAMI College provides a vibrant open studio for young artists, sculptors, graphic illustrators, and craftspeople. It celebrates aesthetic creativity as a vital counterpoint to academic rigor, encouraging students to experiment with diverse mediums and techniques.",
+          "The Arts and Crafts Club at NAMI College provides a vibrant open studio for young artists, sculptors, graphic illustrators, and craftspeople. It celebrates aesthetic creativity as a vital counterpoint to academic rigour, encouraging students to experiment with diverse mediums and techniques.",
           "Members collaborate on fine art exhibitions, theatrical stage set designs, festive campus installations, pottery and clay sculpting, and visual branding for major college festivals."
         ],
         "quoteText": "Art is the voice of imagination. Craft is the disciplined hand that brings vision into tangible reality.",

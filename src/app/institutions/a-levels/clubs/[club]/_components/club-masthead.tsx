@@ -10,6 +10,7 @@ import { ArrowLeftIcon } from "@/lib/icons";
 const COVER_SIZES = "(min-width: 1024px) 1200px, 100vw";
 
 export function ClubMasthead({ club }: { readonly club: ALevelsClub }) {
+  const hero = club.heroImage ?? club.coverImage;
   return (
     <section className="gutter-x pt-2.5 sm:pt-3.5 lg:pt-4 pb-10 sm:pb-14">
       <div className="mx-auto max-w-page">
@@ -63,14 +64,14 @@ export function ClubMasthead({ club }: { readonly club: ALevelsClub }) {
             {/* Background Image */}
             <div className="relative aspect-16/9 sm:aspect-21/9 min-h-[340px] sm:min-h-[420px] lg:min-h-[460px] w-full">
               <Image
-                alt={club.coverImage.alt}
+                alt={hero.alt}
                 className="size-full object-cover opacity-85"
                 fetchPriority="high"
-                height={club.coverImage.height}
+                height={hero.height}
                 loading="eager"
                 sizes={COVER_SIZES}
-                src={club.coverImage.src}
-                width={club.coverImage.width}
+                src={hero.src}
+                width={hero.width}
               />
               {/* Dark Gradient Overlay for optimal readability */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/20" />

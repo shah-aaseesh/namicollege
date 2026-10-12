@@ -6,7 +6,11 @@ import {
 import { fetchCmsPage } from "../../client";
 import { type CmsCollectionItem, fetchCmsCollection } from "../../collections";
 import { mergeWithDefaults } from "../../merge";
-import { documentsDefaults, documentTemplate } from "./defaults";
+import {
+  documentImports,
+  documentsDefaults,
+  documentTemplate,
+} from "./defaults";
 import type { DocumentFields, DocumentsPageContent } from "./types";
 
 export type * from "./types";
@@ -25,7 +29,7 @@ export const getDocumentsPage = cache(
   async (): Promise<DocumentsPageContent> => {
     return mergeWithDefaults(
       documentsDefaults,
-      await fetchCmsPage("documents"),
+      await fetchCmsPage("documents", documentsDefaults),
     );
   },
 );
@@ -69,7 +73,7 @@ function documentOf(
 export const getDocumentsData = cache(async () => {
   const [page, collection] = await Promise.all([
     getDocumentsPage(),
-    fetchCmsCollection(DOCUMENT_COLLECTION, documentTemplate),
+    fetchCmsCollection(DOCUMENT_COLLECTION, documentTemplate, documentImports),
   ]);
   const fromCms =
     collection?.items.map(documentOf).filter((doc) => doc !== null) ?? [];

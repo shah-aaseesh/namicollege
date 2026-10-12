@@ -7,5 +7,8 @@ import type { ContactPageContent } from "./types";
 export type * from "./types";
 
 export const getContactPage = cache(async (): Promise<ContactPageContent> => {
-  return mergeWithDefaults(contactDefaults, await fetchCmsPage("contact"));
+  return mergeWithDefaults(
+    contactDefaults,
+    await fetchCmsPage("contact", contactDefaults),
+  );
 });

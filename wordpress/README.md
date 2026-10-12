@@ -27,6 +27,7 @@ every piece is a PHP snippet pasted into the **Code Snippets** plugin
 | `17-alumni.php` | Alumni stories collection + page text; "Share Your Story" submissions become draft stories | Done |
 | `18-student-life.php` | `/student-life` heading + numbered sections (also feeds `content.getCampusLife()`) | Done |
 | `19-editor-access.php` | Non-admins see only NAMI menus + Media + Profile; other screens redirect; Dashboard = "Edit the website" links | Done |
+| `20-headless-frontend.php` | Redirects WordPress's own public pages to the website, robots "Disallow: /" + noindex, no WP sitemap, hides /wp/v2/users from visitors | Done |
 | — | `/privacy`, `/terms` | Not needed (owner's decision, 2026-10-09) |
 
 ## How it works
@@ -46,6 +47,32 @@ every piece is a PHP snippet pasted into the **Code Snippets** plugin
   `pages/{slug}/{types,defaults,index}.ts` per page. If WordPress is down the site
   shows its bundled content.
 
+## Code changes reach WordPress (core 1.3)
+
+Content changed in code (text, image paths, list items) shows in WordPress after a deploy,
+without re-pasting snippets. The newest change wins, field by field:
+
+- `GET /api/cms/content` (header `x-nami-secret`) serves `CODE_PAGES` + `CODE_COLLECTIONS`
+  (`src/lib/cms/code-content.ts`) and a fingerprint of each (`code-hash.ts`). Core stores it in
+  the `nami_cms_code` option and shows it in the edit screens; snippet defaults are only the
+  fallback until the first fetch.
+- Each save stores the code's section at that moment as its base (`nami_cms_base_{slug}`).
+  `resolveEdit` (`src/lib/cms/resolve.ts`) and `nami_cms_resolve` (core) apply the same rules:
+  edit = base → code; code = base → edit; both changed → code (it changed after the edit),
+  recursing into groups of fields and into lists while all three have the same length.
+- The website asks for `?format=2` and gets only saved sections + bases, then resolves them
+  against the code it is running, so a deploy shows at once. Older cores ignore `format`.
+- Every read sends `x-nami-code`. On a new fingerprint core schedules a fetch (WP-Cron), retried
+  every 2 minutes while the deploy is still building; fingerprints that never go live (local,
+  preview) are ignored after 30 minutes. Also fetched when an editor opens a NAMI screen (at most
+  every 5 minutes), hourly, and via Settings → NAMI CMS → "Check for code changes now".
+- Collections: bundled items carry a stable `key` (the source item's id). Imported items keep
+  `_nami_key` and `_nami_base`; a fetch updates their title/fields with the same rules and adds
+  items whose key is new to the code (`nami_cms_collection_known_{slug}`), so deleted items and
+  "Start with only this list" stay as editors left them. Items removed from code are not deleted.
+  Items imported before 1.3 are matched once by title.
+- New fields or sections still need the page snippet re-pasted (the snippet defines the form).
+
 ## Adding the next page (recipe)
 
 1. Read the page's `page.tsx` and every component/copy file it uses; list what is visible.
@@ -53,12 +80,13 @@ every piece is a PHP snippet pasted into the **Code Snippets** plugin
    (`CmsImage`, `CmsLink`, `CmsTestimonials` from `src/lib/cms`).
 3. `defaults.ts` — build the content **from the existing copy files** so nothing changes
    visually. If a default list is empty, export a `shape` with one sample item (see school).
-4. `index.ts` — `getXPage = cache(() => mergeWithDefaults(defaults, await fetchCmsPage(slug)))`.
+4. `index.ts` — `getXPage = cache(() => mergeWithDefaults(defaults, await fetchCmsPage(slug, defaults)))`.
 5. Change components to take props instead of hardcoded text/constants; use index-based
    keys for CMS lists; hide optional bits when empty. `generateMetadata` reads `seo`.
 6. `wordpress/snippets/NN-<slug>-page.php` — copy an existing page snippet; field keys
    must match `types.ts`; leave the `<<<'NAMI_JSON'` block as `{}`.
-7. Add the page to `scripts/sync-cms-defaults.ts`, run `npm run cms:defaults`.
+7. Add the page to `CODE_PAGES` in `src/lib/cms/code-content.ts` and to
+   `scripts/sync-cms-defaults.ts`, run `npm run cms:defaults`.
 8. Check: `npx tsc --noEmit -p .`, `npx biome check --write <changed paths>`, `npx next build`.
 9. Don't import data from a `"use client"` file into `defaults.ts` — on the server it is a
    client reference, not data. Move the data into a plain `.ts` file first (see `mou-partners.ts`).

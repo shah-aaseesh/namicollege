@@ -55,7 +55,7 @@ export const DOCUMENTS: readonly OfficialDocument[] = [
       "Official admission form for Cambridge Assessment International Education (CAIE) AS and A Level programmes across Science, Business, and Humanities streams at NAMI College.",
     fileSrc: "/documents/NAMI_College_A_Level_Application_Form.pdf",
     fileType: "PDF",
-    fileSize: "255 KB",
+    fileSize: "285 KB",
     updatedDate: "Academic Intake 2026",
     isFeatured: true,
   },
@@ -66,10 +66,10 @@ export const DOCUMENTS: readonly OfficialDocument[] = [
     categoryLabel: "Admissions Form",
     institution: "School",
     description:
-      "Official enrollment form for National Examinations Board (NEB) Grade XI & XII (+2 Science & Management) at NAMI International School.",
+      "Official enrolment form for National Examinations Board (NEB) Grade XI & XII (+2 Science & Management) at NAMI International School.",
     fileSrc: "/documents/Application_form_nami_international_school_plus_2.pdf",
     fileType: "PDF",
-    fileSize: "3.03 MB",
+    fileSize: "3.08 MB",
     updatedDate: "Academic Intake 2026",
   },
   {
@@ -79,11 +79,11 @@ export const DOCUMENTS: readonly OfficialDocument[] = [
     categoryLabel: "Admissions Form",
     institution: "School",
     description:
-      "Official enrollment and student record application form for primary learners (Grades I through VII) at NAMI International School.",
+      "Official enrolment and student record application form for primary learners (Grades I through VII) at NAMI International School.",
     fileSrc:
       "/documents/Nami International School (Primary) Admission form.pdf",
     fileType: "PDF",
-    fileSize: "135 KB",
+    fileSize: "226 KB",
     updatedDate: "Academic Intake 2026",
   },
 ];

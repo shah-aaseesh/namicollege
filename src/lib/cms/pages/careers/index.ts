@@ -23,7 +23,7 @@ const EMPLOYMENT_TYPES: readonly EmploymentType[] = [
 export const getCareersPage = cache(async (): Promise<CareersPageContent> => {
   const merged = mergeWithDefaults(
     careersDefaults,
-    await fetchCmsPage("careers"),
+    await fetchCmsPage("careers", careersDefaults),
   );
   return {
     ...merged,

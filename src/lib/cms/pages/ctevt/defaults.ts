@@ -8,14 +8,14 @@ export const ctevtDefaults: CtevtPageContent = {
   seo: {
     title: "CTEVT Affiliation & Vocational Programmes | NAMI",
     description:
-      "NAMI is a CTEVT-affiliated institution authorized to conduct approved short-term vocational training programs in the hospitality sector in Kathmandu, Nepal.",
+      "NAMI is a CTEVT-affiliated institution authorised to conduct approved short-term vocational training programmes in the hospitality sector in Kathmandu, Nepal.",
   },
   hero: {
     label: "Vocational & Technical Education",
     title: "CTEVT Affiliation",
     subtitle: "Council for Technical Education and Vocational Training",
     intro:
-      "**Naaya Aayam Multi-Disciplinary Institute Pvt. Ltd. (NAMI)** is a CTEVT-affiliated institution authorized to conduct approved short-term vocational training programs in the hospitality sector.",
+      "**Naaya Aayam Multi-Disciplinary Institute Pvt. Ltd. (NAMI)** is a CTEVT-affiliated institution authorised to conduct approved short-term vocational training programmes in the hospitality sector.",
     logo: {
       src: "/logos/brand/ctevt-logo-removebg-preview.png",
       alt: "CTEVT Logo",
@@ -30,11 +30,11 @@ export const ctevtDefaults: CtevtPageContent = {
   },
   programmes: {
     label: "Approved Courses",
-    title: "CTEVT-Approved Training Programs",
+    title: "CTEVT-Approved Training Programmes",
     description:
-      "NAMI is authorized to conduct 5 specialized short-term vocational training programs tailored for the growing hospitality and service industries.",
-    programmeHeading: "Training Program",
-    sectorHeading: "Sector & Specialization",
+      "NAMI is authorised to conduct 5 specialised short-term vocational training programmes tailored for the growing hospitality and service industries.",
+    programmeHeading: "Training Programme",
+    sectorHeading: "Sector & Specialisation",
     durationHeading: "Duration",
     items: [
       {
@@ -69,7 +69,7 @@ export const ctevtDefaults: CtevtPageContent = {
     title: "About CTEVT",
     paragraphs: [
       "The **Council for Technical Education and Vocational Training (CTEVT)** is Nepal's national apex body for technical and vocational education and training. CTEVT is responsible for areas including curriculum development, quality control, skills standards, skills testing and the development of skilled human resources.",
-      "Through its affiliation, NAMI conducts approved short-term training programs following the applicable CTEVT curriculum, standards and institutional requirements.",
+      "Through its affiliation, NAMI conducts approved short-term training programmes following the applicable CTEVT curriculum, standards and institutional requirements.",
     ],
     footerLeft: "Accreditation: National Standards",
     footerRight: "CTEVT Nepal",
@@ -83,7 +83,7 @@ export const ctevtDefaults: CtevtPageContent = {
         value: "Naaya Aayam Multi-Disciplinary Institute Pvt. Ltd.",
       },
       { label: "Address", value: "Jorpati-07, Kathmandu, Nepal" },
-      { label: "Type of Approval", value: "Short-Term Training Programs" },
+      { label: "Type of Approval", value: "Short-Term Training Programmes" },
       {
         label: "Approval Period",
         value: "Two years, as specified in the CTEVT approval letter",
@@ -102,7 +102,7 @@ export const ctevtDefaults: CtevtPageContent = {
     label: "Quality Framework",
     title: "Training Standards",
     description:
-      "NAMI's approved programs are conducted in strict accordance with the requirements specified by CTEVT:",
+      "NAMI's approved programmes are conducted in strict accordance with the requirements specified by CTEVT:",
     items: [
       "Delivery of training according to the approved CTEVT curriculum",
       "Maintenance of required physical and educational facilities",
@@ -118,7 +118,7 @@ export const ctevtDefaults: CtevtPageContent = {
     label: "Career Readiness",
     title: "Skills for the Hospitality Industry",
     paragraphs: [
-      "NAMI's CTEVT-approved programs focus on developing practical skills relevant to hospitality and service-sector employment. The programs provide learners with structured training in areas including **culinary operations, hotel services, coffee preparation, beverage service and housekeeping**.",
+      "NAMI's CTEVT-approved programmes focus on developing practical skills relevant to hospitality and service-sector employment. The programmes provide learners with structured training in areas including **culinary operations, hotel services, coffee preparation, beverage service and housekeeping**.",
       "Through practical learning and occupation-specific training, NAMI aims to equip learners with skills that can be applied in professional hospitality environments.",
     ],
     tags: [
@@ -133,25 +133,25 @@ export const ctevtDefaults: CtevtPageContent = {
     label: "Institutional Certification",
     title: "Official Recognition",
     subtitle:
-      "CTEVT Affiliated Institution — Approved Short-Term Training Programs",
+      "CTEVT Affiliated Institution — Approved Short-Term Training Programmes",
     description:
-      "NAMI's CTEVT affiliation and approved programs are documented through the official approval issued by the Council for Technical Education and Vocational Training.",
+      "NAMI's CTEVT affiliation and approved programmes are documented through the official approval issued by the Council for Technical Education and Vocational Training.",
     facts: [
-      { label: "Approved Programs", value: "5" },
+      { label: "Approved Programmes", value: "5" },
       { label: "Training Duration", value: "390–484 Hours" },
-      { label: "Approval", value: "CTEVT Short-Term Training Programs" },
+      { label: "Approval", value: "CTEVT Short-Term Training Programmes" },
     ],
     letterButton: {
       label: "View CTEVT Approval Letter",
       href: "/hero/ctevt/ctevt-hero.jpeg",
     },
-    contactButton: { label: "Inquire About Admissions", href: "/contact" },
+    contactButton: { label: "Enquire About Admissions", href: "/contact" },
   },
   commitment: {
     label: "Our Commitment",
     title: "Learn. Practice. Build Skills.",
     description:
-      "NAMI is committed to maintaining the standards and requirements associated with its CTEVT-approved programs and to providing learners with quality vocational education, practical training and industry-relevant skills.",
+      "NAMI is committed to maintaining the standards and requirements associated with its CTEVT-approved programmes and to providing learners with quality vocational education, practical training and industry-relevant skills.",
     button: { label: "Apply for Vocational Training", href: "/admissions" },
   },
 };

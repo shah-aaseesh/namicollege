@@ -35,15 +35,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return createMetadata({ path: "/institutions/a-levels" });
   }
 
+  const hero = club.heroImage ?? club.coverImage;
   return createMetadata({
     path: `/institutions/a-levels/clubs/${club.slug}`,
     title: `${club.title} | NAMI College A-Levels`,
     description: club.metaDescription,
     image: {
-      url: club.coverImage.src,
-      width: club.coverImage.width,
-      height: club.coverImage.height,
-      alt: club.coverImage.alt,
+      url: hero.src,
+      width: hero.width,
+      height: hero.height,
+      alt: hero.alt,
     },
   });
 }

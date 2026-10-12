@@ -65,7 +65,7 @@ const institutionCards: HomeInstitutionCard[] = [
   }),
   {
     name: "Vocational & Technical Training",
-    badge: `Approved ${vocationalApproval.approvedYear}`,
+    badge: `Approved in ${vocationalApproval.approvedYear}`,
     stage: "CTEVT Approved Short-Term Vocational Programmes",
     highlights: [
       "Council for Technical Education & Vocational Training",
@@ -151,7 +151,7 @@ export const homeDefaults: HomePageContent = {
   ceo: {
     label: ceoMessage.eyebrow,
     paragraphs: paragraphsOf(ceoMessage.message),
-    name: ceoLeader?.name ?? "",
+    name: ceoMessage.signature,
     title: ceoLeader?.title ?? "",
     portrait: image(ceoLeader?.portrait ?? ceoMessage.portrait),
   },

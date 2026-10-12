@@ -8,7 +8,10 @@ import type { AboutPageContent } from "./types";
 export type * from "./types";
 
 export const getAboutPage = cache(async (): Promise<AboutPageContent> => {
-  const merged = mergeWithDefaults(aboutDefaults, await fetchCmsPage("about"));
+  const merged = mergeWithDefaults(
+    aboutDefaults,
+    await fetchCmsPage("about", aboutDefaults),
+  );
   return {
     ...merged,
     hero: {

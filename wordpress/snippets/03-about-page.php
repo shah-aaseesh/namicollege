@@ -230,10 +230,10 @@ add_filter(
     "images": [
       {
         "image": {
-          "src": "/sections/general/download.png",
-          "alt": "NAMI campus facilities, learning spaces, and academic environments",
-          "width": 1200,
-          "height": 399
+          "src": "/hero/about/Nami Education_ Learn, Grow, Belong.png",
+          "alt": "NAMI Education, Learn, Grow, Belong: graduates in caps and gowns, students in traditional Himalayan dress, a student stretching on the lawn, and the NAMI International School building beneath snow-capped mountains.",
+          "width": 1774,
+          "height": 887
         }
       }
     ]
@@ -245,10 +245,10 @@ add_filter(
       "The institution places strong emphasis on holistic development, integrating rigorous academic learning with extracurricular activities, leadership development and community engagement. By fostering an inclusive and supportive learning environment, NAMI prepares students not only for academic success but also for meaningful contributions to society and the global workforce. Its dedicated faculty, modern facilities and collaborative partnerships further enhance the educational experience, making NAMI a preferred choice for students seeking quality education in Nepal."
     ],
     "image": {
-      "src": "/sections/general/7.jpg",
-      "alt": "NAMI students and faculty on campus",
-      "width": 1600,
-      "height": 1062
+      "src": "/hero/about/about since 2012.jpeg",
+      "alt": "Students filling the NAMI auditorium for a Global Career Opportunities for Nepali Youth seminar.",
+      "width": 1552,
+      "height": 1013
     }
   },
   "leadership": {
@@ -276,7 +276,7 @@ add_filter(
       },
       {
         "badge": "Message from the Chief Executive Officer",
-        "name": "Mr. Pranil Pandey, FCCA",
+        "name": "Pranil Pandey, FCCA, MBA",
         "title": "Chief Executive Officer, NAMI Group of Companies",
         "credentials": "FCCA (UK) · Master's in Management",
         "portrait": {
@@ -285,12 +285,13 @@ add_filter(
           "width": 800,
           "height": 1000
         },
-        "quote": "At NAMI, we align world-class academic frameworks with experiential learning, cultivating future-ready professionals and compassionate global citizens.",
+        "quote": "",
         "paragraphs": [
-          "Education in the 21st century demands more than conventional classroom instruction; it requires dynamic adaptability, analytical rigor, hands-on technological literacy, and deeply ingrained social responsibility. At NAMI, every academic programme is meticulously structured to meet these imperatives.",
-          "Having been part of NAMI's journey since 2015, I take immense pride in our evolution into an institution recognized for academic excellence, innovative pedagogy, and strong industry-academia linkages. From our Primary and Middle School divisions to our Cambridge A-Levels, CTEVT skill-based vocational programmes, and international undergraduate degrees, we foster an environment where students actively discover their intellectual and creative potential.",
-          "We continue to invest extensively in modern learning technologies, advanced science and computing laboratories, Pearson VUE testing facilities, and comprehensive career counseling. Our dedicated faculty members bring international best practices into every classroom, mentoring students to turn curiosity into meaningful scholarship.",
-          "We warmly invite students and parents to experience the NAMI difference — where global opportunities and grounded values converge to build extraordinary futures."
+          "Since our establishment in 2012, NAMI has grown with a clear purpose: to create opportunities for quality, world-class education in Nepal and to contribute to the development of capable, responsible, and confident individuals.",
+          "For us, education is not limited to academic achievement. It is about developing people who can think critically, adapt to change, recognize opportunities, work with others, and use their knowledge and abilities with integrity. Across our schools and higher education programmes, we strive to provide an environment where students can discover their strengths, pursue their aspirations, and develop the confidence to shape their own futures.",
+          "At the heart of our work is our belief in people. We value knowledge and achievement alongside integrity, empathy, creativity, leadership, collaboration, and responsibility. We want our students and graduates to leave NAMI not only with qualifications and skills, but with the judgement, confidence, and sense of purpose to use them well.",
+          "We also believe that meaningful education is a shared responsibility. Our students, parents, educators, staff, alumni, partners, and the wider NAMI community each contribute to the institution we continue to build. By working together, we can create an environment that encourages learning, supports growth, values different perspectives, and prepares individuals to participate positively in an evolving society.",
+          "NAMI was founded with the belief that world-class education should have a place in Nepal. Today, that belief continues to shape our ambitions. The next chapter is not simply about becoming larger, but about becoming more consequential—expanding opportunity, raising standards, strengthening partnerships, and creating an institution whose influence reaches well beyond its campuses. I believe that what we build today will define what NAMI can contribute tomorrow."
         ]
       }
     ]
@@ -323,7 +324,7 @@ add_filter(
           "width": 288,
           "height": 96
         },
-        "description": "Formally incorporated with dedicated multi-storey academic wings, advanced science laboratories, and campus resource centers."
+        "description": "Formally incorporated with dedicated multi-storey academic wings, advanced science laboratories, and campus resource centres."
       },
       {
         "year": "2014",
@@ -375,7 +376,7 @@ add_filter(
           "width": 288,
           "height": 96
         },
-        "description": "Officially authorized as a Pearson VUE testing center, enabling on-campus computer-based international IT certifications, academic tests, and global licensure exams."
+        "description": "Officially authorized as a Pearson VUE testing centre, enabling on-campus computer-based international IT certifications, academic tests, and global licensure exams."
       },
       {
         "year": "2025–2026",
@@ -402,22 +403,22 @@ add_filter(
       "height": 408
     },
     "paragraphs": [
-      "The lotus flower, a representation of rebirth, blossoms in the dark and becomes a lovely plant in the NAMI logo. NAMI's core values are represented by each of the lotus's five petals.",
-      "The heart, or \"Hridaya\", is symbolised by the red lotus in Sanskrit as love, passion, kindness and compassion. A fully blossomed red lotus represents the compassion and warmth of the human spirit. As our graduates enter the real world, we aim for NAMIANS to embody the spirit reflected in our logo."
+      "The lotus flower symbolises rebirth. It blossoms in darkness, and in the NAMI logo it represents growth and transformation. Each of the lotus's five petals represents one of NAMI's core values.",
+      "In Sanskrit, \"Hridaya\" means heart. The red lotus represents love, passion, kindness and compassion, and a fully blossomed red lotus reflects the warmth of the human spirit. As our graduates enter the real world, we aim for NAMIANS to embody the spirit reflected in our logo."
     ],
     "valuesTitle": "The Five Petals & Core Values",
     "values": [
       {
         "name": "Enlightenment",
-        "meaning": "Ensures a complete and holistic development."
+        "meaning": "Promotes complete and holistic development."
       },
       {
         "name": "Knowledge",
-        "meaning": "The skills and awareness acquired through experience with situations and facts."
+        "meaning": "The skills and awareness gained through experience, learning and engagement with the world."
       },
       {
         "name": "Purity of Heart and Mind",
-        "meaning": "Removes impurities from thoughts and thinking, promoting ethics and values for creating a compassionate society."
+        "meaning": "Encourages clarity of thought and promotes the ethics and values needed to build a compassionate society."
       },
       {
         "name": "Self-Awareness",
@@ -445,8 +446,9 @@ add_filter(
     "label": "The swan carries the same five values.",
     "title": "The Mascot",
     "paragraphs": [
-      "NAMI's mascot is a graceful swan, representing the spirit and values of NAMI. With its snow-white feathers and elegant posture, the swan symbolizes purity, resilience, transformation, and excellence. Its warm and friendly expression reflects NAMI's welcoming community. Surrounded by a vibrant lotus flower inspired by the NAMI logo, the mascot embodies growth, knowledge, and nurturing. The lotus petals gently cradle the swan, symbolizing the supportive and interconnected nature of the NAMI family.",
-      "With its wings slightly spread, the swan signifies NAMI students' readiness to soar toward new opportunities. The wings carry the same core values as the petals of the lotus above. The mascot was designed by a NAMI student, showcasing the creativity and spirit of the NAMI community."
+      "NAMI's mascot is a graceful swan, representing the spirit and values of NAMI. With its snow-white feathers and elegant posture, the swan symbolises purity, resilience, transformation, and excellence. Its warm and friendly expression reflects NAMI's welcoming community. Surrounded by a vibrant lotus flower inspired by the NAMI logo, the mascot embodies growth, knowledge, and nurturing. The lotus petals gently cradle the swan, symbolising the supportive and interconnected nature of the NAMI family.",
+      "With its wings slightly spread, the swan signifies NAMI students' readiness to soar toward new opportunities. The wings carry the same core values as the petals of the lotus above.",
+      "The mascot was designed by a NAMI student, showcasing the creativity and spirit of the NAMI community."
     ],
     "image": {
       "src": "/mascot/Mascot final.png",
@@ -458,7 +460,7 @@ add_filter(
   "awards": {
     "label": "",
     "title": "Awards & Honours",
-    "description": "Distinctions the institution and its students have carried home, and the bodies that conferred them.",
+    "description": "Recognition received by the institution and its students, along with the organisations that conferred the awards.",
     "emptyState": "NAMI is compiling its awards record — this space is reserved for it.",
     "items": [
       {

@@ -27,7 +27,7 @@ export function SharedHeroSlider({
   readonly label: string;
   readonly slides: readonly SharedHeroSlide[];
 }) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [_selectedIndex, setSelectedIndex] = useState(0);
   const hasMany = slides.length > 1;
 
   const handleSetApi = (api: CarouselApi) => {
@@ -60,8 +60,7 @@ export function SharedHeroSlider({
               <Image
                 alt={slide.alt}
                 className={cn(
-                  "size-full object-cover object-left-top origin-top-left transition-transform duration-[3500ms] ease-out",
-                  index === selectedIndex ? "scale-[1.025]" : "scale-100",
+                  "size-full object-cover object-left-top origin-top-left",
                 )}
                 draggable={false}
                 fetchPriority={index === 0 ? "high" : "auto"}

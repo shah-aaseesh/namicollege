@@ -114,7 +114,7 @@ export function InstitutionClubsSection({
                     <div className="relative aspect-16/11 w-full overflow-hidden bg-neutral-900">
                       <Image
                         alt={club.coverImage.alt}
-                        className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                        className="size-full origin-top-left object-cover object-left-top transition-transform duration-500 ease-out group-hover:scale-105"
                         fill
                         loading="lazy"
                         sizes={CARD_SIZES}

@@ -25,7 +25,7 @@ export type SchoolDayCopy = {
 };
 
 const PHOTO_SIZES =
-  "(min-width: 1568px) 300px, (min-width: 1024px) 240px, (min-width: 640px) 200px, 160px";
+  "(min-width: 1280px) 240px, (min-width: 1024px) 208px, 192px";
 
 export function SchoolDay({
   copy,
@@ -51,12 +51,12 @@ export function SchoolDay({
           <ul className="grid border-t border-white/15 lg:grid-cols-2 lg:gap-x-14 xl:gap-x-16">
             {copy.campus.map((entry, index) => (
               <li
-                className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 border-b border-white/15 py-4 sm:py-6"
+                className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 lg:gap-7 border-b border-white/15 py-4 sm:py-6"
                 // biome-ignore lint/suspicious/noArrayIndexKey: ordered CMS list
                 key={`${index}-${entry.title}`}
               >
                 {entry.photo && (
-                  <div className="relative aspect-4/3 hidden sm:block sm:h-30 sm:w-40 lg:h-33 lg:w-44 shrink-0 overflow-hidden rounded-2xl shadow-md bg-black/20">
+                  <div className="relative aspect-4/3 hidden sm:block sm:h-36 sm:w-48 lg:h-39 lg:w-52 xl:h-45 xl:w-60 shrink-0 overflow-hidden rounded-2xl shadow-md bg-black/20">
                     <Image
                       alt={entry.photo.alt}
                       className="h-full w-full object-cover object-left-top"

@@ -237,114 +237,58 @@ add_filter(
     "slides": [
       {
         "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM-watermarked.jpg",
-          "alt": "NAMI campus life and academic excellence.",
-          "width": 1500,
-          "height": 1000
+          "src": "/hero/home page hero section/Graduates Celebrate Class of 2025_22_nami-watermarked-75-opacity.webp",
+          "alt": "NAMI Class of 2025 graduates celebrate at convocation ceremony tossing graduation caps into the air.",
+          "width": 2400,
+          "height": 1140
         }
       },
       {
         "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (12)-watermarked.jpg",
-          "alt": "NAMI student activities and learning spaces.",
-          "width": 1500,
-          "height": 1000
+          "src": "/hero/home page hero section/22_nami-watermarked-75-opacity.webp",
+          "alt": "NAMI Climate AI Launchpad participants, mentors, and winners gathered on stage.",
+          "width": 2400,
+          "height": 1140
         }
       },
       {
         "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (13)-watermarked.jpg",
-          "alt": "NAMI campus community and student experiences.",
-          "width": 1500,
-          "height": 1000
+          "src": "/hero/home page hero section/Collaborative Classroom Learning_nami-watermarked-75-opacity.webp",
+          "alt": "Young students engaged in collaborative classroom learning and activities at NAMI International School.",
+          "width": 2400,
+          "height": 1140
         }
       },
       {
         "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (15)-watermarked.jpg",
-          "alt": "NAMI faculty and practical academic workshops.",
-          "width": 1500,
-          "height": 1000
+          "src": "/hero/home page hero section/Festive Welcome Program Dance Performance_nami-watermarked-75-opacity.webp",
+          "alt": "Students performing a traditional dance during the NAMI Welcome Program.",
+          "width": 2400,
+          "height": 1140
         }
       },
       {
         "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (18)-watermarked.jpg",
-          "alt": "NAMI library and collaborative study areas.",
-          "width": 1500,
-          "height": 1000
+          "src": "/hero/home page hero section/Sandy Beach Resort Group Portrait_nami-watermarked-75-opacity.webp",
+          "alt": "NAMI students and faculty gathered for a group portrait during an academic excursion to Sandy Beach Resort, Sukute.",
+          "width": 2400,
+          "height": 1140
         }
       },
       {
         "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (19)-watermarked.jpg",
-          "alt": "NAMI events, conferences, and seminars.",
-          "width": 1500,
-          "height": 1000
+          "src": "/hero/home page hero section/Smiles at the School STEM Fair_nami-watermarked-75-opacity.webp",
+          "alt": "Smiling students demonstrating their interactive science and robotics projects at the NAMI School STEM Fair.",
+          "width": 2400,
+          "height": 1140
         }
       },
       {
         "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (20)-watermarked.jpg",
-          "alt": "NAMI laboratories and scientific research.",
-          "width": 1500,
-          "height": 1000
-        }
-      },
-      {
-        "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (21)-watermarked.jpg",
-          "alt": "NAMI auditorium presentations and student achievements.",
-          "width": 1500,
-          "height": 1000
-        }
-      },
-      {
-        "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (22)-watermarked.jpg",
-          "alt": "NAMI sports, courts, and extracurricular engagement.",
-          "width": 1500,
-          "height": 1000
-        }
-      },
-      {
-        "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (23)-watermarked.jpg",
-          "alt": "NAMI modern classrooms and campus infrastructure.",
-          "width": 1500,
-          "height": 1000
-        }
-      },
-      {
-        "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (24)-watermarked.jpg",
-          "alt": "NAMI campus grounds and student collaboration.",
-          "width": 1500,
-          "height": 1000
-        }
-      },
-      {
-        "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (25)-watermarked.jpg",
-          "alt": "NAMI student leadership and academic community.",
-          "width": 1500,
-          "height": 1000
-        }
-      },
-      {
-        "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.23 AM (6)-watermarked.jpg",
-          "alt": "NAMI cultural celebrations and academic events.",
-          "width": 1500,
-          "height": 1000
-        }
-      },
-      {
-        "image": {
-          "src": "/sections/general/WhatsApp Image 2026-09-27 at 10.42.23 AM (23)-watermarked.jpg",
-          "alt": "NAMI holistic education and student development.",
-          "width": 1500,
-          "height": 1000
+          "src": "/hero/home page hero section/International School Meditation Morning_nami-watermarked-75-opacity.webp",
+          "alt": "NAMI International School students practicing morning mindfulness and meditation on the school grounds.",
+          "width": 2400,
+          "height": 1140
         }
       }
     ]
@@ -461,10 +405,10 @@ add_filter(
           "Mandarin Chinese and Sanskrit Language Learning"
         ],
         "image": {
-          "src": "/hero/home/hero-1.jpg",
-          "alt": "NAMI International School campus and activities",
-          "width": 1178,
-          "height": 667
+          "src": "/hero/nami international watermarked/Nami_International_School_Facade_2400x1030_watermarked.webp",
+          "alt": "The NAMI International School building with its lotus emblem on the entrance tower.",
+          "width": 2400,
+          "height": 1030
         },
         "imageFit": "cover",
         "href": "/institutions/school",
@@ -480,10 +424,10 @@ add_filter(
           "Entry from SEE, GCSE, CBSE or equivalent"
         ],
         "image": {
-          "src": "/hero/home/hero-2.jpg",
-          "alt": "NAMI College students on campus",
-          "width": 1600,
-          "height": 1066
+          "src": "/hero/a levles hero section/NAMI_College_Last_Day_Celebration.webp",
+          "alt": "NAMI College A-Level students celebrating their last day together in front of a GCE A Level banner.",
+          "width": 2400,
+          "height": 1030
         },
         "imageFit": "cover",
         "href": "/institutions/a-levels",
@@ -499,10 +443,10 @@ add_filter(
           "Bachelors in Environmental Studies (BES) with Kathmandu University"
         ],
         "image": {
-          "src": "/hero/home/hero-3.jpg",
-          "alt": "Naaya Aayam Multi-Disciplinary Institute facilities and campus",
-          "width": 1600,
-          "height": 1066
+          "src": "/hero/naya udam watermarked ones/Graduates_Celebrate_Class_of_2025_2400x1030_NAMI_watermarked.webp",
+          "alt": "NAMI Class of 2025 graduates throwing their caps in the air at the convocation ceremony.",
+          "width": 2048,
+          "height": 878
         },
         "imageFit": "cover",
         "href": "/institutions/bachelors",
@@ -510,7 +454,7 @@ add_filter(
       },
       {
         "name": "Vocational & Technical Training",
-        "badge": "Approved 2026",
+        "badge": "Approved in 2026",
         "stage": "CTEVT Approved Short-Term Vocational Programmes",
         "highlights": [
           "Council for Technical Education & Vocational Training",
@@ -583,12 +527,13 @@ add_filter(
   "ceo": {
     "label": "Message from the CEO",
     "paragraphs": [
-      "Welcome to NAMI. Since our inception in 2012, our foundational mission has been to provide world-class, globally accredited education right here in Nepal. We believe that true academic excellence begins with an environment that fosters curiosity, integrity, and ambition, supported by state-of-the-art infrastructure and faculty who are deeply dedicated to student success.",
-      "In an increasingly interconnected and rapidly evolving world, education must go beyond conventional classroom boundaries. Through strategic academic partnerships with premier international universities and dynamic collaborations with industry leaders, NAMI bridges rigorous academic theory with real-world competence. We emphasize critical thinking, computational capability, research orientation, and an entrepreneurial mindset across all our programs.",
-      "Our holistic educational ecosystem is purposefully designed to nurture well-rounded individuals. Alongside academic depth, we place strong value on leadership development, community engagement, ethical values, and extracurricular enrichment. By empowering our students with both knowledge and character, we ensure they are prepared to excel in competitive global arenas and make meaningful contributions to their professions.",
-      "As we look ahead, NAMI remains steadfast in its dedication to transformative education and institutional excellence. We invite our students, parents, alumni, and community partners to join hands with us as we continue to inspire innovation, shape impactful careers, and cultivate the next generation of visionary leaders for Nepal and the world."
+      "Since our establishment in 2012, NAMI has grown with a clear purpose: to create opportunities for quality, world-class education in Nepal and to contribute to the development of capable, responsible, and confident individuals.",
+      "For us, education is not limited to academic achievement. It is about developing people who can think critically, adapt to change, recognize opportunities, work with others, and use their knowledge and abilities with integrity. Across our schools and higher education programmes, we strive to provide an environment where students can discover their strengths, pursue their aspirations, and develop the confidence to shape their own futures.",
+      "At the heart of our work is our belief in people. We value knowledge and achievement alongside integrity, empathy, creativity, leadership, collaboration, and responsibility. We want our students and graduates to leave NAMI not only with qualifications and skills, but with the judgement, confidence, and sense of purpose to use them well.",
+      "We also believe that meaningful education is a shared responsibility. Our students, parents, educators, staff, alumni, partners, and the wider NAMI community each contribute to the institution we continue to build. By working together, we can create an environment that encourages learning, supports growth, values different perspectives, and prepares individuals to participate positively in an evolving society.",
+      "NAMI was founded with the belief that world-class education should have a place in Nepal. Today, that belief continues to shape our ambitions. The next chapter is not simply about becoming larger, but about becoming more consequential—expanding opportunity, raising standards, strengthening partnerships, and creating an institution whose influence reaches well beyond its campuses. I believe that what we build today will define what NAMI can contribute tomorrow."
     ],
-    "name": "Mr. Pranil Pandey, FCCA",
+    "name": "Pranil Pandey, FCCA, MBA",
     "title": "Chief Executive Officer, NAMI Group of Companies",
     "portrait": {
       "src": "/leadership/pranil.jpeg",

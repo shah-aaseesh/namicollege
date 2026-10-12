@@ -610,8 +610,8 @@ export const alumniStories: readonly AlumniStory[] = [
       headline:
         "Driving the Future of Electric Mobility: From Healthcare Marketing to Automotive Strategy",
       storyParagraphs: [
-        "Denish Tuladhar first heard about NAMI through a friend who spoke highly of its academic standards and its unique three-year Bachelor's degree programme. Motivated by NAMI's reputation for providing quality education within a shorter duration, it allowed him to balance both his studies and his professional ambitions in an environment that offered the flexibility and rigor he was looking for.",
-        "His experience at NAMI was both enriching and transformative. The faculty members were approachable, knowledgeable, and always encouraged active participation. The learning environment emphasized teamwork, presentations, case studies, and real-world problem solving, which helped him build confidence, communication skills, and leadership abilities.",
+        "Denish Tuladhar first heard about NAMI through a friend who spoke highly of its academic standards and its unique three-year Bachelor's degree programme. Motivated by NAMI's reputation for providing quality education within a shorter duration, it allowed him to balance both his studies and his professional ambitions in an environment that offered the flexibility and rigour he was looking for.",
+        "His experience at NAMI was both enriching and transformative. The faculty members were approachable, knowledgeable, and always encouraged active participation. The learning environment emphasised teamwork, presentations, case studies, and real-world problem solving, which helped him build confidence, communication skills, and leadership abilities.",
         "The most valuable aspect of his education at NAMI was its emphasis on research-based assignments, practical learning, and professional development. The curriculum encouraged analytical thinking, project-based learning, and collaboration, preparing him to adapt quickly to workplace challenges throughout his career.",
         "After completing his studies, Denish began his career in healthcare marketing at KIST Teaching Hospital, where he worked on branding, digital marketing campaigns, strategic partnerships, and event management, giving him valuable exposure to integrated marketing and communication strategies.",
         "Currently, Denish is working at Agni Group as a Marketing Executive, specializing in Mahindra's BEV and SUV segment. In this role, he develops and executes marketing strategies including product launch planning, digital campaigns, event management, content creation, influencer collaborations, dealership marketing, and brand-building initiatives across Nepal.",
@@ -658,7 +658,7 @@ export const alumniStories: readonly AlumniStory[] = [
           question:
             "How would you describe the overall learning environment and experience at NAMI during your time as a student?",
           answer:
-            "My experience at NAMI was both enriching and transformative. The faculty members were approachable, knowledgeable and always encouraged active participation. The learning environment emphasized teamwork, presentations, case studies and real-world problem solving, which helped me build confidence, communication skills and leadership abilities. Beyond academics, NAMI encouraged students to think critically and develop practical skills that prepared us for the professional world.",
+            "My experience at NAMI was both enriching and transformative. The faculty members were approachable, knowledgeable and always encouraged active participation. The learning environment emphasised teamwork, presentations, case studies and real-world problem solving, which helped me build confidence, communication skills and leadership abilities. Beyond academics, NAMI encouraged students to think critically and develop practical skills that prepared us for the professional world.",
         },
         {
           question:
@@ -831,7 +831,7 @@ export const alumniStories: readonly AlumniStory[] = [
     sector: "Business & Management Studies",
     location: "Kathmandu, Nepal",
     summaryHighlights: [
-      "Secondary School Management stream alumna (Class of 2026) recognized for active participation and academic dedication.",
+      "Secondary School Management stream alumna (Class of 2026) recognised for active participation and academic dedication.",
       "Experienced comprehensive guidance and mentorship from friendly, understanding faculty members throughout her studies.",
       "Thrived in NAMI's peaceful, green campus environment, building lifelong friendships and collaborative learning habits.",
     ],
@@ -920,40 +920,40 @@ export const alumniCopy = {
       "From Kathmandu to global institutions across 15+ countries, NAMI graduates are leading innovation in computing, sustainable development, business, and research.",
     cta: "Explore Alumni Spotlights",
     image: {
-      src: "/hero/alumni/alumni-hero.jpg",
-      alt: "NAMI Alumni network and graduation celebration.",
-      width: 1500,
-      height: 1000,
+      src: "/alumni/alumni hero.jpeg",
+      alt: "NAMI Class of 2025 graduates celebrate at convocation ceremony.",
+      width: 654,
+      height: 424,
     },
   } satisfies CareersMastheadCopy,
   metrics: {
     eyebrow: "COMMUNITY & SCALE",
-    heading: "A Legacy of Excellence Across Fourteen Years",
+    heading: "A Legacy of Excellence Since 2012",
     standfirst:
       "Our alumni form a connected global community of researchers, technology leaders, entrepreneurs, and scholars.",
     items: [
       {
         stat: "8,000+",
         label: "Total Alumni",
-        detail: "Graduates across all academic programmes since 2012.",
+        detail: "Graduates from all academic programmes since 2012.",
       },
       {
         stat: "5,000+",
         label: "NEB 10+2 Alumni",
         detail:
-          "Science and Management graduates advancing into top institutions.",
+          "Science and Management graduates progressing to leading institutions.",
       },
       {
         stat: "2,500+",
         label: "UG & PG Degree Holders",
         detail:
-          "University of Northampton (UK) accredited Bachelor's and Master's degree holders.",
+          "Holders of University of Northampton (UK) accredited bachelor's and master's degrees.",
       },
       {
         stat: "500+",
         label: "Cambridge A Level Scholars",
         detail:
-          "Studying in world-leading universities across the UK, US, and Australia.",
+          "Studying at world-leading universities in the UK, the US and Australia.",
       },
     ] as const satisfies readonly AlumniMetric[],
   },

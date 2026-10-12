@@ -12,7 +12,11 @@ import { fetchCmsPage } from "../../client";
 import { type CmsCollectionItem, fetchCmsCollection } from "../../collections";
 import { mergeWithDefaults } from "../../merge";
 import { hasImage } from "../../types";
-import { galleryDefaults, galleryMomentTemplate } from "./defaults";
+import {
+  galleryDefaults,
+  galleryImports,
+  galleryMomentTemplate,
+} from "./defaults";
 import type {
   GalleryBubble,
   GalleryMomentFields,
@@ -56,7 +60,10 @@ const ICONS: readonly SubcategoryIconType[] = [
 ];
 
 export const getGalleryPage = cache(async (): Promise<GalleryPageContent> => {
-  return mergeWithDefaults(galleryDefaults, await fetchCmsPage("gallery"));
+  return mergeWithDefaults(
+    galleryDefaults,
+    await fetchCmsPage("gallery", galleryDefaults),
+  );
 });
 
 function bubblesOf(list: readonly GalleryBubble[]): SubcategoryItem[] {
@@ -121,7 +128,11 @@ export type GalleryData = {
 export const getGalleryData = cache(async (): Promise<GalleryData> => {
   const [page, collection] = await Promise.all([
     getGalleryPage(),
-    fetchCmsCollection(GALLERY_COLLECTION, galleryMomentTemplate),
+    fetchCmsCollection(
+      GALLERY_COLLECTION,
+      galleryMomentTemplate,
+      galleryImports,
+    ),
   ]);
   const { tabs } = page;
 

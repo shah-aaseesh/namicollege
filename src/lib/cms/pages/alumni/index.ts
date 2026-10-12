@@ -8,7 +8,7 @@ import { fetchCmsPage } from "../../client";
 import { type CmsCollectionItem, fetchCmsCollection } from "../../collections";
 import { mergeWithDefaults } from "../../merge";
 import { hasImage } from "../../types";
-import { alumniDefaults, alumniStoryTemplate } from "./defaults";
+import { alumniDefaults, alumniImports, alumniStoryTemplate } from "./defaults";
 import type { AlumniPageContent, AlumniStoryFields } from "./types";
 
 export type * from "./types";
@@ -25,7 +25,10 @@ const WINGS: readonly Wing[] = [
 ];
 
 export const getAlumniPage = cache(async (): Promise<AlumniPageContent> => {
-  return mergeWithDefaults(alumniDefaults, await fetchCmsPage("alumni"));
+  return mergeWithDefaults(
+    alumniDefaults,
+    await fetchCmsPage("alumni", alumniDefaults),
+  );
 });
 
 function filled(items: readonly string[]): string[] {
@@ -78,7 +81,7 @@ function storyOf(
 export const getAlumniData = cache(async () => {
   const [page, collection] = await Promise.all([
     getAlumniPage(),
-    fetchCmsCollection(ALUMNI_COLLECTION, alumniStoryTemplate),
+    fetchCmsCollection(ALUMNI_COLLECTION, alumniStoryTemplate, alumniImports),
   ]);
   const { wings } = page;
   const cardLabels: Record<Wing, string> = {

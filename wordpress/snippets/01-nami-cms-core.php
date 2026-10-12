@@ -12,7 +12,10 @@
  *   - tells the Next.js site to refresh right after every save,
  *   - runs "collections": lists where editors add items one by one (notices,
  *     vacancies …), registered through the `nami_cms_collections` filter and
- *     served at /wp-json/nami/v1/collections/{collection}.
+ *     served at /wp-json/nami/v1/collections/{collection},
+ *   - keeps up with the website's code (1.3+): it fetches the content bundled in
+ *     the code from {site}/api/cms/content, shows it in the edit screens, and
+ *     the newest change wins, field by field, between an edit and the code.
  *
  * Website connection: Settings → NAMI CMS (or define NAMI_SITE_URL and
  * NAMI_REVALIDATE_SECRET in wp-config.php).
@@ -21,7 +24,7 @@
 if ( ! defined( 'ABSPATH' ) || defined( 'NAMI_CMS_CORE' ) ) {
 	return;
 }
-define( 'NAMI_CMS_CORE', '1.2.0' );
+define( 'NAMI_CMS_CORE', '1.3.0' );
 define( 'NAMI_CMS_CAP', 'edit_pages' );
 
 /* ------------------------------------------------------------------
@@ -45,24 +48,143 @@ function nami_cms_option_name( $slug ) {
 	return 'nami_cms_page_' . $slug;
 }
 
-/** Defaults from the page snippet, overlaid with whatever editors saved. */
+/** The code's content when each section was last saved (see nami_cms_resolve). */
+function nami_cms_base_option_name( $slug ) {
+	return 'nami_cms_base_' . $slug;
+}
+
+function nami_cms_saved_sections( $slug ) {
+	$saved = get_option( nami_cms_option_name( $slug ), array() );
+	return is_array( $saved ) ? $saved : array();
+}
+
+/** The defaults in the page snippet (the code as it was when the snippet was pasted). */
+function nami_cms_snippet_defaults( $slug ) {
+	$pages = nami_cms_pages();
+	return isset( $pages[ $slug ]['defaults'] ) && is_array( $pages[ $slug ]['defaults'] ) ? $pages[ $slug ]['defaults'] : array();
+}
+
+/** The page's content as the website's code has it today (snippet defaults until fetched). */
+function nami_cms_page_defaults( $slug ) {
+	$code = nami_cms_code()['pages'][ $slug ] ?? null;
+	return is_array( $code ) ? $code : nami_cms_snippet_defaults( $slug );
+}
+
+/**
+ * Each saved section's base. Sections saved before 1.3 have none stored; the
+ * snippet defaults are what the editor started from then.
+ */
+function nami_cms_section_base( $slug, $section_id ) {
+	$bases = get_option( nami_cms_base_option_name( $slug ), array() );
+	if ( is_array( $bases ) && is_array( $bases[ $section_id ] ?? null ) ) {
+		return $bases[ $section_id ];
+	}
+	$snippet = nami_cms_snippet_defaults( $slug );
+	return is_array( $snippet[ $section_id ] ?? null ) ? $snippet[ $section_id ] : array();
+}
+
+/** The code's content, with the newer of edit and code winning per saved field. */
 function nami_cms_get_values( $slug ) {
 	$pages = nami_cms_pages();
 	if ( ! isset( $pages[ $slug ] ) ) {
 		return null;
 	}
-	$page     = $pages[ $slug ];
-	$defaults = isset( $page['defaults'] ) && is_array( $page['defaults'] ) ? $page['defaults'] : array();
-	$saved    = get_option( nami_cms_option_name( $slug ), array() );
-	$saved    = is_array( $saved ) ? $saved : array();
+	$snippet = nami_cms_snippet_defaults( $slug );
+	$code    = nami_cms_page_defaults( $slug );
+	$saved   = nami_cms_saved_sections( $slug );
 
 	$values = array();
-	foreach ( $page['sections'] as $id => $section ) {
-		$d             = isset( $defaults[ $id ] ) && is_array( $defaults[ $id ] ) ? $defaults[ $id ] : array();
-		$s             = isset( $saved[ $id ] ) && is_array( $saved[ $id ] ) ? $saved[ $id ] : array();
-		$values[ $id ] = array_merge( $d, $s );
+	foreach ( $pages[ $slug ]['sections'] as $id => $section ) {
+		$current       = is_array( $code[ $id ] ?? null ) ? $code[ $id ] : ( is_array( $snippet[ $id ] ?? null ) ? $snippet[ $id ] : array() );
+		$values[ $id ] = $current;
+		if ( ! is_array( $saved[ $id ] ?? null ) ) {
+			continue;
+		}
+		$base = nami_cms_section_base( $slug, $id );
+		foreach ( $saved[ $id ] as $key => $value ) {
+			$values[ $id ][ $key ] = nami_cms_resolve( $base[ $key ] ?? null, $value, $current[ $key ] ?? null );
+		}
 	}
 	return $values;
+}
+
+/* ------------------------------------------------------------------
+ * Newest change wins (edit vs. code)
+ * ------------------------------------------------------------------
+ *
+ * Each save stores the code's content at that moment as the edit's base. Then:
+ *   - edit equals base → the editor never changed it: the code is shown,
+ *   - code equals base → the code never changed it: the edit is shown,
+ *   - both changed     → the code changed after the edit, so the code wins,
+ *     comparing inside lists (when all three line up) and groups of fields.
+ * The website runs the same rules (src/lib/cms/resolve.ts), so both agree.
+ */
+
+/** Scalars compared the way the website compares them after a JSON round trip. */
+function nami_cms_scalar_key( $value ) {
+	if ( null === $value || false === $value ) {
+		return '';
+	}
+	if ( true === $value ) {
+		return '1';
+	}
+	return is_scalar( $value ) ? (string) $value : '';
+}
+
+function nami_cms_same( $a, $b ) {
+	if ( is_array( $a ) || is_array( $b ) ) {
+		if ( ! is_array( $a ) || ! is_array( $b ) || count( $a ) !== count( $b ) ) {
+			return false;
+		}
+		foreach ( $a as $key => $value ) {
+			if ( ! array_key_exists( $key, $b ) || ! nami_cms_same( $value, $b[ $key ] ) ) {
+				return false;
+			}
+		}
+		return true;
+	}
+	return nami_cms_scalar_key( $a ) === nami_cms_scalar_key( $b );
+}
+
+function nami_cms_is_list( $value ) {
+	return is_array( $value ) && ( array() === $value || array_keys( $value ) === range( 0, count( $value ) - 1 ) );
+}
+
+/** $base: the code when the edit was saved. A null $code means the code has no such value. */
+function nami_cms_resolve( $base, $edited, $code ) {
+	if ( null === $code ) {
+		return $edited;
+	}
+	if ( null === $edited || nami_cms_same( $edited, $base ) ) {
+		return $code;
+	}
+	if ( nami_cms_same( $code, $base ) ) {
+		return $edited;
+	}
+	if ( is_array( $edited ) && is_array( $code ) ) {
+		$edited_list = nami_cms_is_list( $edited );
+		$code_list   = nami_cms_is_list( $code );
+		if ( $edited_list && $code_list ) {
+			// Item by item only while all three lists line up; otherwise the newer list wins.
+			if ( ! nami_cms_is_list( $base ) || count( $edited ) !== count( $base ) || count( $code ) !== count( $base ) ) {
+				return $code;
+			}
+			$merged = array();
+			foreach ( $code as $index => $item ) {
+				$merged[] = nami_cms_resolve( $base[ $index ], $edited[ $index ], $item );
+			}
+			return $merged;
+		}
+		if ( ! $edited_list && ! $code_list ) {
+			$base   = is_array( $base ) && ! nami_cms_is_list( $base ) ? $base : array();
+			$merged = array();
+			foreach ( array_keys( $edited + $code ) as $key ) {
+				$merged[ $key ] = nami_cms_resolve( $base[ $key ] ?? null, $edited[ $key ] ?? null, $code[ $key ] ?? null );
+			}
+			return $merged;
+		}
+	}
+	return $code;
 }
 
 /* ------------------------------------------------------------------
@@ -112,6 +234,177 @@ function nami_cms_notify_site( $slug ) {
 }
 
 /* ------------------------------------------------------------------
+ * Content bundled in the website's code
+ * ------------------------------------------------------------------
+ *
+ * {site}/api/cms/content returns every page's defaults, every collection's
+ * bundled items and a fingerprint of each. The last copy is kept in the
+ * 'nami_cms_code' option and fetched again when the website reports another
+ * fingerprint (header x-nami-code on its reads), when an editor opens a NAMI
+ * screen (at most every 5 minutes), hourly, or via Settings → NAMI CMS.
+ */
+
+function nami_cms_code() {
+	$code = get_option( 'nami_cms_code', array() );
+	return is_array( $code ) ? $code : array();
+}
+
+/** The decoded content, or WP_Error. */
+function nami_cms_code_fetch() {
+	$settings = nami_cms_settings();
+	if ( '' === $settings['site_url'] || '' === $settings['secret'] ) {
+		return new WP_Error( 'nami_cms_unconfigured', 'the website is not connected yet' );
+	}
+	$response = wp_remote_get(
+		untrailingslashit( $settings['site_url'] ) . '/api/cms/content',
+		array(
+			'timeout' => 20,
+			'headers' => array(
+				'Accept'        => 'application/json',
+				'x-nami-secret' => $settings['secret'],
+			),
+		)
+	);
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+	$status = (int) wp_remote_retrieve_response_code( $response );
+	if ( 200 !== $status ) {
+		return new WP_Error( 'nami_cms_http', 404 === $status ? 'the website is not updated for this yet (HTTP 404)' : 'HTTP ' . $status );
+	}
+	$body = json_decode( wp_remote_retrieve_body( $response ), true );
+	if ( ! is_array( $body ) || ! is_array( $body['pages'] ?? null ) || ! is_array( $body['collections'] ?? null ) || ! is_array( $body['hashes']['pages'] ?? null ) || ! is_array( $body['hashes']['collections'] ?? null ) ) {
+		return new WP_Error( 'nami_cms_invalid', 'the website sent an unexpected answer' );
+	}
+	return $body;
+}
+
+/**
+ * Fetches the code's content and brings the collections up to date.
+ * Returns 'ok', 'skipped' (fetched recently, or another fetch is running) or a WP_Error.
+ */
+function nami_cms_code_refresh( $force = false ) {
+	$old = nami_cms_code();
+	if ( ! $force && ( time() - (int) ( $old['fetched'] ?? 0 ) < 300 || get_transient( 'nami_cms_code_backoff' ) ) ) {
+		return 'skipped';
+	}
+	if ( get_transient( 'nami_cms_code_lock' ) ) {
+		return 'skipped';
+	}
+	set_transient( 'nami_cms_code_lock', 1, 60 );
+
+	$body = nami_cms_code_fetch();
+	if ( is_wp_error( $body ) ) {
+		set_transient( 'nami_cms_code_backoff', 1, 300 );
+		update_option( 'nami_cms_code_error', $body->get_error_message(), false );
+		delete_transient( 'nami_cms_code_lock' );
+		return $body;
+	}
+	delete_option( 'nami_cms_code_error' );
+
+	$new = array(
+		'fetched'     => time(),
+		'pages'       => $body['pages'],
+		'collections' => $body['collections'],
+		'hashes'      => $body['hashes'],
+	);
+	update_option( 'nami_cms_code', $new, false );
+
+	// Pages need nothing more: their screens and the website read the new content directly.
+	foreach ( nami_cms_collections() as $slug => $config ) {
+		$items = $new['collections'][ $slug ] ?? null;
+		$same  = isset( $old['hashes']['collections'][ $slug ] ) && $old['hashes']['collections'][ $slug ] === ( $new['hashes']['collections'][ $slug ] ?? '' );
+		if ( is_array( $items ) && ! $same && nami_cms_sync_collection( $slug, $config, $items ) ) {
+			nami_cms_notify_site( $slug );
+		}
+	}
+
+	delete_transient( 'nami_cms_code_lock' );
+	return 'ok';
+}
+
+/** Called with the website's fingerprint of a page ('pages') or collection ('collections'). */
+function nami_cms_code_seen( $kind, $slug, $hash ) {
+	$hash = is_string( $hash ) ? preg_replace( '/[^a-f0-9]/', '', strtolower( $hash ) ) : '';
+	if ( '' === $hash || ( nami_cms_code()['hashes'][ $kind ][ $slug ] ?? '' ) === $hash ) {
+		return;
+	}
+	$key     = $kind . ':' . $slug;
+	$ignored = get_option( 'nami_cms_code_ignored', array() );
+	if ( is_array( $ignored ) && ( $ignored[ $key ] ?? '' ) === $hash ) {
+		return;
+	}
+	$wanted = get_option( 'nami_cms_code_wanted', array() );
+	$wanted = is_array( $wanted ) ? $wanted : array();
+	if ( ( $wanted[ $key ] ?? '' ) !== $hash ) {
+		$wanted[ $key ] = $hash;
+		update_option( 'nami_cms_code_wanted', $wanted, false );
+	}
+	if ( ! wp_next_scheduled( 'nami_cms_code_sync' ) ) {
+		wp_schedule_single_event( time(), 'nami_cms_code_sync' );
+	}
+}
+
+// Runs shortly after the website reports new code. While the new deployment is
+// still building, the live site serves the old content, so it retries every 2
+// minutes; fingerprints that never go live (local or preview builds) are ignored
+// after 30 minutes.
+add_action(
+	'nami_cms_code_sync',
+	function () {
+		nami_cms_code_refresh( true );
+		$wanted = get_option( 'nami_cms_code_wanted', array() );
+		$wanted = is_array( $wanted ) ? $wanted : array();
+		$hashes = nami_cms_code()['hashes'] ?? array();
+		foreach ( $wanted as $key => $hash ) {
+			list( $kind, $slug ) = array_pad( explode( ':', (string) $key, 2 ), 2, '' );
+			if ( ( $hashes[ $kind ][ $slug ] ?? '' ) === $hash ) {
+				unset( $wanted[ $key ] );
+			}
+		}
+		$tries = (int) get_option( 'nami_cms_code_tries', 0 ) + 1;
+		if ( empty( $wanted ) || $tries >= 15 ) {
+			if ( ! empty( $wanted ) ) {
+				$ignored = get_option( 'nami_cms_code_ignored', array() );
+				update_option( 'nami_cms_code_ignored', array_merge( is_array( $ignored ) ? $ignored : array(), $wanted ), false );
+			}
+			delete_option( 'nami_cms_code_wanted' );
+			delete_option( 'nami_cms_code_tries' );
+			return;
+		}
+		update_option( 'nami_cms_code_wanted', $wanted, false );
+		update_option( 'nami_cms_code_tries', $tries, false );
+		wp_schedule_single_event( time() + 120, 'nami_cms_code_sync' );
+	}
+);
+
+add_action(
+	'init',
+	function () {
+		if ( ! wp_next_scheduled( 'nami_cms_code_hourly' ) ) {
+			wp_schedule_event( time() + 300, 'hourly', 'nami_cms_code_hourly' );
+		}
+	}
+);
+add_action(
+	'nami_cms_code_hourly',
+	function () {
+		nami_cms_code_refresh();
+	}
+);
+
+// Editors see the code's latest content when they open a NAMI screen.
+add_action(
+	'current_screen',
+	function ( $screen ) {
+		$collection_list = 'edit' === $screen->base && null !== nami_cms_collection_by_type( $screen->post_type );
+		if ( $collection_list || nami_cms_is_cms_screen() ) {
+			nami_cms_code_refresh();
+		}
+	}
+);
+
+/* ------------------------------------------------------------------
  * REST API: GET /wp-json/nami/v1/pages/{slug}
  * ------------------------------------------------------------------ */
 
@@ -125,11 +418,33 @@ add_action(
 				'methods'             => 'GET',
 				'permission_callback' => '__return_true',
 				'callback'            => function ( WP_REST_Request $request ) {
-					$values = nami_cms_get_values( (string) $request['slug'] );
-					if ( null === $values ) {
+					$slug  = (string) $request['slug'];
+					$pages = nami_cms_pages();
+					if ( ! isset( $pages[ $slug ] ) ) {
 						return new WP_Error( 'nami_cms_not_found', 'Unknown page.', array( 'status' => 404 ) );
 					}
-					$response = rest_ensure_response( $values );
+					nami_cms_code_seen( 'pages', $slug, $request->get_header( 'x-nami-code' ) );
+
+					if ( '2' === (string) $request->get_param( 'format' ) ) {
+						// Only what editors saved, each with its base: the website applies
+						// "newest change wins" against the code it is running right now.
+						$sections = array();
+						foreach ( nami_cms_saved_sections( $slug ) as $id => $saved ) {
+							if ( is_array( $saved ) && isset( $pages[ $slug ]['sections'][ $id ] ) ) {
+								$sections[ $id ] = array(
+									'saved' => (object) $saved,
+									'base'  => (object) nami_cms_section_base( $slug, $id ),
+								);
+							}
+						}
+						$body = array(
+							'format'   => 2,
+							'sections' => (object) $sections,
+						);
+					} else {
+						$body = nami_cms_get_values( $slug );
+					}
+					$response = rest_ensure_response( $body );
 					$response->header( 'Cache-Control', 'no-store' );
 					return $response;
 				},
@@ -627,10 +942,16 @@ add_action(
 			$clean[ $key ] = nami_cms_sanitize_field( $field, $raw[ $key ] ?? null );
 		}
 
-		$saved                = get_option( nami_cms_option_name( $slug ), array() );
-		$saved                = is_array( $saved ) ? $saved : array();
+		$saved                = nami_cms_saved_sections( $slug );
 		$saved[ $section_id ] = $clean;
 		update_option( nami_cms_option_name( $slug ), $saved, false );
+
+		// What the code held when this was saved; later code changes are compared with it.
+		$bases                = get_option( nami_cms_base_option_name( $slug ), array() );
+		$bases                = is_array( $bases ) ? $bases : array();
+		$code                 = nami_cms_page_defaults( $slug );
+		$bases[ $section_id ] = is_array( $code[ $section_id ] ?? null ) ? $code[ $section_id ] : array();
+		update_option( nami_cms_base_option_name( $slug ), $bases, false );
 
 		nami_cms_redirect_back( $slug, $section_id, $page, 'saved', nami_cms_notify_site( $slug ) );
 	}
@@ -645,10 +966,14 @@ add_action(
 		list( $slug, $section_id, $page ) = nami_cms_request_target();
 		check_admin_referer( 'nami_cms_reset_' . $slug . '_' . $section_id );
 
-		$saved = get_option( nami_cms_option_name( $slug ), array() );
-		$saved = is_array( $saved ) ? $saved : array();
+		$saved = nami_cms_saved_sections( $slug );
 		unset( $saved[ $section_id ] );
 		update_option( nami_cms_option_name( $slug ), $saved, false );
+		$bases = get_option( nami_cms_base_option_name( $slug ), array() );
+		if ( is_array( $bases ) && isset( $bases[ $section_id ] ) ) {
+			unset( $bases[ $section_id ] );
+			update_option( nami_cms_base_option_name( $slug ), $bases, false );
+		}
 
 		nami_cms_redirect_back( $slug, $section_id, $page, 'reset', nami_cms_notify_site( $slug ) );
 	}
@@ -789,8 +1114,47 @@ function nami_cms_render_settings() {
 	echo '</tbody></table>';
 	submit_button( 'Save & test connection' );
 	echo '</form>';
+
+	// Content from the website's code.
+	$code    = nami_cms_code();
+	$fetched = (int) ( $code['fetched'] ?? 0 );
+	$error   = (string) get_option( 'nami_cms_code_error', '' );
+	echo '<h2>Changes made in the website\'s code</h2>';
+	echo '<p>Text, images and list items changed in the code appear here automatically after the website is deployed. If an editor and the code changed the same field, the newer change wins.</p>';
+	if ( isset( $_GET['nami_code'] ) ) {
+		if ( 'ok' === $_GET['nami_code'] ) {
+			echo '<div class="notice notice-success"><p>Checked. WordPress now shows the code\'s latest content.</p></div>';
+		} else {
+			printf( '<div class="notice notice-error"><p>Could not read the website\'s content (%s).</p></div>', esc_html( '' !== $error ? $error : 'unknown error' ) );
+		}
+	}
+	printf(
+		'<p>Last checked: <strong>%s</strong>%s</p>',
+		esc_html( $fetched > 0 ? sprintf( '%s ago', human_time_diff( $fetched ) ) : 'never' ),
+		'' !== $error ? esc_html( ' — last attempt failed: ' . $error ) : ''
+	);
+	echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+	echo '<input type="hidden" name="action" value="nami_cms_code_check">';
+	wp_nonce_field( 'nami_cms_code_check' );
+	submit_button( 'Check for code changes now', 'secondary', 'submit', false );
+	echo '</form>';
+
 	printf( '<p>Content API: <code>%s</code></p></div>', esc_html( rest_url( 'nami/v1/pages/home' ) ) );
 }
+
+add_action(
+	'admin_post_nami_cms_code_check',
+	function () {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( 'You are not allowed to do this.', 403 );
+		}
+		check_admin_referer( 'nami_cms_code_check' );
+		delete_transient( 'nami_cms_code_lock' );
+		$result = nami_cms_code_refresh( true );
+		wp_safe_redirect( add_query_arg( array( 'page' => 'nami-cms-settings', 'nami_code' => is_wp_error( $result ) ? 'failed' : 'ok' ), admin_url( 'options-general.php' ) ) );
+		exit;
+	}
+);
 
 /* ------------------------------------------------------------------
  * Admin assets (only on NAMI CMS screens)
@@ -1037,6 +1401,157 @@ function nami_cms_collection_clean( array $config, array $raw ) {
 	return $clean;
 }
 
+/* ------------------------------------------------------------------
+ * Collections: items that came from the code
+ * ------------------------------------------------------------------
+ *
+ * Each bundled item has a stable 'key'. An item created from it keeps the key in
+ * '_nami_key' and the code item it was last synced with in '_nami_base', so the
+ * same "newest change wins" rules as pages apply to its title and fields.
+ * 'nami_cms_collection_known_{slug}' lists every key already offered: only keys
+ * new to the code are added, so items editors deleted stay deleted.
+ */
+
+/** The bundled items: from the website's code, or from the snippet until first fetched. */
+function nami_cms_collection_code_items( $slug, array $config ) {
+	$items = nami_cms_code()['collections'][ $slug ] ?? null;
+	return is_array( $items ) ? $items : ( $config['import'] ?? array() );
+}
+
+function nami_cms_collection_link( $post_id, array $item ) {
+	if ( is_string( $item['key'] ?? null ) && '' !== $item['key'] ) {
+		update_post_meta( $post_id, '_nami_key', sanitize_text_field( $item['key'] ) );
+	}
+	update_post_meta(
+		$post_id,
+		'_nami_base',
+		wp_slash(
+			array(
+				'title'  => (string) ( $item['title'] ?? '' ),
+				'fields' => is_array( $item['fields'] ?? null ) ? $item['fields'] : array(),
+			)
+		)
+	);
+}
+
+/** Creates a published item from a bundled one. Returns the post ID, or 0. */
+function nami_cms_collection_insert( array $config, array $item ) {
+	$date    = preg_match( '/^\d{4}-\d{2}-\d{2}$/', (string) ( $item['date'] ?? '' ) ) ? $item['date'] : current_time( 'Y-m-d' );
+	$post_id = wp_insert_post(
+		array(
+			'post_type'   => $config['post_type'],
+			'post_status' => 'publish',
+			'post_title'  => sanitize_text_field( (string) ( $item['title'] ?? '' ) ),
+			'post_date'   => $date . ' 09:00:00',
+		),
+		true
+	);
+	if ( is_wp_error( $post_id ) ) {
+		return 0;
+	}
+	update_post_meta( $post_id, '_nami_fields', wp_slash( nami_cms_collection_clean( $config, is_array( $item['fields'] ?? null ) ? $item['fields'] : array() ) ) );
+	nami_cms_collection_link( $post_id, $item );
+	return $post_id;
+}
+
+function nami_cms_collection_remember( $slug, array $items ) {
+	$known = get_option( 'nami_cms_collection_known_' . $slug, array() );
+	$known = is_array( $known ) ? $known : array();
+	foreach ( $items as $item ) {
+		if ( is_array( $item ) && is_string( $item['key'] ?? null ) && '' !== $item['key'] && ! in_array( $item['key'], $known, true ) ) {
+			$known[] = $item['key'];
+		}
+	}
+	update_option( 'nami_cms_collection_known_' . $slug, $known, false );
+}
+
+function nami_cms_title_key( $title ) {
+	return strtolower( trim( wp_specialchars_decode( sanitize_text_field( (string) $title ), ENT_QUOTES ) ) );
+}
+
+/**
+ * Brings a ready collection up to date with its bundled items. Returns true when
+ * anything changed. Items removed from the code stay until an editor deletes them.
+ */
+function nami_cms_sync_collection( $slug, array $config, array $items ) {
+	if ( ! nami_cms_collection_ready( $slug, $config ) ) {
+		return false;
+	}
+	$known       = get_option( 'nami_cms_collection_known_' . $slug, null );
+	$first_sync  = ! is_array( $known );
+	$known       = is_array( $known ) ? $known : array();
+	$posts       = get_posts(
+		array(
+			'post_type'        => $config['post_type'],
+			'post_status'      => array( 'publish', 'future', 'draft', 'pending', 'private', 'trash' ),
+			'posts_per_page'   => -1,
+			'orderby'          => 'ID',
+			'order'            => 'ASC',
+			'suppress_filters' => true,
+		)
+	);
+	$by_key      = array();
+	$by_title    = array();
+	foreach ( $posts as $post ) {
+		$key = (string) get_post_meta( $post->ID, '_nami_key', true );
+		if ( '' !== $key ) {
+			$by_key[ $key ] = $post;
+		} else {
+			$by_title[ nami_cms_title_key( $post->post_title ) ][] = $post;
+		}
+	}
+
+	$changed                   = false;
+	$GLOBALS['nami_cms_quiet'] = true;
+	foreach ( $items as $item ) {
+		if ( ! is_array( $item ) || ! is_string( $item['key'] ?? null ) || '' === $item['key'] ) {
+			continue;
+		}
+		$post = $by_key[ $item['key'] ] ?? null;
+
+		if ( null === $post ) {
+			// Imported before items had keys (core < 1.3): find it by its title.
+			$title = nami_cms_title_key( $item['title'] ?? '' );
+			if ( ! empty( $by_title[ $title ] ) ) {
+				nami_cms_collection_link( array_shift( $by_title[ $title ] )->ID, $item );
+			} elseif ( ! $first_sync && ! in_array( $item['key'], $known, true ) ) {
+				$changed = nami_cms_collection_insert( $config, $item ) > 0 || $changed;
+			}
+			continue;
+		}
+		if ( 'trash' === $post->post_status ) {
+			continue;
+		}
+
+		$base = get_post_meta( $post->ID, '_nami_base', true );
+		if ( is_array( $base ) ) {
+			$fields = nami_cms_collection_fields( $post->ID, $config );
+			$merged = nami_cms_resolve( $base['fields'] ?? null, $fields, is_array( $item['fields'] ?? null ) ? $item['fields'] : null );
+			$merged = nami_cms_collection_clean( $config, is_array( $merged ) ? $merged : $fields );
+			if ( ! nami_cms_same( $merged, $fields ) ) {
+				update_post_meta( $post->ID, '_nami_fields', wp_slash( $merged ) );
+				$changed = true;
+			}
+			$title     = wp_specialchars_decode( $post->post_title, ENT_QUOTES );
+			$new_title = nami_cms_resolve( $base['title'] ?? null, $title, (string) ( $item['title'] ?? '' ) );
+			if ( is_string( $new_title ) && '' !== trim( $new_title ) && $new_title !== $title ) {
+				wp_update_post(
+					array(
+						'ID'         => $post->ID,
+						'post_title' => sanitize_text_field( $new_title ),
+					)
+				);
+				$changed = true;
+			}
+		}
+		nami_cms_collection_link( $post->ID, $item );
+	}
+	$GLOBALS['nami_cms_quiet'] = false;
+
+	nami_cms_collection_remember( $slug, $items );
+	return $changed;
+}
+
 add_action(
 	'init',
 	function () {
@@ -1219,7 +1734,7 @@ add_action(
 				esc_html( $label )
 			);
 		};
-		$imports = count( $config['import'] ?? array() );
+		$imports = count( nami_cms_collection_code_items( $slug, $config ) );
 		$many    = strtolower( $config['plural'] );
 		echo '<div class="notice notice-info"><p><strong>The website still shows the ' . esc_html( $many ) . ' it was built with.</strong> ';
 		echo esc_html( 'Anything you add here appears next to them. Import them to edit or remove them here; after that, the website shows only this list.' ) . '</p><p>';
@@ -1248,24 +1763,18 @@ add_action(
 		$count  = 0;
 
 		$GLOBALS['nami_cms_quiet'] = true;
-		if ( 'import' === ( $_GET['mode'] ?? '' ) && ! nami_cms_collection_ready( $slug, $config ) ) {
-			foreach ( $config['import'] ?? array() as $item ) {
-				$date    = preg_match( '/^\d{4}-\d{2}-\d{2}$/', (string) ( $item['date'] ?? '' ) ) ? $item['date'] : current_time( 'Y-m-d' );
-				$post_id = wp_insert_post(
-					array(
-						'post_type'   => $config['post_type'],
-						'post_status' => 'publish',
-						'post_title'  => sanitize_text_field( (string) ( $item['title'] ?? '' ) ),
-						'post_date'   => $date . ' 09:00:00',
-					),
-					true
-				);
-				if ( is_wp_error( $post_id ) ) {
-					continue;
+		if ( ! nami_cms_collection_ready( $slug, $config ) ) {
+			$items = nami_cms_collection_code_items( $slug, $config );
+			if ( 'import' === ( $_GET['mode'] ?? '' ) ) {
+				foreach ( $items as $item ) {
+					if ( is_array( $item ) && nami_cms_collection_insert( $config, $item ) ) {
+						++$count;
+					}
 				}
-				update_post_meta( $post_id, '_nami_fields', wp_slash( nami_cms_collection_clean( $config, is_array( $item['fields'] ?? null ) ? $item['fields'] : array() ) ) );
-				++$count;
 			}
+			// Either way these items are now known: only items added to the code later
+			// are added automatically (so "Start with only this list" stays empty).
+			nami_cms_collection_remember( $slug, $items );
 		}
 
 		update_option( 'nami_cms_collection_ready_' . $slug, true, false );
@@ -1301,15 +1810,25 @@ add_action(
 							'order'          => 'DESC',
 						)
 					);
+					nami_cms_code_seen( 'collections', $slug, $request->get_header( 'x-nami-code' ) );
 					$items = array();
 					foreach ( $posts as $post ) {
-						$items[] = array(
+						$item = array(
 							'id'     => $post->ID,
 							'slug'   => $post->post_name,
 							'title'  => wp_specialchars_decode( $post->post_title, ENT_QUOTES ),
 							'date'   => get_the_date( 'Y-m-d', $post ),
 							'fields' => nami_cms_collection_fields( $post->ID, $config ),
 						);
+						// Items that came from the code: the website resolves them against
+						// its current code at once, before the next sync here.
+						$key  = (string) get_post_meta( $post->ID, '_nami_key', true );
+						$base = get_post_meta( $post->ID, '_nami_base', true );
+						if ( '' !== $key && is_array( $base ) ) {
+							$item['key']  = $key;
+							$item['base'] = $base;
+						}
+						$items[] = $item;
 					}
 					$response = rest_ensure_response(
 						array(

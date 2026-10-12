@@ -8,59 +8,38 @@ export const mustangTrip: ContentImage = {
 };
 
 export const namiSchoolEntity: ContentImage = {
-  src: "/hero/home/hero-1.jpg",
-  alt: "NAMI International School campus and activities",
-  width: 1178,
-  height: 667,
+  src: "/hero/nami international watermarked/Nami_International_School_Facade_2400x1030_watermarked.webp",
+  alt: "The NAMI International School building with its lotus emblem on the entrance tower.",
+  width: 2400,
+  height: 1030,
 };
 
 export const namiCollegeEntity: ContentImage = {
-  src: "/hero/home/hero-2.jpg",
-  alt: "NAMI College students on campus",
-  width: 1600,
-  height: 1066,
+  src: "/hero/a levles hero section/NAMI_College_Last_Day_Celebration.webp",
+  alt: "NAMI College A-Level students celebrating their last day together in front of a GCE A Level banner.",
+  width: 2400,
+  height: 1030,
 };
 
 export const namiInstituteEntity: ContentImage = {
-  src: "/hero/home/hero-3.jpg",
-  alt: "Naaya Aayam Multi-Disciplinary Institute facilities and campus",
-  width: 1600,
-  height: 1066,
-};
-
-export const finalPhotoFour: ContentImage = {
-  src: "/hero/home/hero-4.jpg",
-  alt: "NAMI campus facilities and academic environment",
-  width: 1600,
-  height: 900,
-};
-
-export const finalPhotoFive: ContentImage = {
-  src: "/hero/home/hero-5.jpg",
-  alt: "NAMI academic blocks and campus grounds",
-  width: 1600,
-  height: 1066,
-};
-
-export const finalPhotoSix: ContentImage = {
-  src: "/hero/home/hero-6.jpg",
-  alt: "NAMI learning spaces and facilities",
-  width: 1280,
-  height: 960,
+  src: "/hero/naya udam watermarked ones/Graduates_Celebrate_Class_of_2025_2400x1030_NAMI_watermarked.webp",
+  alt: "NAMI Class of 2025 graduates throwing their caps in the air at the convocation ceremony.",
+  width: 2048,
+  height: 878,
 };
 
 export const aboutHeroCombined: ContentImage = {
-  src: "/sections/general/download.png",
-  alt: "NAMI campus facilities, learning spaces, and academic environments",
-  width: 1200,
-  height: 399,
+  src: "/hero/about/Nami Education_ Learn, Grow, Belong.png",
+  alt: "NAMI Education, Learn, Grow, Belong: graduates in caps and gowns, students in traditional Himalayan dress, a student stretching on the lawn, and the NAMI International School building beneath snow-capped mountains.",
+  width: 1774,
+  height: 887,
 };
 
 export const finalPhotoSeven: ContentImage = {
-  src: "/sections/general/7.jpg",
-  alt: "NAMI students and faculty on campus",
-  width: 1600,
-  height: 1062,
+  src: "/hero/about/about since 2012.jpeg",
+  alt: "Students filling the NAMI auditorium for a Global Career Opportunities for Nepali Youth seminar.",
+  width: 1552,
+  height: 1013,
 };
 
 export const schoolTransport: ContentImage = {
@@ -288,99 +267,50 @@ export const karunRegmiPortrait: ContentImage = {
 };
 
 export const homeHeroSlide1: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM-watermarked.jpg",
-  alt: "NAMI campus life and academic excellence.",
-  width: 1500,
-  height: 1000,
+  src: "/hero/home page hero section/Graduates Celebrate Class of 2025_22_nami-watermarked-75-opacity.webp",
+  alt: "NAMI Class of 2025 graduates celebrate at convocation ceremony tossing graduation caps into the air.",
+  width: 2400,
+  height: 1140,
 };
 
 export const homeHeroSlide2: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (12)-watermarked.jpg",
-  alt: "NAMI student activities and learning spaces.",
-  width: 1500,
-  height: 1000,
+  src: "/hero/home page hero section/22_nami-watermarked-75-opacity.webp",
+  alt: "NAMI Climate AI Launchpad participants, mentors, and winners gathered on stage.",
+  width: 2400,
+  height: 1140,
 };
 
 export const homeHeroSlide3: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (13)-watermarked.jpg",
-  alt: "NAMI campus community and student experiences.",
-  width: 1500,
-  height: 1000,
+  src: "/hero/home page hero section/Collaborative Classroom Learning_nami-watermarked-75-opacity.webp",
+  alt: "Young students engaged in collaborative classroom learning and activities at NAMI International School.",
+  width: 2400,
+  height: 1140,
 };
 
 export const homeHeroSlide4: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (15)-watermarked.jpg",
-  alt: "NAMI faculty and practical academic workshops.",
-  width: 1500,
-  height: 1000,
+  src: "/hero/home page hero section/Festive Welcome Program Dance Performance_nami-watermarked-75-opacity.webp",
+  alt: "Students performing a traditional dance during the NAMI Welcome Program.",
+  width: 2400,
+  height: 1140,
 };
 
 export const homeHeroSlide5: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (18)-watermarked.jpg",
-  alt: "NAMI library and collaborative study areas.",
-  width: 1500,
-  height: 1000,
+  src: "/hero/home page hero section/Sandy Beach Resort Group Portrait_nami-watermarked-75-opacity.webp",
+  alt: "NAMI students and faculty gathered for a group portrait during an academic excursion to Sandy Beach Resort, Sukute.",
+  width: 2400,
+  height: 1140,
 };
 
 export const homeHeroSlide6: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (19)-watermarked.jpg",
-  alt: "NAMI events, conferences, and seminars.",
-  width: 1500,
-  height: 1000,
+  src: "/hero/home page hero section/Smiles at the School STEM Fair_nami-watermarked-75-opacity.webp",
+  alt: "Smiling students demonstrating their interactive science and robotics projects at the NAMI School STEM Fair.",
+  width: 2400,
+  height: 1140,
 };
 
 export const homeHeroSlide7: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (20)-watermarked.jpg",
-  alt: "NAMI laboratories and scientific research.",
-  width: 1500,
-  height: 1000,
-};
-
-export const homeHeroSlide8: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (21)-watermarked.jpg",
-  alt: "NAMI auditorium presentations and student achievements.",
-  width: 1500,
-  height: 1000,
-};
-
-export const homeHeroSlide9: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (22)-watermarked.jpg",
-  alt: "NAMI sports, courts, and extracurricular engagement.",
-  width: 1500,
-  height: 1000,
-};
-
-export const homeHeroSlide10: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (23)-watermarked.jpg",
-  alt: "NAMI modern classrooms and campus infrastructure.",
-  width: 1500,
-  height: 1000,
-};
-
-export const homeHeroSlide11: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (24)-watermarked.jpg",
-  alt: "NAMI campus grounds and student collaboration.",
-  width: 1500,
-  height: 1000,
-};
-
-export const homeHeroSlide12: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.22 AM (25)-watermarked.jpg",
-  alt: "NAMI student leadership and academic community.",
-  width: 1500,
-  height: 1000,
-};
-
-export const homeHeroSlide13: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.23 AM (6)-watermarked.jpg",
-  alt: "NAMI cultural celebrations and academic events.",
-  width: 1500,
-  height: 1000,
-};
-
-export const homeHeroSlide14: ContentImage = {
-  src: "/sections/general/WhatsApp Image 2026-09-27 at 10.42.23 AM (23)-watermarked.jpg",
-  alt: "NAMI holistic education and student development.",
-  width: 1500,
-  height: 1000,
+  src: "/hero/home page hero section/International School Meditation Morning_nami-watermarked-75-opacity.webp",
+  alt: "NAMI International School students practicing morning mindfulness and meditation on the school grounds.",
+  width: 2400,
+  height: 1140,
 };

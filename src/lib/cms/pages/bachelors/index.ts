@@ -84,7 +84,7 @@ export const getBachelorsPage = cache(
   async (): Promise<BachelorsPageContent> => {
     const merged = mergeWithDefaults(
       bachelorsDefaults,
-      await fetchCmsPage("bachelors"),
+      await fetchCmsPage("bachelors", bachelorsDefaults),
     );
     return {
       ...merged,

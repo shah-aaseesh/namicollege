@@ -11,6 +11,8 @@ export type CmsClub = {
   readonly tagline: string;
   readonly metaDescription: string;
   readonly coverImage: CmsImage;
+  /** Banner at the top of the club page; empty = the cover photo. */
+  readonly heroImage: CmsImage;
   readonly overview: readonly string[];
   readonly quoteText: string;
   readonly quoteAuthor: string;

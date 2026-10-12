@@ -45,7 +45,7 @@ function optional(value: string): string | undefined {
 export const getSitePage = cache(async (): Promise<SitePageContent> => {
   const merged = mergeWithDefaults(
     siteDefaults,
-    await fetchCmsPage("site"),
+    await fetchCmsPage("site", siteDefaults),
     siteShape,
   );
   return {

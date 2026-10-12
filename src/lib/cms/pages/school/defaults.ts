@@ -179,7 +179,7 @@ export const schoolDefaults: SchoolPageContent = {
     label: "Partners in Learning",
     title: "Our Learning Collaborators",
     description:
-      "We collaborate with premier specialized learning partners to complement classroom education and enrich student discovery.",
+      "We collaborate with premier specialised learning partners to complement classroom education and enrich student discovery.",
     items: [
       {
         name: "3Di School",

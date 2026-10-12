@@ -35,7 +35,7 @@ export const documentsDefaults: DocumentsPageContent = {
   },
   banner: {
     title: "Prefer applying completely online?",
-    text: "You can fill out the dynamic digital inquiry and application form directly in your browser without printing.",
+    text: "You can fill out the dynamic digital enquiry and application form directly in your browser without printing.",
     button: { label: "Online Admissions Portal →", href: "/admissions" },
   },
 };
@@ -67,5 +67,10 @@ export const documentImports = DOCUMENTS.map((document, index) => {
     note: document.updatedDate,
     featured: document.isFeatured === true,
   };
-  return { title: document.title, date: importDate(index), fields };
+  return {
+    key: document.id,
+    title: document.title,
+    date: importDate(index),
+    fields,
+  };
 });

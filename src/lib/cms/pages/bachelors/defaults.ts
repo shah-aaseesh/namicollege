@@ -139,8 +139,8 @@ export const bachelorsDefaults: BachelorsPageContent = {
         ),
         dark: true,
         overview: [
-          "The University of Northampton is a leading British public university located on its purpose-built £330 million Waterside Campus in England. Globally recognized as the UK's first Ashoka U Changemaker Campus and commended for teaching excellence under the British Teaching Excellence Framework (TEF), the university champions social innovation, enterprise, and high graduate outcomes.",
-          "Since 2012, NAMI has operated in direct academic partnership with the University of Northampton to deliver accredited undergraduate and postgraduate degrees in Kathmandu. Programmes follow identical curricula, assessment frameworks, and moderation from external UK examiners, granting graduates authentic British degrees recognized internationally.",
+          "The University of Northampton is a leading British public university located on its purpose-built £330 million Waterside Campus in England. Globally recognised as the UK's first Ashoka U Changemaker Campus and commended for teaching excellence under the British Teaching Excellence Framework (TEF), the university champions social innovation, enterprise, and high graduate outcomes.",
+          "Since 2012, NAMI has operated in direct academic partnership with the University of Northampton to deliver accredited undergraduate and postgraduate degrees in Kathmandu. Programmes follow identical curricula, assessment frameworks, and moderation from external UK examiners, granting graduates authentic British degrees recognised internationally.",
         ],
         note: "",
         metrics: [
@@ -170,7 +170,7 @@ export const bachelorsDefaults: BachelorsPageContent = {
         leaderMessage: [
           "At the University of Northampton, we believe higher education has the transformative power to develop future leaders, ignite innovation, and deliver real social impact. Our long-standing collaboration with Naaya Aayam Multi-Disciplinary Institute (NAMI) in Kathmandu is a testament to this global mission.",
           "Through this partnership, students in Nepal engage in rigorous, career-focused degree programmes in Computing, Software Engineering, Network Engineering, Environmental Science, and Business Administration. These programmes are delivered under our exacting academic standards, incorporating experiential learning and technological literacy.",
-          "We take immense pride in the achievements of NAMI graduates who continue to excel across international technology companies, research organizations, and entrepreneurial ventures. We look forward to deepening our academic collaboration and welcoming future cohorts into our global community.",
+          "We take immense pride in the achievements of NAMI graduates who continue to excel across international technology companies, research organisations, and entrepreneurial ventures. We look forward to deepening our academic collaboration and welcoming future cohorts into our global community.",
         ],
       },
       {
@@ -243,7 +243,7 @@ export const bachelorsDefaults: BachelorsPageContent = {
     label: "OFFICIAL TESTING CENTRE",
     title: "Pearson VUE-Authorized Test Center",
     description:
-      "NAMI is an officially authorized Pearson VUE test center, empowering students and professionals across Nepal to take internationally recognized IT certifications, academic assessments, and global professional licensure examinations in a secure, state-of-the-art testing facility.",
+      "NAMI is an officially authorised Pearson VUE test centre, empowering students and professionals across Nepal to take internationally recognised IT certifications, academic assessments, and global professional licensure examinations in a secure, state-of-the-art testing facility.",
     logo: image(
       "/sections/misc/pearson-vue.jpg",
       "Pearson VUE-Authorized Test Center Logo",

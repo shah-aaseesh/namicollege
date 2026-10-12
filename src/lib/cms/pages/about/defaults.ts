@@ -2,6 +2,7 @@
 // as the type schema for CMS data, and exported into the WordPress snippet by
 // `npm run cms:defaults` so the admin screens start pre-filled.
 
+import { ceoMessage } from "@/lib/content/ceo-message";
 import { aboutCopy } from "@/lib/content/local/about-copy";
 import { institution } from "@/lib/content/local/institution";
 import { stakeholderTestimonials } from "@/lib/content/local/testimonials";
@@ -66,21 +67,15 @@ export const aboutDefaults: AboutPageContent = {
       },
       {
         badge: "Message from the Chief Executive Officer",
-        name: "Mr. Pranil Pandey, FCCA",
+        name: ceoMessage.signature,
         title: "Chief Executive Officer, NAMI Group of Companies",
         credentials: "FCCA (UK) · Master's in Management",
         portrait: portrait(
           "/leadership/pranil.jpeg",
           "Mr. Pranil Pandey, FCCA",
         ),
-        quote:
-          "At NAMI, we align world-class academic frameworks with experiential learning, cultivating future-ready professionals and compassionate global citizens.",
-        paragraphs: [
-          "Education in the 21st century demands more than conventional classroom instruction; it requires dynamic adaptability, analytical rigor, hands-on technological literacy, and deeply ingrained social responsibility. At NAMI, every academic programme is meticulously structured to meet these imperatives.",
-          "Having been part of NAMI's journey since 2015, I take immense pride in our evolution into an institution recognized for academic excellence, innovative pedagogy, and strong industry-academia linkages. From our Primary and Middle School divisions to our Cambridge A-Levels, CTEVT skill-based vocational programmes, and international undergraduate degrees, we foster an environment where students actively discover their intellectual and creative potential.",
-          "We continue to invest extensively in modern learning technologies, advanced science and computing laboratories, Pearson VUE testing facilities, and comprehensive career counseling. Our dedicated faculty members bring international best practices into every classroom, mentoring students to turn curiosity into meaningful scholarship.",
-          "We warmly invite students and parents to experience the NAMI difference — where global opportunities and grounded values converge to build extraordinary futures.",
-        ],
+        quote: "",
+        paragraphs: paragraphsOf(ceoMessage.message),
       },
     ],
   },
@@ -108,7 +103,7 @@ export const aboutDefaults: AboutPageContent = {
         partner: "NAMI College",
         logo: logo("/logos/brand/nami-college.png", "NAMI College"),
         description:
-          "Formally incorporated with dedicated multi-storey academic wings, advanced science laboratories, and campus resource centers.",
+          "Formally incorporated with dedicated multi-storey academic wings, advanced science laboratories, and campus resource centres.",
       },
       {
         year: "2014",
@@ -153,7 +148,7 @@ export const aboutDefaults: AboutPageContent = {
         partner: "Pearson VUE",
         logo: logo("/sections/misc/pearson-vue.jpg", "Pearson VUE"),
         description:
-          "Officially authorized as a Pearson VUE testing center, enabling on-campus computer-based international IT certifications, academic tests, and global licensure exams.",
+          "Officially authorized as a Pearson VUE testing centre, enabling on-campus computer-based international IT certifications, academic tests, and global licensure exams.",
       },
       {
         year: "2025–2026",
@@ -198,8 +193,9 @@ export const aboutDefaults: AboutPageContent = {
     title: "The Mascot",
     paragraphs: paragraphsOf(
       richText(
-        "NAMI's mascot is a graceful swan, representing the spirit and values of NAMI. With its snow-white feathers and elegant posture, the swan symbolizes purity, resilience, transformation, and excellence. Its warm and friendly expression reflects NAMI's welcoming community. Surrounded by a vibrant lotus flower inspired by the NAMI logo, the mascot embodies growth, knowledge, and nurturing. The lotus petals gently cradle the swan, symbolizing the supportive and interconnected nature of the NAMI family.",
-        "With its wings slightly spread, the swan signifies NAMI students' readiness to soar toward new opportunities. The wings carry the same core values as the petals of the lotus above. The mascot was designed by a NAMI student, showcasing the creativity and spirit of the NAMI community.",
+        "NAMI's mascot is a graceful swan, representing the spirit and values of NAMI. With its snow-white feathers and elegant posture, the swan symbolises purity, resilience, transformation, and excellence. Its warm and friendly expression reflects NAMI's welcoming community. Surrounded by a vibrant lotus flower inspired by the NAMI logo, the mascot embodies growth, knowledge, and nurturing. The lotus petals gently cradle the swan, symbolising the supportive and interconnected nature of the NAMI family.",
+        "With its wings slightly spread, the swan signifies NAMI students' readiness to soar toward new opportunities. The wings carry the same core values as the petals of the lotus above.",
+        "The mascot was designed by a NAMI student, showcasing the creativity and spirit of the NAMI community.",
       ),
     ),
     image: {

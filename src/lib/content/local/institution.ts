@@ -38,26 +38,26 @@ export const institution: InstitutionProfile = {
     "To offer access to world-class education within Nepal, fostering human capital development among the youth and empowering them to become responsible individuals contributing to society, both locally and globally.",
   ),
   emblemStory: richText(
-    "The lotus flower, a representation of rebirth, blossoms in the dark and becomes a lovely plant in the NAMI logo. NAMI's core values are represented by each of the lotus's five petals.",
-    'The heart, or "Hridaya", is symbolised by the red lotus in Sanskrit as love, passion, kindness and compassion. A fully blossomed red lotus represents the compassion and warmth of the human spirit. As our graduates enter the real world, we aim for NAMIANS to embody the spirit reflected in our logo.',
+    "The lotus flower symbolises rebirth. It blossoms in darkness, and in the NAMI logo it represents growth and transformation. Each of the lotus's five petals represents one of NAMI's core values.",
+    'In Sanskrit, "Hridaya" means heart. The red lotus represents love, passion, kindness and compassion, and a fully blossomed red lotus reflects the warmth of the human spirit. As our graduates enter the real world, we aim for NAMIANS to embody the spirit reflected in our logo.',
   ),
   values: [
     {
       ...entryOf("enlightenment"),
       name: "Enlightenment",
-      meaning: "Ensures a complete and holistic development.",
+      meaning: "Promotes complete and holistic development.",
     },
     {
       ...entryOf("knowledge"),
       name: "Knowledge",
       meaning:
-        "The skills and awareness acquired through experience with situations and facts.",
+        "The skills and awareness gained through experience, learning and engagement with the world.",
     },
     {
       ...entryOf("purity-of-heart-and-mind"),
       name: "Purity of Heart and Mind",
       meaning:
-        "Removes impurities from thoughts and thinking, promoting ethics and values for creating a compassionate society.",
+        "Encourages clarity of thought and promotes the ethics and values needed to build a compassionate society.",
     },
     {
       ...entryOf("self-awareness"),

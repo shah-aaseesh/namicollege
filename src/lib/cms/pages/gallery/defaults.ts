@@ -115,5 +115,10 @@ export const galleryImports = GALLERY_MOMENTS.map((moment, index) => {
     quoteText: moment.quote?.text ?? "",
     quoteAuthor: moment.quote?.author ?? "",
   };
-  return { title: moment.title, date: importDate(index), fields };
+  return {
+    key: moment.id,
+    title: moment.title,
+    date: importDate(index),
+    fields,
+  };
 });
